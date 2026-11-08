@@ -68,13 +68,13 @@
     b.style.setProperty("--x", PAD + j * STEP + "px");
     row.appendChild(b);
   }
-  // Shift the link row so its middle item (Other Work) sits at the page centre,
-  // right under the dial.
-  const middle = links[Math.floor(n / 2)];
+  // Shift the link row so its middle sits at the page centre, right under the dial
+  // (the middle link with an odd number of links, the gap between the middle two with an even one).
   const centre = () => {
     list.style.transform = "";
-    const m = middle.getBoundingClientRect(), d = dial.getBoundingClientRect();
-    list.style.transform = `translateX(${(d.left + d.width / 2) - (m.left + m.width / 2)}px)`;
+    const a = links[Math.floor((n - 1) / 2)].getBoundingClientRect(), b = links[Math.ceil((n - 1) / 2)].getBoundingClientRect();
+    const d = dial.getBoundingClientRect();
+    list.style.transform = `translateX(${(d.left + d.width / 2) - (a.left + a.width / 2 + b.left + b.width / 2) / 2}px)`;
   };
   document.fonts.ready.then(centre);
   centre();
