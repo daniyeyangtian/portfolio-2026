@@ -37,6 +37,15 @@
     background: url("assets/about/paper-strokes.svg") center / 100% 100% no-repeat; }
   .story ~ .story::before { background-image: url("assets/about/paper-lotr.svg"); }
   .story ~ .story ~ .story::before { background-image: url("assets/about/paper-movies.svg"); }
+  /* washi tape holding the first note: pink with white dots, ends torn, a little see-through */
+  .story:not(.story ~ .story)::after { content: ""; position: absolute; left: 50%; top: -52px;
+    width: 128px; height: 32px; translate: -50% 0; rotate: -4deg; opacity: .88;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 45%, rgba(0,0,0,.05)),
+      radial-gradient(circle, #fff 2.4px, transparent 2.9px) 0 0 / 13px 13px,
+      radial-gradient(circle, #fff 2.4px, transparent 2.9px) 6.5px 6.5px / 13px 13px,
+      #f2a3b6;
+    clip-path: polygon(0% 0.0%, 100% 0.0%, 96% 14.3%, 100% 28.6%, 96% 42.9%, 100% 57.1%, 96% 71.4%, 100% 85.7%, 96% 100.0%, 4% 100.0%, 0% 85.7%, 4% 71.4%, 0% 57.1%, 4% 42.9%, 0% 28.6%, 4% 14.3%); }
   /* with the paper gone, two piles move over a little: the iPod right, the holiday movies right */
   .pile:has(#ipod) { translate: 70px 0; }
   .pile:has(#love-actually) { translate: 50px 0; }
