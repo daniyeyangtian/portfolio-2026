@@ -30,6 +30,16 @@
   }
   .story { font-weight: 300; font-size: 20px; line-height: 28px; color: #000; }
   .story p + p { margin-top: 28px; }
+  /* try-out: the photo cards lose their torn paper, and the paragraphs get it instead */
+  .pile .paper { visibility: hidden; }   /* kept in place: the fade-in watches it */
+  .story { isolation: isolate; }
+  .story::before { content: ""; position: absolute; inset: -46px -52px -50px -50px; z-index: -1;
+    background: url("assets/about/paper-strokes.svg") center / 100% 100% no-repeat; }
+  .story ~ .story::before { background-image: url("assets/about/paper-lotr.svg"); }
+  .story ~ .story ~ .story::before { background-image: url("assets/about/paper-movies.svg"); }
+  /* with the paper gone, two piles move over a little: the iPod right, the holiday movies right */
+  .pile:has(#ipod) { translate: 70px 0; }
+  .pile:has(#love-actually) { translate: 50px 0; }
 
   /* each pile of paper and photos drifts up into place as it scrolls into view */
   .js .pile, .js .story { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
