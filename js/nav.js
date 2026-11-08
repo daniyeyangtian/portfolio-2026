@@ -71,7 +71,7 @@
   // Lay the link row out under the dial. With an even number of links the row splits in
   // two around the dial: the first half ends at the dial's left edge (the −), the second
   // starts at its right edge (the +). With an odd number, the middle link sits under the dial.
-  const SPLIT_GAP = 0;   // px between each half and the dial's edge
+  const SPLIT_GAP = 40;   // px between each half and the dial's edge
   const centre = () => {
     list.style.transform = "";
     const d = dial.getBoundingClientRect(), mid = d.left + d.width / 2;
