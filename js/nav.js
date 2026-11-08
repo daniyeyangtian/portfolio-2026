@@ -68,13 +68,27 @@
     b.style.setProperty("--x", PAD + j * STEP + "px");
     row.appendChild(b);
   }
-  // Shift the link row so its middle sits at the page centre, right under the dial
-  // (the middle link with an odd number of links, the gap between the middle two with an even one).
+  // Lay the link row out under the dial. With an even number of links the row splits in
+  // two around the dial: the first half ends at the dial's left edge (the −), the second
+  // starts at its right edge (the +). With an odd number, the middle link sits under the dial.
+  const SPLIT_GAP = 0;   // px between each half and the dial's edge
   const centre = () => {
     list.style.transform = "";
-    const a = links[Math.floor((n - 1) / 2)].getBoundingClientRect(), b = links[Math.ceil((n - 1) / 2)].getBoundingClientRect();
-    const d = dial.getBoundingClientRect();
-    list.style.transform = `translateX(${(d.left + d.width / 2) - (a.left + a.width / 2 + b.left + b.width / 2) / 2}px)`;
+    const d = dial.getBoundingClientRect(), mid = d.left + d.width / 2;
+    if (n % 2) {
+      const m = links[(n - 1) / 2].getBoundingClientRect();
+      list.style.transform = `translateX(${mid - (m.left + m.width / 2)}px)`;
+      return;
+    }
+    const right = links[n / 2].parentElement;
+    right.style.marginLeft = "";
+    const a = links[n / 2 - 1].getBoundingClientRect(), b = links[n / 2].getBoundingClientRect();
+    const want = d.width + 2 * SPLIT_GAP, have = b.left - a.right;
+    // only when there is room for it; on narrow screens the row stays as it is, centred
+    if (want > have && list.parentElement.clientWidth >= list.scrollWidth + (want - have) + 32) right.style.marginLeft = want - have + "px";
+    const a2 = links[n / 2 - 1].getBoundingClientRect(), b2 = links[n / 2].getBoundingClientRect();
+    list.style.transform = `translateX(${mid - (a2.right + b2.left) / 2}px)`;
+    place();   // the links after the split moved: put the underline back under the current one
   };
   document.fonts.ready.then(centre);
   centre();
