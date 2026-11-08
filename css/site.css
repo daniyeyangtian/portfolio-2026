@@ -25,6 +25,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
   padding-top: 24px;
 }
+/* dial and links on one row (js/nav.js adds this when there is room): a little lower */
+.site-nav.is-split { padding-top: 44px; }
 .site-nav ul {
   position: relative;
   display: flex; gap: clamp(20px, 7vw, 100px);

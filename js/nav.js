@@ -87,9 +87,11 @@
     // only when there is room for it; on narrow screens the row stays as it is, centred
     const split = want > have && list.parentElement.clientWidth >= list.scrollWidth + (want - have) + 32;
     if (split) right.style.marginLeft = want - have + "px";
+    nav.classList.toggle("is-split", split);   // one row: it sits a little lower (site.css)
     const a2 = links[n / 2 - 1].getBoundingClientRect(), b2 = links[n / 2].getBoundingClientRect();
     // split around the dial, the links also rise to the dial's height, level with it
-    const dy = split ? (d.top + d.height / 2) - (a2.top + a2.height / 2) : 0;
+    const d2 = dial.getBoundingClientRect();
+    const dy = split ? (d2.top + d2.height / 2) - (a2.top + a2.height / 2) : 0;
     list.style.transform = `translate(${mid - (a2.right + b2.left) / 2}px, ${dy}px)`;
     place();   // the links after the split moved: put the underline back under the current one
   };
