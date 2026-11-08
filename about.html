@@ -37,13 +37,20 @@
     background: url("assets/about/paper-strokes.svg") center / 100% 100% no-repeat; }
   .story ~ .story::before { background-image: url("assets/about/paper-lotr.svg"); }
   .story ~ .story ~ .story::before { background-image: url("assets/about/paper-movies.svg"); }
-  /* washi tape holding the first note: pink with white dots, ends torn, a little see-through */
+  /* washi tape holding the first note: plain pink, creased, ends torn, a little see-through */
   .story:not(.story ~ .story)::after { content: ""; position: absolute; left: 50%; top: -52px;
     width: 128px; height: 32px; translate: -50% 0; rotate: -4deg; opacity: .88;
     background:
-      linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 45%, rgba(0,0,0,.05)),
-      radial-gradient(circle, #fff 2.4px, transparent 2.9px) 0 0 / 13px 13px,
-      radial-gradient(circle, #fff 2.4px, transparent 2.9px) 6.5px 6.5px / 13px 13px,
+      /* creases: soft, uneven folds (a pale ridge fading into a faint shadow), at odd angles */
+      linear-gradient(104deg, transparent 10%, rgba(255,255,255,.22) 15%, rgba(0,0,0,.035) 19%, transparent 25%),
+      linear-gradient(76deg, transparent 38%, rgba(0,0,0,.03) 42%, rgba(255,255,255,.18) 46%, transparent 52%),
+      linear-gradient(118deg, transparent 62%, rgba(255,255,255,.16) 67%, rgba(0,0,0,.04) 70%, transparent 76%),
+      linear-gradient(88deg, transparent 82%, rgba(255,255,255,.14) 86%, transparent 92%),
+      /* uneven stick: patches where it lifts (lighter) or presses down (deeper) */
+      radial-gradient(60% 90% at 28% 30%, rgba(255,255,255,.14), transparent 70%),
+      radial-gradient(50% 80% at 74% 75%, rgba(0,0,0,.045), transparent 70%),
+      /* the tape bows a little: lighter along the middle, darker at the edges */
+      linear-gradient(180deg, rgba(0,0,0,.05), rgba(255,255,255,.16) 42%, rgba(255,255,255,.06) 62%, rgba(0,0,0,.06)),
       #f2a3b6;
     clip-path: polygon(0% 0.0%, 100% 0.0%, 96% 14.3%, 100% 28.6%, 96% 42.9%, 100% 57.1%, 96% 71.4%, 100% 85.7%, 96% 100.0%, 4% 100.0%, 0% 85.7%, 4% 71.4%, 0% 57.1%, 4% 42.9%, 0% 28.6%, 4% 14.3%); }
   /* with the paper gone, two piles move over a little: the iPod right, the holiday movies right */
