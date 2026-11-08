@@ -85,9 +85,12 @@
     const a = links[n / 2 - 1].getBoundingClientRect(), b = links[n / 2].getBoundingClientRect();
     const want = d.width + 2 * SPLIT_GAP, have = b.left - a.right;
     // only when there is room for it; on narrow screens the row stays as it is, centred
-    if (want > have && list.parentElement.clientWidth >= list.scrollWidth + (want - have) + 32) right.style.marginLeft = want - have + "px";
+    const split = want > have && list.parentElement.clientWidth >= list.scrollWidth + (want - have) + 32;
+    if (split) right.style.marginLeft = want - have + "px";
     const a2 = links[n / 2 - 1].getBoundingClientRect(), b2 = links[n / 2].getBoundingClientRect();
-    list.style.transform = `translateX(${mid - (a2.right + b2.left) / 2}px)`;
+    // split around the dial, the links also rise to the dial's height, level with it
+    const dy = split ? (d.top + d.height / 2) - (a2.top + a2.height / 2) : 0;
+    list.style.transform = `translate(${mid - (a2.right + b2.left) / 2}px, ${dy}px)`;
     place();   // the links after the split moved: put the underline back under the current one
   };
   document.fonts.ready.then(centre);
