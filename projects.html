@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<title>projects · yeyang dani tian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@500&family=Instrument+Sans:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css?v=15">
+<style>
+  /* secondary gray on this page */
+  :root { --ink-muted: #6E6879; }
+  html, body { height: 100%; overflow: hidden; }
+  body { display: flex; flex-direction: column; }
+
+  .layout {
+    flex: 1; min-height: 0;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    column-gap: 24px;
+  }
+
+  /* ---------- left column ---------- */
+  /* Section nav and project list share one type size (--side-size). */
+  .side { --side-size: 14px; display: flex; flex-direction: column; gap: 48px; min-height: 0; overflow-y: auto; padding-bottom: 32px; }
+
+  .sections {
+    position: relative;
+    padding: 10px 0 12px 40px;
+    list-style: none;
+  }
+
+  /* Fader: a volume-style slider beside the section names. The grey fill and the knob show
+     how far through the case study you are (the knob reaches a name as that section
+     starts); drag the knob to scrub, or tap a tick to spring to that section. */
+  .fader { position: absolute; left: 12px; top: 0; bottom: 0; width: 22px; touch-action: none; cursor: pointer; }
+  .fader-ticks i {
+    position: absolute; left: 0; width: 5px; height: 1.5px; border-radius: 1px;
+    background: #c9c7cf; transition: background .25s;
+  }
+  .fader-ticks i.major { width: 7px; left: -1px; background: #b4b1bb; }
+  .fader-ticks i.on { background: #6E6879; }
+  .fader-track {
+    position: absolute; left: 11px; width: 4px; border-radius: 2px;
+    background: #d3d6dc; box-shadow: inset 0 1px 1px rgba(0,0,0,.12);
+  }
+  .fader-fill {
+    position: absolute; left: 0; right: 0; top: 0; border-radius: 2px;
+    background: #6E6879;
+  }
+  .fader-knob {
+    position: absolute; left: 6px; width: 14px; height: 24px; margin-top: -12px; border-radius: 7px;
+    background: linear-gradient(160deg, #3a3a3c 0 45%, #1a1a1b 55% 100%);
+    box-shadow: 0 2px 5px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
+    cursor: grab;
+  }
+  .fader-knob::after {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
+    border-radius: 50%; background: #2c2c2e; box-shadow: inset 0 1px 1px rgba(0,0,0,.5), 0 .5px 0 rgba(255,255,255,.2);
+  }
+  .fader.is-dragging, .fader.is-dragging .fader-knob { cursor: grabbing; }
+  /* spring to a clicked section: overshoot, then settle */
+  .fader.is-springing .fader-knob { transition: top .65s cubic-bezier(.34, 1.4, .5, 1); }
+  .fader.is-springing .fader-fill { transition: height .65s cubic-bezier(.34, 1.4, .5, 1); }
+  .sections button {
+    display: block; padding: 6px 0;
+    font-size: var(--side-size); line-height: 1.35;
+    color: var(--ink-muted);
+    transition: color .3s;
+  }
+  .sections button:hover { color: var(--ink); }
+  .sections button[aria-current="true"] { color: var(--ink); }
+  .sections button:disabled { color: var(--ink-faint); opacity: .5; cursor: default; }
+
+  .project-list {
+    list-style: none; padding: 14px 10px 16px 20px; display: flex; flex-direction: column; gap: 18px;
+    background: var(--panel); border-radius: 0 12px 12px 0;
+  }
+  .project-list button { display: block; text-align: left; width: 100%; }
+  .project-list strong {
+    display: block; font-weight: 400; font-size: var(--side-size); line-height: 1.35;
+    color: var(--ink-muted); transition: color .3s;
+  }
+  .project-list span {
+    display: block; margin-top: 3px; font-size: 12px; line-height: 1.45;
+    color: var(--ink-faint); transition: color .3s;
+  }
+  .project-list button:hover strong,
+  .project-list button[aria-current="true"] strong { color: var(--ink); }
+  .project-list button:hover span,
+  .project-list button[aria-current="true"] span { color: var(--ink-muted); }
+
+  /* ---------- right: project viewer ---------- */
+  .viewer { position: relative; min-height: 0; background: var(--placeholder); }
+  .viewer iframe {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+    background: var(--bg);
+    transition: opacity .6s var(--ease), transform .8s cubic-bezier(.2, .7, .2, 1);
+  }
+  /* a case study rises in as it fades in */
+  .viewer iframe.is-loading { opacity: 0; transform: translateY(32px); }
+  .is-pocket .viewer iframe { opacity: 0; transform: translateY(32px); pointer-events: none; }
+  .fader { transition: opacity .3s; }
+  /* Back to the pockets: a physical key floating over the case study's top-left corner,
+     sat in a light metal bezel like the exposure dial's. The cap stands proud of the
+     well (its side shows as a hard shadow), lifts a touch on hover, sinks flush when
+     pressed and springs back up on release. */
+  .viewer-back {
+    position: absolute; top: 16px; left: 16px; z-index: 3;
+    display: block; padding: 3px; border-radius: 13px;
+    background: linear-gradient(#fdfdfc, #e4e3e0 45%, #c9c8c4);
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,.14),
+      0 2px 5px rgba(0,0,0,.22),
+      0 8px 18px rgba(0,0,0,.12),
+      inset 0 1px 0 #fff,
+      inset 0 -1px 0 rgba(0,0,0,.12);
+    transition: opacity .35s var(--ease), transform .35s var(--ease);
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* the well the key sits in */
+  .vb-well {
+    display: block; padding: 2px 2px 3px; border-radius: 10px;
+    background: linear-gradient(#a9a8a4, #c7c6c2);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.5);
+  }
+  .vb-cap {
+    display: flex; align-items: center; gap: 3px;
+    padding: 6px 12px 6px 8px; border-radius: 8px;
+    font: 500 11.5px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase;
+    color: #3b3a3f; text-shadow: 0 1px 0 rgba(255,255,255,.9);   /* engraved */
+    background: linear-gradient(#ffffff, #f1f0ed 55%, #e5e4e0);
+    box-shadow:
+      0 3px 0 #9d9c98,                      /* the cap's side */
+      0 4px 3px rgba(0,0,0,.28),
+      inset 0 1px 0 #fff,
+      inset 0 -2px 1px rgba(0,0,0,.05);
+    transform: translateY(-3px);
+    transition: transform .28s cubic-bezier(.3, 1.8, .5, 1), box-shadow .28s cubic-bezier(.3, 1.8, .5, 1);
+  }
+  .vb-cap svg { width: 14px; height: 14px; filter: drop-shadow(0 1px 0 rgba(255,255,255,.9)); }
+  .viewer-back:hover .vb-cap {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 0 #9d9c98, 0 5px 4px rgba(0,0,0,.26), inset 0 1px 0 #fff, inset 0 -2px 1px rgba(0,0,0,.05);
+  }
+  .viewer-back:active .vb-cap, .viewer-back.is-pressed .vb-cap {
+    transform: translateY(0);
+    box-shadow: 0 0 0 #9d9c98, 0 1px 1px rgba(0,0,0,.2), inset 0 1px 2px rgba(0,0,0,.1), inset 0 -1px 0 rgba(255,255,255,.6);
+    transition-duration: .06s; transition-timing-function: ease-out;
+  }
+  .viewer-back:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .is-pocket .viewer-back { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+  .is-pocket .fader { opacity: .45; pointer-events: none; }   /* resting: knob parked at the top, nothing to scrub */
+
+  /* ---------- pockets: the projects landing view ----------
+     One frosted pocket per project, in a row, each with its name underneath. Hover a
+     pocket and its pieces rise out and fan into a spread above it; click a piece to open
+     that case study. Geometry is in each pocket's own 520×540 box (scaled to fit by --s);
+     piece offsets are measured from the centre of the front panel's top edge. */
+  .pocket-stage {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg);
+    opacity: 0; visibility: hidden; transform: translateY(-32px);
+    transition: opacity .45s var(--ease), transform .6s var(--ease), visibility 0s .6s;
+  }
+  .is-pocket .pocket-stage { opacity: 1; visibility: visible; transform: none; transition: opacity .45s var(--ease), transform .6s var(--ease); }
+  .pocket-grid { --s: 1; display: flex; flex-wrap: wrap; justify-content: center; row-gap: 12px; width: 100%; padding: 0 16px; }
+  .pocket-col { position: relative; flex: 0 0 var(--col, 25%); display: flex; flex-direction: column; align-items: center; }
+  .pocket-col.is-raised { z-index: 5; }
+  .pocket-wrap { position: relative; width: 100%; height: calc(540px * var(--s)); }
+  .pocket {
+    position: absolute; left: 50%; top: 0; width: 520px; height: 540px; margin-left: -260px;
+    transform: scale(var(--s)); transform-origin: 260px 0;
+  }
+
+  .pocket-back, .pocket-front, .pocket-hit { position: absolute; left: 140px; width: 240px; border-radius: 26px; }
+  .pocket-back {
+    top: 280px; height: 230px; z-index: 1;
+    --t: var(--tint, #dcdee2);
+    background: linear-gradient(color-mix(in srgb, var(--t), #fff 14%), color-mix(in srgb, var(--t), #000 6%));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 0 0 1px rgba(0,0,0,.07), 0 16px 36px rgba(0,0,0,.11), 0 2px 5px rgba(0,0,0,.08);
+    transform-origin: 50% 100%;   /* hinged at the bottom, like the front */
+    transition: transform .55s cubic-bezier(.3, 1.35, .5, 1), top .55s cubic-bezier(.3, 1.35, .5, 1), height .55s cubic-bezier(.3, 1.35, .5, 1);
+  }
+  /* open: grows taller from its bottom edge (still joined to the front there), so its
+     colour stands above the front */
+  .pocket.is-open .pocket-back { top: 254px; height: 256px; transform: perspective(700px) rotateX(6deg); }
+  /* Back: the project's signature colour (--tint), cool grey for placeholders; it tips
+     away from you while the pocket is open, the front toward you, so the pocket gapes.
+     Front: translucent white with a thumb notch dipped into its top edge, frosting
+     over a little more (and tipping open) while the pocket is open. */
+  .pocket-front {
+    top: 300px; height: 210px; z-index: 20; pointer-events: none;
+    background: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.62));
+    -webkit-backdrop-filter: blur(5px) saturate(1.1); backdrop-filter: blur(5px) saturate(1.1);
+    transform-origin: 50% 100%;   /* hinged at the bottom, so it tips open toward you */
+    transition: background .4s var(--ease), -webkit-backdrop-filter .4s var(--ease), backdrop-filter .4s var(--ease),
+                transform .55s cubic-bezier(.3, 1.35, .5, 1);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 1px rgba(0,0,0,.06), inset 0 -10px 20px rgba(0,0,0,.04);
+    -webkit-mask: radial-gradient(ellipse 36px 15px at 50% 0, transparent 96%, #000 100%);
+    mask: radial-gradient(ellipse 36px 15px at 50% 0, transparent 96%, #000 100%);
+  }
+  .pocket.is-open .pocket-front {
+    transform: perspective(700px) rotateX(-14deg);
+    background: linear-gradient(rgba(255,255,255,.74), rgba(255,255,255,.84));
+    -webkit-backdrop-filter: blur(12px) saturate(1.1); backdrop-filter: blur(12px) saturate(1.1);
+  }
+  .pocket-hit { top: 200px; height: 310px; z-index: 25; cursor: pointer; }
+  .pocket-hit:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+  .pi { position: absolute; left: 260px; top: 300px; width: var(--w); will-change: transform; }
+  .pi-inner {
+    display: block; width: 100%;
+    transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), box-shadow .35s;
+  }
+  .pocket.is-open button.pi { cursor: pointer; }   /* only pieces that open something */
+  .pocket.is-open .pi:hover, .pocket.is-open .pi:focus-visible { z-index: 60 !important; }
+  .pocket.is-open .pi:hover .pi-inner,
+  .pocket.is-open .pi:focus-visible .pi-inner { transform: rotate(var(--unrot)) scale(1.08); }
+  .pi:focus-visible { outline: none; }
+  .pi:focus-visible .pi-inner { outline: 2px solid var(--ink); outline-offset: 3px; }
+  /* photo print */
+  .pi-photo .pi-inner {
+    padding: 5px; background: #fff; border-radius: 4px;
+    box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.12), 0 8px 20px rgba(0,0,0,.10);
+  }
+  .pi-photo img { display: block; width: 100%; aspect-ratio: var(--ar); object-fit: cover; border-radius: 2px; }
+  /* round sticker */
+  .pi-sticker .pi-inner { border-radius: 50%; padding: 4px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.14), 0 6px 14px rgba(0,0,0,.10); }
+  .pi-sticker img { display: block; width: 100%; aspect-ratio: 1; border-radius: 50%; }
+  /* track card: the project's tags from its Home card, one chip each, and its track number */
+  .pi-track .pi-inner {
+    min-height: 120px; box-sizing: border-box; display: flex; flex-direction: column;
+    padding: 13px 14px 12px; border-radius: 14px; text-align: left; background: #fff; color: var(--ink);
+    box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.08), 0 8px 18px rgba(0,0,0,.07);
+  }
+  .pi-track small, .pi-track i {
+    font: 500 15px/1.35 "Geist Mono", ui-monospace, monospace; font-style: normal; letter-spacing: .05em; text-transform: uppercase;
+  }
+  .pi-track .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .pi-track small {
+    padding: 3px 8px; border-radius: 999px; color: var(--ink);
+    background: color-mix(in srgb, var(--tint, #ccc) 18%, #fff);
+    box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--tint, #ccc) 55%, #fff);
+  }
+  .pi-track i { margin-top: auto; color: var(--ink-faint); }
+  /* blank card, for a pocket whose project isn't up yet */
+  .pi-blank { cursor: default; }
+  .pi-blank .pi-inner {
+    aspect-ratio: var(--ar); border-radius: 4px; background: var(--paper, #f4f5f7);
+    box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.08), 0 8px 18px rgba(0,0,0,.06);
+  }
+
+  .pocket-name {
+    margin-top: 10px; font: 500 14px/1.3 "Geist Mono", ui-monospace, monospace; color: var(--ink-muted);
+    transition: color .3s;
+  }
+  .pocket-col.is-open .pocket-name { color: var(--ink); }
+  .pocket-col.is-soon .pocket-name { color: var(--ink-faint); }
+
+  @media (max-width: 900px) {
+    html, body { overflow: auto; height: auto; }
+    .layout { grid-template-columns: 1fr; row-gap: 24px; }
+    .side { overflow: visible; gap: 24px; padding: 0 16px; }
+    .side { --side-size: 16px; }
+    .sections { display: flex; flex-wrap: wrap; gap: 0 20px; padding: 8px 16px; border-radius: 12px; }
+    .fader { display: none; }
+    .sections button { padding: 6px 0; }
+    .project-list { flex-direction: row; gap: 20px; padding: 10px 16px; border-radius: 12px; }
+    .viewer { height: 80vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Primary">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="projects.html" aria-current="page">Projects</a></li>
+    <li><a href="other-work.html">Other Work</a></li>
+    <li><a href="#" aria-disabled="true" title="coming soon">Contacts</a></li>
+    <li><a href="about.html">About Me</a></li>
+  </ul>
+</nav>
+
+<div class="layout">
+  <aside class="side">
+    <ul class="sections" id="sections" aria-label="Sections"></ul>
+    <ul class="project-list" id="project-list" aria-label="Projects"></ul>
+  </aside>
+
+  <main class="viewer">
+    <iframe id="viewer" title="Project case study"></iframe>
+    <button type="button" class="viewer-back" id="viewer-back" aria-label="Back to all projects">
+      <span class="vb-well"><span class="vb-cap">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg>
+        Projects
+      </span></span>
+    </button>
+    <section class="pocket-stage" id="pocket-stage" aria-label="Projects">
+      <div class="pocket-grid" id="pocket-grid"></div>
+    </section>
+  </main>
+</div>
+
+<script src="js/nav.js?v=12"></script>
+<script>
+  // Section anchors are y positions (px) in each project's page — Figma frame y minus the
+  // height taken out of the hero by tools/hero_shrink.js (Verdure 170, Clicket 130), and for
+  // Verdure past its research, the 2372 px its research cuts gave up (verdure.html).
+  // null = the project has no such section yet (shown greyed out).
+  const PROJECTS = {
+    verdure: {
+      title: "Verdure",
+      blurb: "Modular indoor-planting system with FlexiSpot.",
+      color: "#6fd197",   // signature colour (the case study's green): the pocket's back
+      src: "projects/verdure.html?v=71",
+      sections: { overview: 0, research: 2383, development: 6911, "final product": 11499, outcomes: 19214 },
+      // pieces in the pocket: photo (w = width in px, ar = aspect ratio), sticker, tag
+      pocket: [
+        { sticker: "assets/pocket/flexispot.png", w: 92 },
+        { sticker: "assets/pocket/trophy.svg", w: 80 },   // 2nd place of 30, 12,000 RMB award
+        { track: "Physical product · UX/UI · Complex system", n: "01", w: 210 },
+        { photo: "assets/pocket/verdure-12e49.jpg", w: 170, ar: 1.417 },
+        { photo: "assets/pocket/verdure-height.jpg", w: 120, ar: .475 }
+      ]
+    },
+    clicket: {
+      title: "Clicket",
+      blurb: "Camera accessory, app and rental service for new photographers.",
+      color: "#ff6f6f",   // the shutter-button coral
+      src: "projects/clicket.html?v=25",
+      sections: { overview: 0, research: 2242, development: 5089, "final product": 5755, outcomes: 12069 },
+      pocket: [
+        { photo: "assets/pocket/clicket-e7d9b.jpg", w: 104, ar: .82 },
+        { photo: "assets/pocket/clicket-f4cf1.jpg", w: 170, ar: 2.41 },
+        { track: "Physical product · App · Service", n: "02", w: 210 },
+        { photo: "assets/pocket/clicket-1a22b.jpg", w: 150, ar: 1.6 },
+        { photo: "assets/pocket/clicket-30218.jpg", w: 140, ar: 1.333 },
+        { photo: "assets/pocket/clicket-59d78.jpg", w: 140, ar: 1.145 }
+      ]
+    }
+  };
+  // the overview's pockets, in order; a pocket without a project id is a placeholder
+  const POCKETS = [
+    { id: "verdure" },
+    { id: "clicket" },
+    // case study not up yet: named, tinted (the purple from its card on Home), not clickable
+    { title: "Microsoft Fabric", color: "#8a6cc0",
+      pieces: [{ blank: "#f3f4f6", w: 150, ar: 1.35 }, { track: "Client project · AI · UX research", n: "03", w: 210 }, { blank: "#f1f2f4", w: 150, ar: 1.5 }] },
+    { title: "Coming soon", pieces: [{ blank: "#eef0f3", w: 140, ar: 1.4 }, { blank: "#f3f4f6", w: 120, ar: .85 }, { blank: "#f0f1f3", w: 150, ar: 1.3 }] }
+  ];
+  const FIRST = POCKETS[0].id;   // scrolling down on the overview goes into this one
+  const SPY_OFFSET = 0.3; // a section becomes current once it reaches 30% down the viewer
+
+  const iframe = document.getElementById("viewer");
+  const sectionList = document.getElementById("sections");
+  const projectList = document.getElementById("project-list");
+  let active, detachScroll = null;   // active: project id, null = pocket overview
+
+  const sectionNames = Object.keys(PROJECTS.verdure.sections);
+  sectionList.innerHTML = sectionNames.map(s => `<li><button type="button" data-section="${s}">${s[0].toUpperCase() + s.slice(1)}</button></li>`).join("");
+  sectionList.insertAdjacentHTML("beforeend", `<li class="fader" aria-hidden="true">
+      <span class="fader-ticks"></span><span class="fader-track"><span class="fader-fill"></span></span><span class="fader-knob"></span>
+    </li>`);
+  const fader = sectionList.querySelector(".fader");
+  const fTicks = fader.querySelector(".fader-ticks"), fTrack = fader.querySelector(".fader-track");
+  const fFill = fader.querySelector(".fader-fill"), fKnob = fader.querySelector(".fader-knob");
+  projectList.innerHTML = Object.entries(PROJECTS).map(([id, p]) => `
+    <li><button type="button" data-project="${id}">
+      <strong>${p.title}</strong><span>${p.blurb}</span>
+    </button></li>`).join("");
+
+  const zoomOf = win => {
+    const f = win.document.getElementById("frame");
+    if (!f) return 1;
+    const crop = Number(f.dataset.crop) || 0;
+    const frameW = Number(f.dataset.frameWidth) || 1420;
+    return parseFloat(f.style.zoom) || win.document.documentElement.clientWidth / (frameW - 2 * crop);
+  };
+
+  function markSection(name) {
+    sectionList.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", b.dataset.section === name));
+  }
+
+  let spyPausedUntil = 0; // while a clicked section scrolls into view, keep its highlight
+
+  // ---------- fader ----------
+  // Stops: for each section that exists, the y of its name in the panel and the scroll
+  // position (in the case-study page) where that section's top reaches the top of the viewer.
+  function faderStops() {
+    const win = iframe.contentWindow, z = zoomOf(win);
+    const max = win.document.documentElement.scrollHeight - win.innerHeight;
+    return Object.entries(PROJECTS[active].sections).filter(([, y]) => y !== null).map(([name, y]) => {
+      const b = sectionList.querySelector(`[data-section="${name}"]`);
+      return { y: b.offsetTop + b.offsetHeight / 2, at: Math.min(max, y * z) };   // same spot a click on the name scrolls to
+    });
+  }
+  let knobY = 0;
+  function layoutFader() {
+    const stops = faderStops(), top = stops[0].y, bottom = stops.at(-1).y;
+    fTrack.style.top = top + "px"; fTrack.style.height = bottom - top + "px";
+    if (!fTicks.childElementCount || fTicks.dataset.span !== `${top},${bottom}`) {
+      fTicks.dataset.span = `${top},${bottom}`;
+      const marks = [];
+      stops.forEach((st, i) => {
+        marks.push([st.y, true]);
+      });
+      fTicks.innerHTML = marks.map(([y, major]) => `<i class="${major ? "major" : ""}" style="top:${y - 0.75}px"></i>`).join("");
+    }
+    return stops;
+  }
+  // Clicking a section name: the knob springs to that name, overshooting a little and
+  // settling (it ignores the page scroll until the smooth scroll there is done).
+  let faderLockUntil = 0;
+  function springKnob(name) {
+    const b = sectionList.querySelector(`[data-section="${name}"]`);
+    const y = b.offsetTop + b.offsetHeight / 2;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { setKnob(y); return; }
+    faderLockUntil = performance.now() + 1200;
+    fader.classList.add("is-springing");
+    setKnob(y, true);
+    clearTimeout(springKnob.t);
+    springKnob.t = setTimeout(() => fader.classList.remove("is-springing"), 1200);
+  }
+  function setKnob(y, force) {
+    if (!force && performance.now() < faderLockUntil) return;
+    knobY = y;
+    const top = parseFloat(fTrack.style.top) || 0;
+    fKnob.style.top = y + "px";
+    fFill.style.height = Math.max(0, y - top) + "px";
+    fTicks.querySelectorAll("i").forEach(t => t.classList.toggle("on", parseFloat(t.style.top) <= y));
+  }
+  // Resting fader for the pocket overview: a tick at every section name, knob at the top.
+  function restFader() {
+    const ys = [...sectionList.querySelectorAll("button")].map(b => b.offsetTop + b.offsetHeight / 2);
+    fTrack.style.top = ys[0] + "px"; fTrack.style.height = ys.at(-1) - ys[0] + "px";
+    fTicks.dataset.span = "";   // so a project lays its own ticks out again
+    fTicks.innerHTML = ys.map(y => `<i class="major" style="top:${y - 0.75}px"></i>`).join("");
+    faderLockUntil = 0; fader.classList.remove("is-springing");
+    setKnob(ys[0], true);
+  }
+  function updateFader() {
+    const win = iframe.contentWindow;
+    if (!active || !win?.document?.getElementById("frame")) return;
+    const stops = layoutFader(), sy = win.scrollY;
+    let y = stops[0].y;
+    for (let i = 0; i < stops.length; i++) {
+      const a = stops[i], b = stops[i + 1];
+      if (!b || sy < b.at) { y = b && b.at > a.at ? a.y + (b.y - a.y) * Math.max(0, Math.min(1, (sy - a.at) / (b.at - a.at))) : a.y; break; }
+    }
+    if (win.scrollY + win.innerHeight >= win.document.documentElement.scrollHeight - 2) y = stops.at(-1).y;
+    setKnob(y);
+  }
+  // knob y → scroll position (the inverse of the mapping above)
+  function scrollFromKnob(y) {
+    const stops = faderStops(), win = iframe.contentWindow;
+    y = Math.max(stops[0].y, Math.min(stops.at(-1).y, y));
+    for (let i = 0; i < stops.length - 1; i++) {
+      const a = stops[i], b = stops[i + 1];
+      if (y <= b.y) { win.scrollTo({ top: a.at + (b.at - a.at) * (y - a.y) / (b.y - a.y), behavior: "auto" }); return; }
+    }
+    win.scrollTo({ top: stops.at(-1).at, behavior: "auto" });
+  }
+  // Press on a tick (or anywhere on the bar) and let go: the knob springs to the nearest
+  // section and the case study scrolls there, same as clicking its name. Grab the knob,
+  // or press and move, to scrub freely instead.
+  let faderDrag = null;
+  const yIn = e => e.clientY - fader.getBoundingClientRect().top;
+  fader.addEventListener("pointerdown", e => {
+    if (e.button !== 0 || !attachedDoc) return;
+    e.preventDefault();
+    try { fader.setPointerCapture(e.pointerId); } catch {}
+    faderDrag = { id: e.pointerId, y0: yIn(e), scrubbing: !!e.target.closest(".fader-knob") };
+    if (faderDrag.scrubbing) { faderLockUntil = 0; fader.classList.remove("is-springing"); fader.classList.add("is-dragging"); spyPausedUntil = 0; }
+  });
+  fader.addEventListener("pointermove", e => {
+    if (!faderDrag || e.pointerId !== faderDrag.id) return;
+    if (!faderDrag.scrubbing && Math.abs(yIn(e) - faderDrag.y0) > 4) {
+      faderDrag.scrubbing = true; faderLockUntil = 0; fader.classList.remove("is-springing"); fader.classList.add("is-dragging"); spyPausedUntil = 0;
+    }
+    if (faderDrag.scrubbing) scrollFromKnob(yIn(e));
+  });
+  const faderUp = e => {
+    if (!faderDrag || e.pointerId !== faderDrag.id) return;
+    const d = faderDrag; faderDrag = null;
+    fader.classList.remove("is-dragging");
+    if (d.scrubbing || e.type === "pointercancel") return;
+    // a tap: nearest section
+    const y = yIn(e);
+    const names = Object.entries(PROJECTS[active].sections).filter(([, v]) => v !== null).map(([n]) => n);
+    const near = names.reduce((best, n) => {
+      const b = sectionList.querySelector(`[data-section="${n}"]`), c = b.offsetTop + b.offsetHeight / 2;
+      return Math.abs(c - y) < best.d ? { n, d: Math.abs(c - y) } : best;
+    }, { n: names[0], d: Infinity }).n;
+    sectionList.querySelector(`[data-section="${near}"]`).click();
+  };
+  fader.addEventListener("pointerup", faderUp);
+  fader.addEventListener("pointercancel", faderUp);
+  addEventListener("resize", () => updateFader());
+
+  function spy() {
+    updateFader();
+    if (performance.now() < spyPausedUntil) return;
+    const win = iframe.contentWindow;
+    const z = zoomOf(win);
+    const probe = win.scrollY + win.innerHeight * SPY_OFFSET;
+    let current = sectionNames[0];
+    const available = Object.entries(PROJECTS[active].sections).filter(([, y]) => y !== null);
+    for (const [name, y] of available) if (y * z <= probe) current = name;
+    // At the very bottom, the last section is current even if it is short.
+    if (win.scrollY + win.innerHeight >= win.document.documentElement.scrollHeight - 2) current = available.at(-1)[0];
+    markSection(current);
+  }
+
+  // id null (or unknown) = the pocket overview
+  function openProject(id, { push = true } = {}) {
+    if (!PROJECTS[id]) id = null;
+    if (id === active) return;
+    active = id;
+    projectList.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", b.dataset.project === (id || "")));
+    document.body.classList.toggle("is-pocket", !id);
+    if (!id) {
+      clearInterval(poll); detachScroll?.(); detachScroll = null; attachedDoc = null;
+      sectionList.querySelectorAll("button").forEach(b => { b.disabled = true; b.title = ""; b.setAttribute("aria-current", false); });
+      restFader();
+      if (push) history.pushState({ id: null }, "", location.pathname);
+      // load the first case study behind the pockets, so scrolling into it is instant
+      if (!iframe.getAttribute("src")) iframe.src = PROJECTS[FIRST].src;
+      return;
+    }
+    pocket.close();
+    sectionList.querySelectorAll("button").forEach(b => {
+      const missing = PROJECTS[id].sections[b.dataset.section] === null;
+      b.disabled = missing;
+      b.title = missing ? "coming soon" : "";
+    });
+    markSection(sectionNames[0]);
+    spyPausedUntil = 0;
+    iframe.classList.add("is-loading");
+    // replace() keeps iframe loads out of the session history, so Back switches projects
+    const win = iframe.contentWindow;
+    if (win?.location.pathname.endsWith(PROJECTS[id].src.split("?")[0])) { win.scrollTo(0, 0); attachedDoc = null; }
+    else if (win && win.location.href !== "about:blank") win.location.replace(new URL(PROJECTS[id].src, location.href));
+    else iframe.src = PROJECTS[id].src;
+    waitForProject();
+    if (push) history.pushState({ id }, "", `?p=${id}`);
+  }
+
+  // Hook up as soon as the case study's DOM is parsed; the iframe "load" event
+  // waits for every image, which can take a long time on these pages.
+  let attachedDoc = null;
+  function attach() {
+    const win = iframe.contentWindow, doc = iframe.contentDocument;
+    if (!active || !doc || doc === attachedDoc || !doc.getElementById("frame")) return false;
+    // wait until the page has run its layout scripts (they sit at the end of the body);
+    // revealing it earlier shows the raw layout for a moment before it rearranges
+    if (doc.readyState === "loading") return false;
+    if (!win.location.pathname.endsWith(PROJECTS[active].src.split("?")[0])) return false;
+    detachScroll?.();
+    attachedDoc = doc;
+    const onScroll = () => spy();
+    // Already at the top and scrolling further up goes back to the pockets. Only a
+    // gesture that starts at the top counts, so the tail of a fling up the page doesn't.
+    let acc = 0, lastWheel = 0, fromTop = false;
+    const atTop = () => win.scrollY <= 0;
+    const onWheel = e => {
+      if (matchMedia("(max-width: 900px)").matches) return;
+      const now = performance.now();
+      if (now - lastWheel > 250) { acc = 0; fromTop = atTop(); }
+      lastWheel = now;
+      if (!fromTop || !atTop() || e.deltaY >= 0) { acc = 0; return; }
+      acc -= e.deltaY;
+      if (acc > 80) { acc = 0; openProject(null); }
+    };
+    const onKey = e => { if (atTop() && (e.key === "ArrowUp" || e.key === "PageUp")) openProject(null); };
+    win.addEventListener("scroll", onScroll, { passive: true });
+    win.addEventListener("wheel", onWheel, { passive: true });
+    win.addEventListener("keydown", onKey);
+    detachScroll = () => {
+      win.removeEventListener("scroll", onScroll);
+      win.removeEventListener("wheel", onWheel);
+      win.removeEventListener("keydown", onKey);
+    };
+    spy();
+    iframe.classList.remove("is-loading");
+    return true;
+  }
+  let poll = null;
+  function waitForProject() {
+    clearInterval(poll);
+    poll = setInterval(() => { if (attach()) clearInterval(poll); }, 100);
+  }
+  iframe.addEventListener("load", attach);
+
+  sectionList.addEventListener("click", e => {
+    const b = e.target.closest("button[data-section]");
+    if (!b) return;
+    const win = iframe.contentWindow;
+    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    markSection(b.dataset.section);
+    springKnob(b.dataset.section);
+    spyPausedUntil = performance.now() + (smooth ? 1200 : 0);
+    win.scrollTo({ top: PROJECTS[active].sections[b.dataset.section] * zoomOf(win), behavior: smooth ? "smooth" : "auto" });
+  });
+
+  projectList.addEventListener("click", e => {
+    const b = e.target.closest("button[data-project]");
+    if (b) openProject(b.dataset.project);
+  });
+  // ---------- pockets ----------
+  const pocket = (() => {
+    const stage = document.getElementById("pocket-stage"), grid = document.getElementById("pocket-grid");
+    const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const Z_BEHIND = 2, Z_FRONT = 30;   // the front panel sits at z 20
+    const PIECE = 1;                    // pieces are drawn at their listed width
+    // Spread slots (offsets from the anchor), all above the pocket so an open pocket never
+    // covers its neighbours: six make two rows of three, three or four mostly one row (a
+    // sticker floats above it). Jitter keeps it from looking gridded.
+    const SLOTS = {
+      6: [[-195, -300, -5], [-25, -318, 3], [180, -298, -2], [-170, -150, 4], [0, -160, -3], [170, -146, 5]],
+      5: [[-110, -295, 6], [25, -300, -8], [-220, -150, -4], [5, -160, 2], [175, -190, -3]],
+      4: [[-90, -275, 6], [-200, -150, -4], [-10, -160, 2], [165, -190, -3]],
+      3: [[-190, -160, -5], [0, -184, 3], [190, -166, 4]]
+    };
+    // a position is [x, y, rotation, scale?]
+    const tf = ([x, y, r, k = 1], s = 1) => `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${r}deg) scale(${k * s})`;
+    // seeded jitter so a pocket's stack always looks the same
+    const rand = seed => () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const scale = () => parseFloat(grid.style.getPropertyValue("--s")) || 1;
+
+    // Animate from wherever the piece is right now (mid-flight included) to the end
+    // frame, which is also written inline so it holds once the animation is gone.
+    // firstEasing: the easing out of that starting frame, when the timing is per segment.
+    function move(p, frames, opts, firstEasing) {
+      const cs = getComputedStyle(p.node);
+      const from = { transform: cs.transform, zIndex: cs.zIndex === "auto" ? Z_BEHIND : +cs.zIndex };
+      if (firstEasing) from.easing = firstEasing;
+      p.node.getAnimations().forEach(a => a.cancel());
+      const last = frames.at(-1);
+      for (const k in last) if (k !== "offset" && k !== "easing") p.node.style[k] = last[k];
+      if (reduced()) return;
+      p.node.animate([from, ...frames], { fill: "backwards", ...opts });   // hold the start through any delay
+    }
+
+    function make(def, n) {
+      const proj = PROJECTS[def.id], title = proj ? proj.title : def.title;
+      const col = document.createElement("div");
+      const tint = (proj || def).color;
+      col.className = "pocket-col" + (proj || tint ? "" : " is-soon");
+      if (tint) col.style.setProperty("--tint", tint);
+      col.innerHTML = `<div class="pocket-wrap"><div class="pocket">
+          <div class="pocket-back"></div><div class="pocket-front"></div>
+          <button type="button" class="pocket-hit" aria-expanded="false" aria-label="Open ${title}"></button>
+        </div></div><p class="pocket-name">${title}</p>`;
+      grid.append(col);
+      const el = col.querySelector(".pocket"), hit = col.querySelector(".pocket-hit");
+      const front = col.querySelector(".pocket-front");
+      const items = proj ? proj.pocket : def.pieces, slots = SLOTS[items.length] || SLOTS[6];
+      const rnd = rand(n * 7919 + 13);
+      const me = { id: def.id, col, el, hit, open: false, pieces: [] };
+
+      me.pieces = items.map((it, i) => {
+        const w = Math.round(it.w * PIECE);
+        const node = document.createElement(proj ? "button" : "div");
+        if (proj) { node.type = "button"; node.tabIndex = -1; node.setAttribute("aria-label", `Open ${title}`); }
+        node.className = "pi " + (it.photo ? "pi-photo" : it.sticker ? "pi-sticker" : it.track ? "pi-track" : "pi-blank");
+        node.style.setProperty("--w", w + "px");
+        if (it.ar) node.style.setProperty("--ar", it.ar);
+        if (it.blank) node.style.setProperty("--paper", it.blank);
+        node.innerHTML = `<span class="pi-inner">${
+          it.photo || it.sticker ? `<img src="${it.photo || it.sticker}" alt="" draggable="false">` :
+          it.track ? `<span class="chips">${it.track.split(" · ").map(t => `<small>${t}</small>`).join("")}</span><i>Track ${it.n}</i>` : ""}</span>`;
+        const h = it.photo ? w / it.ar + 10 : it.sticker ? w : it.track ? 150 : w / it.ar;
+        // Tucked: blown up to nearly fill the pocket's width and sunk deep, its bottom near
+        // the pocket's floor (the front is 210 tall), but always with a strip above the edge.
+        const k = it.sticker ? 1.3 : Math.min(205 / w, 215 / h), hk = h * k;   // a sticker stays sticker-sized
+        const top = Math.min(196 - hk, -22) + (rnd() - .5) * 10;
+        const stack = [(rnd() - .5) * 18, top + hk / 2, (rnd() - .5) * 7, k];
+        // lifted: just clear of the front panel, so it can pass in front of it
+        const lift = [stack[0], -hk / 2 - 16, stack[2] * .5, k];
+        const slot = slots[i];
+        node.style.setProperty("--unrot", -slot[2] + "deg");
+        node.style.transform = tf(stack); node.style.zIndex = Z_BEHIND + i;
+        if (proj) node.addEventListener("click", () => { if (me.open) openProject(def.id); else show(me); });
+        el.insertBefore(node, front);
+        return { node, h, w, stack, lift, slot, i };
+      });
+
+      // Open while the pointer is over the pocket; once open, stay open while it is anywhere
+      // over the spread (the box around every slot), so moving onto a piece keeps it out.
+      me.zone = e => {
+        const s = scale(), r = el.getBoundingClientRect(), ax = r.left + 260 * s, ay = r.top + 300 * s;
+        const x = (e.clientX - ax) / s, y = (e.clientY - ay) / s;
+        if (!me.open) return x > -120 && x < 120 && y > -100 && y < 210;
+        return me.pieces.some(p => Math.abs(x - p.slot[0]) < p.w / 2 + 24 && Math.abs(y - p.slot[1]) < p.h / 2 + 24)
+            || (x > -140 && x < 140 && y > -100 && y < 220);
+      };
+
+      me.setOpen = next => {
+        if (next === me.open) return;
+        me.open = next;
+        el.classList.toggle("is-open", next);
+        col.classList.toggle("is-open", next);
+        hit.setAttribute("aria-expanded", next);
+        // keep this pocket above its neighbours while its pieces are out (and on the way back)
+        clearTimeout(me.lower);
+        if (next) col.classList.add("is-raised");
+        else me.lower = setTimeout(() => col.classList.remove("is-raised"), 1200);
+        const n = me.pieces.length;
+        me.pieces.forEach(p => {
+          if (proj) p.node.tabIndex = next ? 0 : -1;
+          if (next) {
+            // the whole stack rises out of the pocket together, then without a pause each
+            // piece fans out to its slot, one after another
+            // timings in ms: RISE to lift the stack, SPREAD from all lifted to all in their slots,
+            // GAP between one piece leaving and the next
+            const RISE = 360, SPREAD = 600, GAP = 42, D = RISE + SPREAD, up = RISE / D;
+            const out = up + p.i * GAP / D;
+            move(p, [
+              { zIndex: Z_BEHIND + p.i, offset: up - .01 },
+              { transform: tf(p.lift), offset: up }, { zIndex: Z_FRONT + p.i, offset: up },
+              { transform: tf(p.lift), offset: out, easing: "cubic-bezier(.2, .8, .3, 1)" },
+              { transform: tf(p.slot), zIndex: Z_FRONT + p.i }
+            ], { duration: D, easing: "linear" }, "cubic-bezier(.25, .9, .35, 1)");
+          } else {
+            // gather back over the pocket, then drop in behind the front
+            move(p, [
+              { transform: tf(p.lift), offset: .5, easing: "cubic-bezier(.4, 0, .4, 1)" },
+              { zIndex: Z_FRONT + p.i, offset: .5 }, { zIndex: Z_BEHIND + p.i, offset: .51 },
+              { transform: tf(p.stack), zIndex: Z_BEHIND + p.i }
+            ], { duration: 900, delay: (n - 1 - p.i) * 50, easing: "cubic-bezier(.4, 0, .3, 1)" });
+          }
+        });
+      };
+      return me;
+    }
+
+    const pockets = POCKETS.map(make);
+    let current = null;   // the open pocket
+    function show(next) {
+      if (next === current) return;
+      current?.setOpen(false);
+      current = next;
+      current?.setOpen(true);
+    }
+
+    stage.addEventListener("pointermove", e => {
+      if (e.pointerType !== "mouse" || (current && current.zone(e))) return;
+      show(pockets.find(p => p.zone(e)) || null);
+    });
+    stage.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") show(null); });
+    // mouse opens on hover; keyboard and touch toggle with a click
+    let lastPointer = "";
+    stage.addEventListener("pointerdown", e => { lastPointer = e.pointerType; }, true);
+    // clicking an open pocket goes into its project, like clicking one of its pieces
+    pockets.forEach(p => p.hit.addEventListener("click", e => {
+      if (current === p && PROJECTS[p.id]) openProject(p.id);
+      else if (e.detail === 0 || lastPointer !== "mouse") show(current === p ? null : p);
+    }));
+    // touch: tap outside the spread to close
+    stage.addEventListener("pointerup", e => { if (e.pointerType !== "mouse" && current && !current.zone(e) && !e.target.closest(".pocket-hit")) show(null); });
+    stage.addEventListener("focusout", e => { if (current && !current.col.contains(e.relatedTarget)) show(null); });
+    stage.addEventListener("keydown", e => {
+      if (e.key === "Escape" && current) { const p = current; show(null); p.hit.focus(); }
+    });
+
+    // four in a row; two by two on narrow screens
+    function fit() {
+      const perRow = matchMedia("(max-width: 900px)").matches ? 2 : 4, rows = Math.ceil(pockets.length / perRow);
+      // a pocket is ~62% of its column; the outer columns get extra side room so their
+      // spread (about 300px either side of the pocket's centre, at full size) stays in view
+      const k = .62 / 240, REACH = 300;
+      const colW = (stage.clientWidth - 32) / (perRow + 2 * Math.max(0, REACH * k - .5));
+      const s = Math.max(.3, Math.min(1, colW * k, (stage.clientHeight - rows * 40) / (rows * 540)));
+      grid.style.setProperty("--col", colW + "px");
+      grid.style.setProperty("--s", s);
+      grid.style.paddingInline = 16 + Math.max(0, REACH * s - colW / 2) + "px";
+      // The box's top ~280px is room for the spread, so centring the box sits the pockets
+      // low. Lift it so the pockets and names are centred, as far as the spread allows.
+      const boxTop = (stage.clientHeight - rows * 540 * s) / 2;
+      const lift = rows === 1 ? Math.max(0, Math.min(140 * s, boxTop + 40 * s - 8)) : 0;
+      grid.style.marginTop = -2 * lift + "px";
+    }
+    addEventListener("resize", fit);
+    fit();
+    return { close: () => show(null), openId: () => current?.id };
+  })();
+
+  // On the overview (desktop layout, where the page itself doesn't scroll), scrolling
+  // down, swiping up or pressing ↓ / PageDown / Space goes straight into a project: the
+  // one whose pocket is open under the pointer, or else the first.
+  (() => {
+    const stage = document.getElementById("pocket-stage");
+    const wide = () => !matchMedia("(max-width: 900px)").matches;
+    let acc = 0, accT = 0, touchY = null;
+    // the pocket under the pointer, if it's a real project; otherwise the first one
+    const go = () => { if (!active && wide()) { acc = 0; openProject(PROJECTS[pocket.openId()] ? pocket.openId() : FIRST); } };
+    stage.addEventListener("wheel", e => {
+      if (active || !wide()) return;
+      e.preventDefault();
+      const now = performance.now();
+      if (now - accT > 250) acc = 0;   // a fresh gesture
+      accT = now;
+      acc = Math.max(0, acc + e.deltaY);
+      if (acc > 60) go();
+    }, { passive: false });
+    stage.addEventListener("touchstart", e => { touchY = e.touches[0].clientY; }, { passive: true });
+    stage.addEventListener("touchend", e => {
+      if (touchY !== null && touchY - e.changedTouches[0].clientY > 60) go();
+      touchY = null;
+    });
+    addEventListener("keydown", e => {
+      if (active || e.target.closest?.("input, textarea") || (e.key === " " && e.target.closest?.("button, a"))) return;
+      if (["ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); go(); }
+    });
+  })();
+
+  addEventListener("popstate", () => openProject(new URLSearchParams(location.search).get("p"), { push: false }));
+  // hold the key down for a beat so the press reads, then go
+  const backKey = document.getElementById("viewer-back");
+  backKey.addEventListener("click", () => {
+    backKey.classList.add("is-pressed");
+    setTimeout(() => { backKey.classList.remove("is-pressed"); openProject(null); }, 140);
+  });
+
+  // A refresh always lands on the pockets; a link with ?p= (e.g. from Home) opens that project.
+  const reloaded = performance.getEntriesByType("navigation")[0]?.type === "reload";
+  if (reloaded && location.search) history.replaceState({ id: null }, "", location.pathname);
+  openProject(reloaded ? null : new URLSearchParams(location.search).get("p"), { push: false });
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+.DS_Store
+# high-res originals and working files stay out of the repo
+source-assets/
+*.psd
+*.fig
+*.blend
+*.mov
