@@ -16,6 +16,10 @@
   .canvas { position: relative; width: 1420px; height: 1450px; margin-top: 40px; }
   .canvas > .pile, .canvas > .story { position: absolute; }
   .pile { left: 0; top: 0; }
+  /* the torn-paper cards are 5% smaller (each about its own centre, set by the script below);
+     their handwriting and speech bubbles keep their size */
+  .pile { scale: .95; }
+  .pile .note, .pile .bubble { scale: calc(1 / .95); }
   .paper, .photo, .note, .ipod { position: absolute; }
   .ipod-img { display: block; width: 100%; height: 100%; }
   .paper { max-width: none; }
@@ -253,6 +257,15 @@
     <div class="story" style="left:600px;top:524px;width:355px"><p>I’ve always wondered how I could help make the world a better place.</p><p>I once dreamed of becoming a lawyer, advocating for others and fighting for justice. Today, I pursue that same purpose through design, creating meaningful experiences for a certain community and amplifying their voice.</p></div>
     <div class="story" style="left:795px;top:1098px;width:407px"><p>To me, design is a intersection of intention, empathy and craft, and a little bit of beauty. Design is never about technical skills, but it’s always about people: how deeply it resonates with them, and how meaningfully it shapes the way they feel, think, and live.</p></div>
   </div>
+<script>
+  // each card shrinks about the centre of its paper
+  document.querySelectorAll(".pile").forEach(p => {
+    const paper = p.querySelector(".paper");
+    if (!paper) return;
+    const n = v => parseFloat(paper.style[v]) || 0;
+    p.style.transformOrigin = `${n("left") + n("width") / 2}px ${n("top") + n("height") / 2}px`;
+  });
+</script>
 </main>
 
 <script src="js/nav.js?v=17"></script>
