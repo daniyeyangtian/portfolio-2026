@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="css/site.css?v=16">
 <style>
   /* Other Work: six project thumbnails in the home cards' style (paper card, image well,
-     red number, title, grey intro); each opens work.html?p=N. Content lives in js/other-work.js. */
+     number, title, intro; in cool greys and blue); each opens work.html?p=N. Content lives in js/other-work.js. */
   :root { --ink-muted: #6E6879; }
   .work { max-width: 900px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 48px) 80px; }
   .work-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
@@ -20,22 +20,22 @@
   .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; list-style: none; padding: 0; }
   .thumb {
-    display: block; background: #f0f0ee; border-radius: 16px; padding: 8px 8px 14px;
-    box-shadow: 2px 5px 10px rgba(0,0,0,.10);
+    display: block; background: #eef1f4; border-radius: 16px; padding: 8px 8px 14px;
+    box-shadow: 2px 5px 10px rgba(30,45,70,.10);
     transition: transform .35s cubic-bezier(.3,1.4,.5,1), box-shadow .35s;
   }
-  .thumb:hover, .thumb:focus-visible { transform: translateY(-4px) rotate(-.6deg); box-shadow: 4px 12px 20px rgba(0,0,0,.14); }
+  .thumb:hover, .thumb:focus-visible { transform: translateY(-4px) rotate(-.6deg); box-shadow: 4px 12px 20px rgba(30,45,70,.15); }
   .thumb:focus-visible { outline: 2px solid var(--ink-muted); outline-offset: 4px; }
   .grid li:nth-child(even) .thumb:hover { transform: translateY(-4px) rotate(.6deg); }
   .thumb-img {
     aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden;
-    background: #d9d9d6 center / cover no-repeat;
-    display: grid; place-items: center; font: 12px "DM Mono", monospace; color: #9a9894;
+    background: #d5dbe2 center / cover no-repeat;
+    display: grid; place-items: center; font: 12px "DM Mono", monospace; color: #8f99a6;
   }
-  .thumb-num { display: block; margin: 10px 4px 0; font: 11px/1.3 "DM Mono", monospace; color: #d2412f; }
-  .thumb-title { display: block; margin: 2px 4px 0; font-size: 16px; font-weight: 500; }
-  .thumb-sub { display: block; margin: 4px 4px 0; font-size: 12.5px; line-height: 1.4; color: var(--ink-muted); }
-  .thumb-meta { display: block; margin: 8px 4px 0; font-size: 11.5px; color: #9a9894; }
+  .thumb-num { display: block; margin: 10px 4px 0; font: 11px/1.3 "DM Mono", monospace; color: #2f6db5; }
+  .thumb-title { display: block; margin: 2px 4px 0; font-size: 16px; font-weight: 500; color: #1d2733; }
+  .thumb-sub { display: block; margin: 4px 4px 0; font-size: 12.5px; line-height: 1.4; color: #5f6b78; }
+  .thumb-meta { display: block; margin: 8px 4px 0; font-size: 11.5px; color: #929ba6; }
   @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .work-head { flex-direction: column; gap: 6px; } }
 </style>
