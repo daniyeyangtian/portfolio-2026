@@ -69,6 +69,7 @@
   .ipod.is-focus { z-index: 2; transform: rotate(0deg) scale(1.6); cursor: default; filter: drop-shadow(0 14px 20px rgba(0,0,0,.22)); }
   .ipod.is-focus .wheel-btn, .ipod.is-focus .ipod-screen { cursor: pointer; }
   .pile.has-focus { z-index: 10; }
+  .pile:has(.bubble.is-on) { z-index: 10; }   /* a speech bubble or quote card shows above the paragraphs */
 
   .ipod-screen {                            /* sits exactly on the photo's screen */
     position: absolute; left: 13.1px; top: 12.6px; width: 140.3px; height: 109.7px;
