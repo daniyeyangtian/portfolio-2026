@@ -25,6 +25,12 @@ window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX,
       <p style="margin:16px 0 0;font:400 16px/1.5 Geist,sans-serif;color:${bodyColor}">${c.body}</p>
     </div>`).join("");
   frame.appendChild(sec);
+  // side by side: the lead lines take the same height, so the paragraphs under them line up
+  const leads = [...sec.querySelectorAll(".case-insert-text > p:first-child")];
+  if (leads.length > 1) {
+    const h = Math.max(...leads.map(p => p.offsetHeight));
+    leads.forEach(p => { p.style.minHeight = h + "px"; });
+  }
   const textH = Math.max(textTop + Math.max(...[...sec.querySelectorAll(".case-insert-text")].map(d => d.offsetHeight)), 37);
   const shift = Math.max(0, Math.round(top + textH + gap - from));
   if (!shift) return 0;
