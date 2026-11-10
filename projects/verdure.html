@@ -870,11 +870,9 @@
   .rs-hint { margin: 0 114px 28px; font: 400 15px/1.33 Geist, sans-serif; color: #737373; }
   .rs-hint svg { display: inline-block; vertical-align: -2px; margin-right: 8px; }
   .rs-stat[aria-expanded="true"] .rs-label { text-decoration: underline; text-decoration-color: #137E44; text-underline-offset: 5px; }
-  .rs-panels { position: relative; margin: 0 114px; overflow: hidden; height: 0; transition: height .35s cubic-bezier(.2,.7,.3,1); }
-  /* closing: gone at once, before the page below moves back up; opening: fades in once the
-     page below has made room (.35 s), so it never sits over the insights */
-  .rs-panel { position: absolute; left: 0; right: 0; top: 0; padding-top: 40px; opacity: 0; visibility: hidden; transition: opacity .1s, visibility 0s .1s; }
-  .rs-panel.is-open { opacity: 1; visibility: visible; transition: opacity .3s .3s, visibility 0s; }
+  .rs-panels { position: relative; margin: 0 114px; }
+  .rs-panel { position: absolute; left: 0; right: 0; top: 0; padding-top: 40px; opacity: 0; visibility: hidden; transition: opacity .15s, visibility 0s .15s; }
+  .rs-panel.is-open { opacity: 1; visibility: visible; transition: opacity .3s .05s, visibility 0s; }
   .rs-intro { margin: 0 0 28px; font: 400 16px/1.5 Geist, sans-serif; color: #6f6f6f; }
   /* surveys: one column per question, a bar per answer */
   .rs-q { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
@@ -894,15 +892,15 @@
   .rs-figs figure { margin: 0; }
   .rs-figs img { display: block; width: 100%; aspect-ratio: 367 / 435; object-fit: contain; }
   .rs-figs figcaption { margin-top: 10px; font: 400 14px/1.3 Geist, sans-serif; color: #6f6f6f; text-align: center; }
-  @media (prefers-reduced-motion: reduce) { .rs-panels, .rs-panel, .rs-chev { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .rs-panel, .rs-chev { transition: none; } }
 </style>
 <script>
   // Research Path as one row of four figures. The old research layers are gone from the export
   // (80:70400–04, 70414–27, 70431–82); the space they took (FROM to TO) closes up. The survey answers, the interview quotes and the three analysis diagrams open
-  // under the row when you click a figure, and the page below follows.
+  // under the row when you click a figure, into room kept for them.
   // Keep projects.html's anchors in step (they are for the closed state).
   (() => {
-    const FROM = 1960, TO = 3400, GAP = 190;   // frame y: the old research block; space before the insights band
+    const FROM = 1960, TO = 3400, GAP = 130;   // frame y: the old research block; space before the insights band
     const room = makeCaseRoom(FROM, TO);
     const A = "../assets/verdure/";
     const chev = '<span class="rs-more" aria-hidden="true"><svg class="rs-chev" viewBox="0 0 10 10"><path d="M2 3.6 5 6.6l3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
@@ -944,16 +942,17 @@
       `<div class="rs-panels">` + STATS.map((s, i) => s.panel ? `<div class="rs-panel" id="rs-p${i}" role="region" aria-label="${s.label}">${s.panel}</div>` : "").join("") + `</div>`;
     document.getElementById("frame").appendChild(sec);
 
-    const rowH = sec.querySelector(".rs-row").offsetTop + sec.querySelector(".rs-row").offsetHeight;
-    const closed = FROM + rowH + GAP - TO;          // how far the page below moves with nothing open
-    room.move(closed);
-    window.caseResearchShift = closed;
-
+    // The page below sits low enough for the tallest panel, so opening one never moves it:
+    // the panels open into space that is already there.
     const holder = sec.querySelector(".rs-panels");
     const buttons = [...sec.querySelectorAll("button.rs-stat")];
-    const ease = "cubic-bezier(.2,.7,.3,1)";
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const animate = on => room.layers().forEach(el => { el.style.transition = on && !reduce ? `translate .35s ${ease}, top .35s ${ease}, height .35s ${ease}` : ""; });
+    const tallest = Math.max(...[...sec.querySelectorAll(".rs-panel")].map(p => p.offsetHeight));
+    holder.style.height = tallest + "px";
+    const rowH = sec.querySelector(".rs-row").offsetTop + sec.querySelector(".rs-row").offsetHeight;
+    const shift = FROM + rowH + tallest + GAP - TO;
+    room.move(shift);
+    window.caseResearchShift = shift;
+
     let open = null;
     const show = btn => {
       open = btn === open ? null : btn;
@@ -962,12 +961,6 @@
         b.setAttribute("aria-expanded", on);
         document.getElementById(b.getAttribute("aria-controls")).classList.toggle("is-open", on);
       });
-      const panel = open && document.getElementById(open.getAttribute("aria-controls"));
-      const h = panel ? panel.offsetHeight : 0;
-      animate(true);
-      holder.style.height = h + "px";
-      room.move(closed + h);
-      clearTimeout(show.t); show.t = setTimeout(() => animate(false), 400);
     };
     buttons.forEach(b => b.addEventListener("click", () => show(b)));
   })();
