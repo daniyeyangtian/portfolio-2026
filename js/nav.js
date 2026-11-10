@@ -48,8 +48,9 @@
   list.addEventListener("focusout", e => { if (!list.contains(e.relatedTarget)) moveTo(current); });
 
   // ---------- exposure dial above the nav ----------
-  // One bead per page; − / + step to the previous / next available page. Going to
-  // another page turns the dial (the beads and knurling roll by that many steps).
+  // One bead per page; the red light, set into the roller, marks the page. Going to
+  // another page turns the dial: beads, light and knurling roll together until the
+  // light sits on the new page. − / + step to the previous / next available page.
   // The dial is centred on the page.
   const nav = list.closest(".site-nav");
   const dial = document.createElement("div");
@@ -106,6 +107,11 @@
   centre();
   addEventListener("resize", centre);
 
+  const light = document.createElement("span");
+  light.className = "dial-light";
+  track.appendChild(light);
+  light.style.setProperty("--x", xOf(links.indexOf(current)) + "px");
+
   const enabled = a => a.getAttribute("aria-disabled") !== "true";
   // nowhere to go: the dial nudges against its stop and springs back
   const bump = dir => {
@@ -119,13 +125,14 @@
     links[i] ? links[i].click() : bump(dir);
   }));
   // Click the bar → nearest page. Press and drag → the whole bar rolls with the
-  // pointer (beads and knurling together) and the nav underline follows;
+  // pointer (beads, red light and knurling together) and the nav underline follows;
   // on release it clicks into the nearest step and goes to that page. Rolling onto a
   // "coming soon" page, or past either end, springs back.
   const nearestTo = x => links.reduce((best, a, i) => Math.abs(xOf(i) - x) < Math.abs(xOf(links.indexOf(best)) - x) ? a : best, links[0]);
   const setShift = (px, animate) => {
     dial.classList.toggle("is-rolling", !animate);
     row.style.transform = `translateX(${px}px)`;
+    light.style.setProperty("--x", xOf(links.indexOf(current)) + px + "px");
     track.style.setProperty("--roll", roll + px + "px");
   };
   const goTo = target => {
