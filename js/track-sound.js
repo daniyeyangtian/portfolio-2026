@@ -1,13 +1,13 @@
 // Home, PROJECTS tape: pointing at a track card plays a short sound, a soft two-note
-// electric-piano chime, pitched per track (Verdure lowest, Fabric highest), with a little
+// electric-piano chime, low and rounded, pitched per track (Verdure lowest, Fabric highest), with a little
 // tape wobble. Made on the fly with Web Audio, no audio files. Browsers only allow sound
 // after a click or key press on the page, which pressing the PROJECTS key already is.
 (() => {
   const AC = window.AudioContext || window.webkitAudioContext;
   const cards = [...document.querySelectorAll('[data-tape="works"] .track')];
   if (!AC || !cards.length) return;
-  const CHIMES = [[72, 79], [76, 83], [79, 86]];   // C5–G5, E5–B5, G5–D6
-  const VOLUME = 0.09;
+  const CHIMES = [[60, 67], [64, 71], [67, 74]];   // C4–G4, E4–B4, G4–D5: an octave lower, softer
+  const VOLUME = 0.11;
   const hz = m => 440 * Math.pow(2, (m - 69) / 12);
   let ctx = null, last = 0;
 
@@ -16,8 +16,9 @@
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(gain, t + 0.008);
     g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
-    g.connect(ctx.destination);
-    [[1, 1], [2, 0.15], [3.01, 0.05]].forEach(([mul, amp]) => {   // sine body + faint bell partials
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1400;   // round off the edge
+    g.connect(lp).connect(ctx.destination);
+    [[1, 1], [2, 0.06]].forEach(([mul, amp]) => {   // sine body + a faint octave
       const o = ctx.createOscillator(), a = ctx.createGain();
       o.frequency.setValueAtTime(hz(m) * mul, t);
       o.detune.setValueAtTime(-6, t); o.detune.linearRampToValueAtTime(4, t + 0.5);   // tape wobble
