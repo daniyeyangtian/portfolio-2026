@@ -10,7 +10,7 @@
   list.appendChild(bar);
 
   const HOVER_DWELL = 140;   // ms
-  let hoverT = 0, lightTo = null;   // lightTo is set once the dial exists
+  let hoverT = 0, spinTo = null;   // spinTo is set once the dial exists
   const moveTo = a => {
     bar.style.width = a.offsetWidth + "px";
     bar.style.transform = `translateX(${a.offsetLeft}px)`;
@@ -30,7 +30,7 @@
 
   links.forEach(a => {
     // hover: follow only once the pointer rests on a link (passing over one on the way to
-    // the dial's − / + shouldn't drag the underline and the light along)
+    // the dial's − / + shouldn't drag the underline along)
     a.addEventListener("mouseenter", () => { clearTimeout(hoverT); hoverT = setTimeout(() => moveTo(a), HOVER_DWELL); });
     a.addEventListener("mouseleave", () => clearTimeout(hoverT));
     a.addEventListener("focus", () => moveTo(a));
@@ -39,16 +39,18 @@
       if (e.metaKey || e.ctrlKey || e.shiftKey) return;
       e.preventDefault();
       moveTo(a);
+      spinTo?.(a);   // the dial turns to the new page
       const go = () => { location.href = a.href; };
-      matchMedia("(prefers-reduced-motion: reduce)").matches ? go() : setTimeout(go, 380);
+      matchMedia("(prefers-reduced-motion: reduce)").matches ? go() : setTimeout(go, 420);
     });
   });
   list.addEventListener("mouseleave", () => { clearTimeout(hoverT); moveTo(current); });
   list.addEventListener("focusout", e => { if (!list.contains(e.relatedTarget)) moveTo(current); });
 
   // ---------- exposure dial above the nav ----------
-  // One bead per page. The red light marks the page; − / + step to the previous /
-  // next available page. The dial is centred on the page.
+  // One bead per page; − / + step to the previous / next available page. Going to
+  // another page turns the dial (the beads and knurling roll by that many steps).
+  // The dial is centred on the page.
   const nav = list.closest(".site-nav");
   const dial = document.createElement("div");
   dial.className = "nav-dial";
@@ -103,18 +105,12 @@
   document.fonts.ready.then(centre);
   centre();
   addEventListener("resize", centre);
-  const light = document.createElement("span");
-  light.className = "dial-light no-anim";
-  track.appendChild(light);
-  lightTo = a => light.style.setProperty("--x", xOf(links.indexOf(a)) + "px");
-  lightTo(current);
-  light.offsetWidth;
-  light.classList.remove("no-anim");
 
   const enabled = a => a.getAttribute("aria-disabled") !== "true";
+  // nowhere to go: the dial nudges against its stop and springs back
   const bump = dir => {
-    light.style.setProperty("--bump", dir * 4 + "px");
-    light.classList.remove("bump"); light.offsetWidth; light.classList.add("bump");
+    track.style.setProperty("--bump", dir * 4 + "px");
+    track.classList.remove("bump"); track.offsetWidth; track.classList.add("bump");
   };
   dial.querySelectorAll(".dial-step").forEach(btn => btn.addEventListener("click", () => {
     const dir = Number(btn.dataset.step);
@@ -123,30 +119,17 @@
     links[i] ? links[i].click() : bump(dir);
   }));
   // Click the bar → nearest page. Press and drag → the whole bar rolls with the
-  // pointer (beads, red light and knurling together) and the nav underline follows;
+  // pointer (beads and knurling together) and the nav underline follows;
   // on release it clicks into the nearest step and goes to that page. Rolling onto a
   // "coming soon" page, or past either end, springs back.
   const nearestTo = x => links.reduce((best, a, i) => Math.abs(xOf(i) - x) < Math.abs(xOf(links.indexOf(best)) - x) ? a : best, links[0]);
   const setShift = (px, animate) => {
     dial.classList.toggle("is-rolling", !animate);
     row.style.transform = `translateX(${px}px)`;
-    light.style.setProperty("--x", xOf(links.indexOf(current)) + px + "px");
     track.style.setProperty("--roll", roll + px + "px");
   };
   const goTo = target => {
-    if (enabled(target) && target !== current) {
-      // Land on the target step, then hand over to the normal nav click.
-      setShift(xOf(links.indexOf(target)) - xOf(links.indexOf(current)), true);
-      setTimeout(() => {
-        // a whole number of steps looks the same as rest, so reset the row unseen
-        roll += xOf(links.indexOf(target)) - xOf(links.indexOf(current));
-        dial.classList.add("is-rolling");
-        row.style.transform = "";
-        target.click();
-        row.offsetWidth; dial.classList.remove("is-rolling");
-      }, 240);
-      return;
-    }
+    if (enabled(target) && target !== current) { target.click(); return; }   // the click turns the dial
     setShift(0, true); moveTo(current);
     bump(target === current ? 1 : Math.sign(xOf(links.indexOf(target)) - xOf(links.indexOf(current))));
   };
@@ -206,8 +189,8 @@
   };
   track.addEventListener("pointerup", end);
   track.addEventListener("pointercancel", end);
-  // The light stays on the current page while you hover the links (only the underline
-  // follows); it moves when you actually go to another page.
-  links.forEach(a => a.addEventListener("click", () => { if (enabled(a)) lightTo(a); }));
-  addEventListener("pageshow", () => { light.classList.add("no-anim"); lightTo(current); light.offsetWidth; light.classList.remove("no-anim"); });
+  // Turn the dial by as many steps as the target page is from this one.
+  spinTo = a => setShift(xOf(links.indexOf(a)) - xOf(links.indexOf(current)), true);
+  // back/forward cache: the page comes back with the dial still turned; reset it unseen
+  addEventListener("pageshow", e => { if (e.persisted) { roll = 0; setShift(0, false); row.offsetWidth; dial.classList.remove("is-rolling"); } });
 })();

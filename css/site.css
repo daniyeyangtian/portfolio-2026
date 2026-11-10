@@ -49,7 +49,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav-indicator.no-anim { transition: none; }
 
 /* ---------- exposure-dial page switcher above the nav (built by js/nav.js) ----------
-   One bead per page; the red light sits on the current page, follows hover like the underline, and slides over before navigating. */
+   One bead per page; going to another page turns the dial by that many steps. */
 .nav-dial {
   display: flex; align-items: center; gap: 8px;
   height: 36px;
@@ -102,7 +102,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   80%  { transform: translate(.25px, 0); }
   100% { transform: translate(0, 0); }
 }
-.nav-dial.is-rolling .dial-row, .nav-dial.is-rolling .dial-light { transition: none; }
+.nav-dial.is-rolling .dial-row { transition: none; }
 .dial-track::before { transition: background-position .45s var(--ease); }
 .nav-dial.is-rolling .dial-track::before { transition: none; }
 .dial-track::before {   /* roller surface: vertical shading + fine knurling, ends masked away */
@@ -120,7 +120,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     linear-gradient(90deg, #050505 0%, rgba(5,5,5,.75) 7%, rgba(5,5,5,0) 22%, rgba(5,5,5,0) 78%, rgba(5,5,5,.75) 93%, #050505 100%),
     radial-gradient(60% 40% at 50% 12%, rgba(255,255,255,.22), rgba(255,255,255,0));  /* centre highlight */
 }
-.dial-bead, .dial-light {
+.dial-bead {
   position: absolute; top: 50%; left: 0; border-radius: 50%;
   transform: translate(calc(var(--x) - 50%), -50%);
 }
@@ -129,17 +129,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: radial-gradient(circle at 35% 30%, #fff 0 18%, #c9c9c7 40%, #6d6c6a 85%);
   box-shadow: 0 1px 1px rgba(0,0,0,.7);
 }
-.dial-light {
-  width: 9px; height: 9px; z-index: 2;
-  background: radial-gradient(circle at 35% 30%, #ffe1d8 0 14%, #f0624a 45%, #a3291b 90%);
-  box-shadow: 0 0 6px 1px rgba(240,90,60,.65), 0 1px 1px rgba(0,0,0,.6);
-  transition: transform .45s var(--ease);
-}
-.dial-light.no-anim { transition: none; }
-.dial-light.bump { animation: dial-bump .32s ease-out; }
-@keyframes dial-bump {
-  30% { transform: translate(calc(var(--x) - 50% + var(--bump, 4px)), -50%); }
-}
+/* − / + with nowhere to go: the roller nudges against its stop */
+.dial-track.bump .dial-row { animation: dial-bump .32s ease-out; }
+@keyframes dial-bump { 30% { translate: var(--bump, 4px) 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; scroll-behavior: auto !important; }
