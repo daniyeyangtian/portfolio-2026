@@ -42,6 +42,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .site-nav a[aria-disabled="true"] { cursor: default; }
 .site-nav a { position: relative; z-index: 1; }
 .site-nav a[aria-current="page"] { color: var(--ink); }
+/* hovering another page's link: an underline fades in under it (the pill stays on this page) */
+.site-nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px;
+  background: currentColor; opacity: 0; transition: opacity .15s;
+}
+.site-nav a:not([aria-current="page"]):not([aria-disabled="true"]):is(:hover, :focus-visible)::after { opacity: 1; }
 .nav-indicator {   /* a pill pressed into the page behind the link: large radius, inner shadow */
   position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 0;
   border-radius: 999px;

@@ -1,5 +1,6 @@
-// Top nav: a pill that sits behind the current page's link and follows hover. It doesn't
-// slide from link to link (it would sweep across the dial): it reappears under the new one.
+// Top nav: a pill sits behind the current page's link; hovering another link underlines it.
+// Going to another page, the pill doesn't slide (it would sweep across the dial): it
+// reappears under the new link.
 (() => {
   const list = document.querySelector(".site-nav ul");
   if (!list) return;
@@ -9,8 +10,7 @@
   bar.className = "nav-indicator no-anim";
   list.appendChild(bar);
 
-  const HOVER_DWELL = 140;   // ms
-  let hoverT = 0, spinTo = null;   // spinTo is set once the dial exists
+  let spinTo = null;   // spinTo is set once the dial exists
   // The indicator is a pill pressed into the page behind the link, a little larger than it.
   const PX = 14, PY = 7;
   let at = null;
@@ -35,11 +35,8 @@
   addEventListener("pageshow", place); // back/forward cache
 
   links.forEach(a => {
-    // hover: follow only once the pointer rests on a link (passing over one on the way to
-    // the dial's − / + shouldn't drag the underline along)
-    a.addEventListener("mouseenter", () => { clearTimeout(hoverT); hoverT = setTimeout(() => moveTo(a), HOVER_DWELL); });
-    a.addEventListener("mouseleave", () => clearTimeout(hoverT));
-    a.addEventListener("focus", () => moveTo(a));
+    // hover / focus: only an underline (site.css); the pill stays on the current page and
+    // moves when you actually go somewhere
     a.addEventListener("click", e => {
       if (a.getAttribute("aria-disabled") === "true" || a === current) { e.preventDefault(); return; }
       if (e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -50,8 +47,7 @@
       matchMedia("(prefers-reduced-motion: reduce)").matches ? go() : setTimeout(go, 420);
     });
   });
-  list.addEventListener("mouseleave", () => { clearTimeout(hoverT); moveTo(current); });
-  list.addEventListener("focusout", e => { if (!list.contains(e.relatedTarget)) moveTo(current); });
+
 
   // ---------- exposure dial above the nav ----------
   // One bead per page; the red light, set into the roller, marks the page. Going to
