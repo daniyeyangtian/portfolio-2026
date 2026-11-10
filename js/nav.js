@@ -31,7 +31,7 @@
   links.forEach(a => {
     // hover: follow only once the pointer rests on a link (passing over one on the way to
     // the dial's − / + shouldn't drag the underline and the light along)
-    a.addEventListener("mouseenter", () => { clearTimeout(hoverT); hoverT = setTimeout(() => { moveTo(a); lightTo?.(a); }, HOVER_DWELL); });
+    a.addEventListener("mouseenter", () => { clearTimeout(hoverT); hoverT = setTimeout(() => moveTo(a), HOVER_DWELL); });
     a.addEventListener("mouseleave", () => clearTimeout(hoverT));
     a.addEventListener("focus", () => moveTo(a));
     a.addEventListener("click", e => {
@@ -206,12 +206,8 @@
   };
   track.addEventListener("pointerup", end);
   track.addEventListener("pointercancel", end);
-  // The light follows the underline: hover / focus / click on nav links.
-  links.forEach(a => {
-    a.addEventListener("focus", () => lightTo(a));
-    a.addEventListener("click", () => { if (enabled(a)) lightTo(a); });
-  });
-  list.addEventListener("mouseleave", () => { clearTimeout(hoverT); lightTo(current); });
-  list.addEventListener("focusout", e => { if (!list.contains(e.relatedTarget)) lightTo(current); });
+  // The light stays on the current page while you hover the links (only the underline
+  // follows); it moves when you actually go to another page.
+  links.forEach(a => a.addEventListener("click", () => { if (enabled(a)) lightTo(a); }));
   addEventListener("pageshow", () => { light.classList.add("no-anim"); lightTo(current); light.offsetWidth; light.classList.remove("no-anim"); });
 })();
