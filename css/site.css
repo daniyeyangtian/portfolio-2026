@@ -54,7 +54,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   pointer-events: none;
 }
 /* moving to another link: no slide, the pill fades in under the new link */
-.nav-indicator.pop { animation: nav-pop .08s ease-out; }
+.nav-indicator.pop { animation: nav-pop .1s ease-out; }
 @keyframes nav-pop { from { opacity: 0; } }   /* fades in where it lands */
 .nav-indicator.no-anim { transition: none; }
 
