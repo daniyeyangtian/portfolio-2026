@@ -48,14 +48,9 @@
 [data-node-id="80:70430"] { display: none; }
 
 /* Greens deepened for contrast (WCAG AA). The title is large text, so 3:1 is enough
-   (bright #3CCB7B fill with a #137E44 outline, which carries the contrast); the green labels (TEAM, SOURCES, insights…) are
+   (#2AB26A: 2.6:1 on the #fafafa band, a little under, chosen brighter on purpose); the green labels (TEAM, SOURCES, insights…) are
    small text and need 4.5:1 (#137E44: 4.9:1). The green accents in the app screens stay. */
-[data-node-id="80:70651"] {
-  color: #3CCB7B !important;
-  /* a thin deep-green outline (drawn outside the letters) gives the edges the contrast:
-     #137E44 is 5:1 on the band, so the bright fill can stay */
-  -webkit-text-stroke: 4px #137E44; paint-order: stroke fill;
-}
+[data-node-id="80:70651"] { color: #2AB26A !important; }
 .text-\[\#6fd197\] { color: #137E44 !important; }
 
 /* ---- Frame 6 phones (inserted above Overview), animated by tools/verdure_anim.js ---- */
