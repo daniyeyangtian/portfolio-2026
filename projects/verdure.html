@@ -860,9 +860,10 @@
   button.rs-stat:hover { background: #f4f6f4; }
   button.rs-stat:focus-visible { outline: 2px solid #137E44; outline-offset: 2px; }
   .rs-num { font: 400 64px/1 Geist, sans-serif; color: #137E44; letter-spacing: -.01em; }
-  .rs-label { display: inline-flex; align-items: center; gap: 8px; font: 400 18px/1.3 Geist, sans-serif; }
+  /* the label is centred under its figure on its own; the round button hangs to its right */
+  .rs-label { position: relative; font: 400 18px/1.3 Geist, sans-serif; }
   /* the open / close cue: a round green button beside the label, so the figures read as clickable */
-  .rs-more { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #e3f3e9; color: #137E44; transition: background .2s, color .2s; }
+  .rs-more { position: absolute; left: calc(100% + 8px); top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #e3f3e9; color: #137E44; transition: background .2s, color .2s; }
   .rs-chev { width: 12px; height: 12px; transition: transform .3s; }
   button.rs-stat:hover .rs-more, .rs-stat[aria-expanded="true"] .rs-more { background: #137E44; color: #fff; }
   .rs-stat[aria-expanded="true"] .rs-chev { transform: rotate(180deg); }
@@ -904,7 +905,7 @@
     document.querySelectorAll('#frame img[src$="892dc.svg"]').forEach(img => (img.closest("[data-node-id], [data-copy-node-id]") || img).remove());
     const room = makeCaseRoom(FROM, TO);
     const A = "../assets/verdure/";
-    const chev = '<span class="rs-more" aria-hidden="true"><svg class="rs-chev" viewBox="0 0 10 10"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+    const chev = '<span class="rs-more" aria-hidden="true"><svg class="rs-chev" viewBox="0 0 10 10"><path d="M2 3.6 5 6.6l3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
     const bar = (label, v) => `<div class="rs-bar"><p><span>${label}</span><b>${v}%</b></p><i style="--v:${v}%"></i></div>`;
     const STATS = [
       { num: "20+", label: "Desk research" },
