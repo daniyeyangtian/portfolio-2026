@@ -9,6 +9,8 @@
   bar.className = "nav-indicator no-anim";
   list.appendChild(bar);
 
+  const HOVER_DWELL = 140;   // ms
+  let hoverT = 0, lightTo = null;   // lightTo is set once the dial exists
   const moveTo = a => {
     bar.style.width = a.offsetWidth + "px";
     bar.style.transform = `translateX(${a.offsetLeft}px)`;
@@ -27,7 +29,10 @@
   addEventListener("pageshow", place); // back/forward cache
 
   links.forEach(a => {
-    a.addEventListener("mouseenter", () => moveTo(a));
+    // hover: follow only once the pointer rests on a link (passing over one on the way to
+    // the dial's − / + shouldn't drag the underline and the light along)
+    a.addEventListener("mouseenter", () => { clearTimeout(hoverT); hoverT = setTimeout(() => { moveTo(a); lightTo?.(a); }, HOVER_DWELL); });
+    a.addEventListener("mouseleave", () => clearTimeout(hoverT));
     a.addEventListener("focus", () => moveTo(a));
     a.addEventListener("click", e => {
       if (a.getAttribute("aria-disabled") === "true" || a === current) { e.preventDefault(); return; }
@@ -38,7 +43,7 @@
       matchMedia("(prefers-reduced-motion: reduce)").matches ? go() : setTimeout(go, 380);
     });
   });
-  list.addEventListener("mouseleave", () => moveTo(current));
+  list.addEventListener("mouseleave", () => { clearTimeout(hoverT); moveTo(current); });
   list.addEventListener("focusout", e => { if (!list.contains(e.relatedTarget)) moveTo(current); });
 
   // ---------- exposure dial above the nav ----------
@@ -101,7 +106,7 @@
   const light = document.createElement("span");
   light.className = "dial-light no-anim";
   track.appendChild(light);
-  const lightTo = a => light.style.setProperty("--x", xOf(links.indexOf(a)) + "px");
+  lightTo = a => light.style.setProperty("--x", xOf(links.indexOf(a)) + "px");
   lightTo(current);
   light.offsetWidth;
   light.classList.remove("no-anim");
@@ -203,11 +208,10 @@
   track.addEventListener("pointercancel", end);
   // The light follows the underline: hover / focus / click on nav links.
   links.forEach(a => {
-    a.addEventListener("mouseenter", () => lightTo(a));
     a.addEventListener("focus", () => lightTo(a));
     a.addEventListener("click", () => { if (enabled(a)) lightTo(a); });
   });
-  list.addEventListener("mouseleave", () => lightTo(current));
+  list.addEventListener("mouseleave", () => { clearTimeout(hoverT); lightTo(current); });
   list.addEventListener("focusout", e => { if (!list.contains(e.relatedTarget)) lightTo(current); });
   addEventListener("pageshow", () => { light.classList.add("no-anim"); lightTo(current); light.offsetWidth; light.classList.remove("no-anim"); });
 })();
