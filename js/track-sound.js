@@ -16,8 +16,7 @@
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(gain, t + 0.008);
     g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
-    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1400;   // round off the edge
-    g.connect(lp).connect(ctx.destination);
+    g.connect(ctx.destination);
     [[1, 1], [2, 0.06]].forEach(([mul, amp]) => {   // sine body + a faint octave
       const o = ctx.createOscillator(), a = ctx.createGain();
       o.frequency.setValueAtTime(hz(m) * mul, t);
