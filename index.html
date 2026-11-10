@@ -8,14 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@500&family=Instrument+Sans:ital,wght@0,500;0,600;1,600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=29">
+<link rel="stylesheet" href="css/site.css?v=30">
 <style>
   /* Home 3 · cassette (Figma: 2026 babies › home3 › "v3 · cassette · about").
      Three transport keys sit above a clear cassette; each key loads a different tape and the
      reels never stop. This first pass builds the About tape; keys 2 and 3 press and spring
      back until their tapes exist. (All three tapes exist now.) The cassette is three.js (js/home3-cassette.js); the
      SVG under it is the fallback if WebGL or the module doesn't load. */
-  :root { --ink-muted: #6E6879; }
   html, body { min-height: 100%; }
   body { display: flex; flex-direction: column; min-height: 100vh; }
 
@@ -92,10 +91,10 @@
   .panel[hidden] { display: block; visibility: hidden; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s, transform .2s, visibility 0s .2s; }
 
   /* ---------- 1 · about ---------- */
-  .copy p { font-size: 24px; line-height: 1.4; color: var(--ink); }
+  .copy p { font-size: 21.6px; line-height: 1.4; color: var(--ink); }
   /* the name, set in Instrument Serif italic (a touch larger: its x-height is smaller than Geist's) */
   .copy .name { font: italic 400 1.25em/1 "Instrument Serif", Georgia, serif; letter-spacing: .005em; }
-  .links { display: flex; gap: 24px; margin-top: 16px; list-style: none; padding: 0; font-size: 18px; }
+  .links { display: flex; gap: 24px; margin-top: 16px; list-style: none; padding: 0; font-size: 16.2px; }
   .links a { color: var(--ink-muted); cursor: pointer; transition: color .2s; }
   .links a:hover { color: var(--ink); }
 
@@ -155,8 +154,8 @@
   @media (max-width: 900px) {
     .deck { flex-direction: column; align-items: stretch; gap: 40px; }
     .tape-col, .panels { width: 100%; max-width: 560px; margin: 0 auto; }
-    .copy p { font-size: 20px; }
-    .links { font-size: 16px; }
+    .copy p { font-size: 18px; }
+    .links { font-size: 14.4px; }
   }
   @media (max-width: 520px) { .tracks { grid-template-columns: 1fr 1fr; } }
 </style>
