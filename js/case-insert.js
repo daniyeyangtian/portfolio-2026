@@ -3,26 +3,29 @@
 // frame at frame-y `top`. Everything from `from` down moves down to make room, so the next
 // section starts `gap` px below the new one's text. Runs after the page's own layout scripts.
 // Returns how far the page below moved (keep the section anchors in projects.html in step).
-window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX, textW, textTop = 0, bodyColor }) => {
+window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX, textW, textTop = 0, bodyColor, columns }) => {
   const frame = document.getElementById("frame");
   if (!frame) return 0;
   const z = frame.getBoundingClientRect().width / 1220;
   const yOf = el => (el.getBoundingClientRect().top - frame.getBoundingClientRect().top) / z;
   const bottomOf = el => (el.getBoundingClientRect().bottom - frame.getBoundingClientRect().top) / z;
 
-  // the new section, as its own layer on the frame
+  // the new section, as its own layer on the frame. Its text is one block, or `columns`:
+  // several blocks side by side, each [{ x, w, lead, body }]
+  const blocks = columns || [{ x: textX, w: textW, lead, body }];
   const sec = document.createElement("section");
   sec.className = "case-insert";
   sec.setAttribute("aria-labelledby", "case-insert-h");
   sec.style.cssText = `position:absolute;left:0;top:${top}px;width:1220px;z-index:2;font-family:Geist,sans-serif`;
   sec.innerHTML = `
-    <h2 id="case-insert-h" style="position:absolute;left:${headX}px;top:0;margin:0;font:500 28px/normal Geist,sans-serif;color:#000">${heading}</h2>
-    <div style="position:absolute;left:${textX}px;top:${textTop}px;width:${textW}px">
-      <p style="margin:0;font:400 20px/1.4 Geist,sans-serif;color:#141414">${lead}</p>
-      <p style="margin:16px 0 0;font:400 16px/1.5 Geist,sans-serif;color:${bodyColor}">${body}</p>
-    </div>`;
+    <h2 id="case-insert-h" style="position:absolute;left:${headX}px;top:0;margin:0;font:500 28px/normal Geist,sans-serif;color:#000">${heading}</h2>` +
+    blocks.map(c => `
+    <div class="case-insert-text" style="position:absolute;left:${c.x}px;top:${textTop}px;width:${c.w}px">
+      <p style="margin:0;font:400 20px/1.4 Geist,sans-serif;color:#141414">${c.lead}</p>
+      <p style="margin:16px 0 0;font:400 16px/1.5 Geist,sans-serif;color:${bodyColor}">${c.body}</p>
+    </div>`).join("");
   frame.appendChild(sec);
-  const textH = Math.max(textTop + sec.lastElementChild.offsetHeight, 37);
+  const textH = Math.max(textTop + Math.max(...[...sec.querySelectorAll(".case-insert-text")].map(d => d.offsetHeight)), 37);
   const shift = Math.max(0, Math.round(top + textH + gap - from));
   if (!shift) return 0;
 
