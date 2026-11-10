@@ -871,8 +871,10 @@
   .rs-hint svg { display: inline-block; vertical-align: -2px; margin-right: 8px; }
   .rs-stat[aria-expanded="true"] .rs-label { text-decoration: underline; text-decoration-color: #137E44; text-underline-offset: 5px; }
   .rs-panels { position: relative; margin: 0 114px; overflow: hidden; height: 0; transition: height .35s cubic-bezier(.2,.7,.3,1); }
-  .rs-panel { position: absolute; left: 0; right: 0; top: 0; padding-top: 40px; opacity: 0; visibility: hidden; transition: opacity .25s, visibility 0s .25s; }
-  .rs-panel.is-open { opacity: 1; visibility: visible; transition: opacity .3s .1s, visibility 0s; }
+  /* closing: gone at once, before the page below moves back up; opening: fades in once the
+     page below has made room (.35 s), so it never sits over the insights */
+  .rs-panel { position: absolute; left: 0; right: 0; top: 0; padding-top: 40px; opacity: 0; visibility: hidden; transition: opacity .1s, visibility 0s .1s; }
+  .rs-panel.is-open { opacity: 1; visibility: visible; transition: opacity .3s .3s, visibility 0s; }
   .rs-intro { margin: 0 0 28px; font: 400 16px/1.5 Geist, sans-serif; color: #6f6f6f; }
   /* surveys: one column per question, a bar per answer */
   .rs-q { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
@@ -900,7 +902,7 @@
   // under the row when you click a figure, and the page below follows.
   // Keep projects.html's anchors in step (they are for the closed state).
   (() => {
-    const FROM = 1960, TO = 3400, GAP = 130;   // frame y: the old research block; space before the insights band
+    const FROM = 1960, TO = 3400, GAP = 190;   // frame y: the old research block; space before the insights band
     const room = makeCaseRoom(FROM, TO);
     const A = "../assets/verdure/";
     const chev = '<span class="rs-more" aria-hidden="true"><svg class="rs-chev" viewBox="0 0 10 10"><path d="M2 3.6 5 6.6l3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
