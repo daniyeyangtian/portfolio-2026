@@ -1,4 +1,4 @@
-// Top nav: an underline that sits under the current page, follows hover,
+// Top nav: a pill that sits behind the current page's link, follows hover,
 // and slides to the target before navigating to another page.
 (() => {
   const list = document.querySelector(".site-nav ul");
@@ -11,9 +11,12 @@
 
   const HOVER_DWELL = 140;   // ms
   let hoverT = 0, spinTo = null;   // spinTo is set once the dial exists
+  // The indicator is a pill pressed into the page behind the link, a little larger than it.
+  const PX = 14, PY = 7;
   const moveTo = a => {
-    bar.style.width = a.offsetWidth + "px";
-    bar.style.transform = `translateX(${a.offsetLeft}px)`;
+    bar.style.width = a.offsetWidth + 2 * PX + "px";
+    bar.style.height = a.offsetHeight + 2 * PY + "px";
+    bar.style.transform = `translate(${a.offsetLeft - PX}px, ${a.offsetTop - PY}px)`;
   };
 
   // Place under the current page without animating, then enable transitions.

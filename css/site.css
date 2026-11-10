@@ -41,10 +41,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .site-nav a { display: block; white-space: nowrap; transition: color .3s; }
 .site-nav a:not([aria-disabled="true"]):hover { color: var(--ink); }
 .site-nav a[aria-disabled="true"] { cursor: default; }
-.nav-indicator {
-  position: absolute; left: 0; bottom: 0; height: 1px; width: 0;
-  background: #6E6879;
-  transition: transform .45s var(--ease), width .45s var(--ease);
+.site-nav a { position: relative; z-index: 1; }
+.site-nav a[aria-current="page"] { color: var(--ink); }
+.nav-indicator {   /* a pill pressed into the page behind the link: large radius, inner shadow */
+  position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 0;
+  border-radius: 999px;
+  background: #ebebea;
+  box-shadow:
+    inset 0 1.5px 3px rgba(0,0,0,.16),
+    inset 0 -1px 1px rgba(255,255,255,.8),
+    0 1px 0 rgba(255,255,255,.9);
+  pointer-events: none;
+  transition: transform .45s var(--ease), width .45s var(--ease), height .45s var(--ease);
 }
 .nav-indicator.no-anim { transition: none; }
 
