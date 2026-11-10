@@ -252,8 +252,36 @@
     const keys = [...document.querySelectorAll(".key")];
     const panels = [...document.querySelectorAll(".panel")];
     let current = "about";
+    // Sound of a tape-deck key, made on the fly (no audio files): a short plastic click and a
+    // low thump as the key goes down, then, a moment later, the latch: the key that was down
+    // springs up with a lighter click. Pressing the key that is already down only ticks.
+    let audio = null;
+    const sound = full => {
+      try {
+        audio ??= new (window.AudioContext || window.webkitAudioContext)();
+        if (audio.state === "suspended") audio.resume();
+        const t0 = audio.currentTime;
+        const click = (at, gain, freq, len) => {   // filtered noise burst
+          const n = Math.floor(audio.sampleRate * len), buf = audio.createBuffer(1, n, audio.sampleRate), d = buf.getChannelData(0);
+          for (let j = 0; j < n; j++) d[j] = (Math.random() * 2 - 1) * Math.pow(1 - j / n, 3);
+          const src = audio.createBufferSource(), bp = audio.createBiquadFilter(), g = audio.createGain();
+          bp.type = "bandpass"; bp.frequency.value = freq; bp.Q.value = 1.2; g.gain.value = gain;
+          src.buffer = buf; src.connect(bp).connect(g).connect(audio.destination); src.start(t0 + at);
+        };
+        const thump = (at, gain) => {              // body of the deck: a quick low sine drop
+          const o = audio.createOscillator(), g = audio.createGain();
+          o.frequency.setValueAtTime(150, t0 + at); o.frequency.exponentialRampToValueAtTime(60, t0 + at + .08);
+          g.gain.setValueAtTime(gain, t0 + at); g.gain.exponentialRampToValueAtTime(.0001, t0 + at + .09);
+          o.connect(g).connect(audio.destination); o.start(t0 + at); o.stop(t0 + at + .1);
+        };
+        if (!full) { click(0, .12, 3200, .012); return; }
+        click(0, .22, 2600, .018); thump(0, .28);   // key goes down
+        click(.07, .12, 3800, .012);                 // the other key springs up
+      } catch {}
+    };
     keys.forEach((k, i) => k.addEventListener("click", () => {
       const tape = TAPES[i];
+      sound(tape && tape !== current);
       if (!tape) {
         k.classList.add("is-tapping");
         setTimeout(() => k.classList.remove("is-tapping"), 160);
