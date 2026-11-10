@@ -51,6 +51,10 @@
    (#2AB26A: 2.6:1 on the #fafafa band, a little under, chosen brighter on purpose); the green labels (TEAM, SOURCES, insights…) are
    small text and need 4.5:1 (#137E44: 4.9:1). The green accents in the app screens stay. */
 [data-node-id="80:70651"] { color: #2AB26A !important; }
+/* Greys deepened to 4.5:1 (WCAG AA) on their backgrounds: the app screens' quiet text and the
+   design-system captions */
+:root { --light\/quiet: #686b6c; --light\/quiet-display: #6c6f70; --light\/tab-inactive: #727475; }
+.text-\[\#737373\] { color: #6f6f6f !important; }
 .text-\[\#6fd197\] { color: #137E44 !important; }
 
 /* ---- Frame 6 phones (inserted above Overview), animated by tools/verdure_anim.js ---- */
@@ -87,7 +91,7 @@
   .iter-slide p { position: absolute; margin: 0; }
   .iter-t { font: 500 22px/normal "Geist", sans-serif; white-space: nowrap; }
   .iter-n { font: 400 15px/normal "Geist", sans-serif; }
-  .iter-l { font: 500 12.9px/normal "Geist", sans-serif; color: #8c8c8c; }
+  .iter-l { font: 500 12.9px/normal "Geist", sans-serif; color: #757575; }
   /* Final Screens · flow cards, and the flow they open */
   .fl-box .fl-bg { position: absolute; inset: 0; background: #f4f5f5; }
   .fl-head { position: absolute; width: 760px; }

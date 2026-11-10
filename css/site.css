@@ -2,7 +2,7 @@
   --bg: #fafafa;
   --ink: #141414;
   --ink-muted: #707070;
-  --ink-faint: #a8a8a8;
+  --ink-faint: #6d6d6d;   /* 4.6:1 on the #f2f2f1 panel (WCAG AA); was #a8a8a8 */
   --placeholder: #d9d9d9;
   --panel: #f2f2f1;
   --ease: cubic-bezier(.7, 0, .2, 1);
