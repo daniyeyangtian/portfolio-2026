@@ -361,22 +361,15 @@
   document.head.insertAdjacentHTML("beforeend", `<style>#frame.case-frame { height: ${h}px; }</style>`);
 })();
 
-// Research laid out as in the Figma frame "verdure4" (positions there, minus 850).
-// - Desk research, Surveys and Interviews sit where verdure4 has them, and the timeline
-//   line is redrawn to verdure4's path; three of the survey's circles (66%, 22.7%, 34.5%)
-//   sit in the Surveys row as in verdure4, faded in while that row is hovered, and the
-//   rest of the bubble chart goes;
-// - the Data Analysis step keeps its number, title and "tools" label, but its three
-//   diagrams (HTA, empathy map, affinity diagram) become one line of text; hovering the
-//   step fades the diagrams in behind it.
-// Everything below each cut moves up. Positions are frame y; the work is in the last
+// Page layout below the phones: blocks cut out or made room for (CUTS), moved (MOVES) and
+// added (Iteration carousel, Final Product grid, System Diagram, flow players). The Research
+// Path itself is built further down (one row of figures). Everything below each cut moves up. Positions are frame y; the work is in the last
 // window (the one showing the page below the inserted phones). Keep the cuts in step
 // with the section anchors in projects.html.
 (() => {
   const CUTS = [
     { from: 2290, to: 4434, cut: 1286 },   // survey chart and interviews: laid out again below
     { from: 4530, to: 5600, cut: 1086 },   // Data Analysis diagrams
-    { from: 5719, to: 5719, cut: -340 },   // more room above the insights: the Data Analysis hover backdrop grows into it (80 px stay clear)
     { from: 8340, to: 9293, cut: 913 },    // Product Opportunity: folded into the System Diagram
     { from: 10900, to: 11862, cut: 0 },    // System Diagram: replaced by the merged diagram (DIAGRAM)
     { from: 13969, to: 13969, cut: -1009.2 }, // room for the tilted screens (TILT) above the Final Product renders
@@ -410,45 +403,6 @@
   // the merged System Diagram, exported from the Figma frame 474:1315 (1220 × 880), placed
   // where verdure4's System Diagram frame starts; the page keeps its own "System Diagram" title
   const DIAGRAM = { src: "../assets/verdure/system-diagram.png", top: 10809, height: 880, left: -60 };   // nudged left
-  // [left, top] in the frame for layers placed as in verdure4 (by node id)
-  const PLACE = {
-    "80:70431": [121, 1941],   // Desk research marker
-    "80:70423": [180, 1968], "80:70421": [180, 2000], "80:70422": [180, 2073],   // Desk research, 20+, sources
-    "80:70432": [1010, 2144],  // Surveys marker
-    "80:70437": [951, 2172], "80:70435": [918, 2205], "80:70436": [939, 2278],   // Surveys, 106, responses
-    "80:70433": [121, 2502],   // Interviews marker
-    "80:70440": [159, 2524], "80:70439": [159, 2545], "80:70438": [159, 2618],   // Interviews, 8, responses
-    "80:70449": [294, 2618], "80:70451": [928, 2717], "80:70450": [294, 2815], "80:70452": [933.4, 2900],   // the four people
-    // Data Analysis: verdure4 has it 234 px lower, leaving a gap under the interviews; pulled up
-    "80:70434": [121, 3120], "80:70425": [164, 3169], "80:70424": [164, 3148],   // marker, 3, title
-  };
-  // Interviews: the four quotes stacked as speech bubbles, alternately green (the person on
-  // the left) and grey (the person on the right). Per quote: its text's node, the bubble
-  // [left, top, width, height], the text [left, top, width], and which way the bubble points.
-  const QUOTES = [
-    { text: "80:70445", bubble: [393, 2633, 480, 92], at: [476, 2658, 352], green: true },    // I love having plants…
-    { text: "80:70448", bubble: [453, 2731, 475, 94], at: [532, 2757, 316], green: false },   // Having plants and pots…
-    { text: "80:70446", bubble: [414, 2830, 480, 92], at: [474, 2855, 376], green: true },    // I want to grow…
-    { text: "80:70447", bubble: [443, 2927, 490, 94], at: [532, 2943, 317], green: false },   // Sometimes I'm too busy…
-  ];
-  const OLD_BUBBLES = ["80:70441", "80:70442", "80:70443", "80:70444"];
-  const FLIP = ["80:70450", "80:70451"];   // people now facing the other way: to face their bubble
-  const PEOPLE_SIZE = [119.6, 113];
-  const TOOLS = [164, 3239];   // the Data Analysis "tools" label
-  // the survey circles kept, as verdure4 has them: [left, top, size] for the circles, and
-  // [left, top, box height] for their text (the font scales with the box)
-  const CIRCLES = {
-    "80:70453": [286, 2144, 212], "80:70460": [514, 2231.3, 168], "80:70456": [684, 2158, 191.5],   // 66%, 22.7%, 34.5%
-  };
-  const CIRCLE_TEXT = {
-    "80:70467": [331, 2201, 87.4], "80:70475": [338, 2283.1, 15],          // 66%, Keep plants at home
-    "80:70469": [556.4, 2289.3, 36.2], "80:70477": [556.4, 2325.3, 15],    // 22.7%, Forget to water
-    "80:70468": [721.1, 2222.4, 50.3], "80:70481": [714.9, 2271, 15],      // 34.5%, See plants as decoration
-  };
-  // verdure4's timeline line (corners of radius 80), in a 952 × 1180 box at (120, 1940),
-  // ending at the Data Analysis marker
-  const PATH = "M0.5 0V105.5C0.5 149.7 36.3 185.5 80.5 185.5H871.5C915.7 185.5 951.5 221.3 951.5 265.5V400.5" +
-    "C951.5 444.7 915.7 480.5 871.5 480.5H80.5C36.3 480.5 0.5 516.3 0.5 560.5V1180";
   // Brainstorm (frame y 9293–10033) moves to just before Prototyping & Testing (12928):
   // Final Concept, System Diagram and Storyboard move up by its height to make room
   // Each move takes the block [from, to) to just before `before`; what lies between moves up by the
@@ -471,8 +425,6 @@
   const FLOWS_UI = { top: 18930, height: 720, flows: [{"title": "Get started", "desc": "Sign up, connect the unit and set your heights once. Verdure maps six slots, so every planter has one code (U1–L2) everywhere in the app.", "taps": [[[0.5, 0.923]], [[0.5, 0.923]], [[0.5, 0.923]], [[0.5, 0.923]]], "line": "Set your heights once. Six slots, mapped.", "comp": {"src": "a1-heights.png", "w": 281, "h": 241, "base": 286, "anim": "heights"}}, {"title": "Everyday Care", "desc": "Colour only ever means state: mint is ready, lemon needs you. Care starts from the slot in the Garden, then shows what the plant needs and why.", "taps": [[[0.386, 0.923]], [[0.5, 0.604]], [[0.5, 0.923]], [[0.5, 0.923]]], "line": "Colour means state: mint is ready, lemon needs you.", "comp": {"src": "a2-unit.png", "w": 231, "h": 133, "base": 230, "anim": "unit"}}, {"title": "Harvest", "desc": "The furniture comes to you. Check the height, lower the frame to your shoulder, harvest, and raise it back. Movement always shows progress and a Stop.", "taps": [[[0.5, 0.923]], [[0.11, 0.618], [0.5, 0.923]], [], [[0.5, 0.923]]], "line": "The frame comes down to you, with progress and a Stop.", "comp": {"src": "a3-lowering.png", "w": 281, "h": 313, "base": 286, "anim": "lowering"}}, {"title": "Grow more", "desc": "Recommendations are matched to the unit’s light, the slot is chosen on the map, and the pod is recognised the moment it clicks in.", "taps": [[[0.5, 0.453]], [[0.5, 0.923]], [[0.5, 0.923]], []], "line": "Plants matched to the unit's light; the slot chosen on the map.", "comp": {"src": "a4-slot.png", "w": 281, "h": 246, "base": 286, "anim": "slot"}}] };
   const TOTAL = CUTS.reduce((s, c) => s + c.cut, 0);
   const shiftAt = y => CUTS.reduce((s, c) => y >= c.to ? s + c.cut : s, 0);
-  const STEP = 3144, BOTTOM = 5719 - shiftAt(5719) - 80;   // the Data Analysis band once cut: marker to insights
-  const LINE = "Synthesised with affinity mapping, an empathy map and HTA.";
   const frame = document.getElementById("frame");
   if (!frame || frame.children.length < 2) return;
   const win = frame.children[frame.children.length - 1];
@@ -480,28 +432,10 @@
   if (!root) return;
   const yOf = el => { let y = 0; for (let e = el; e && e !== root; e = e.offsetParent) y += e.offsetTop; return y; };
   const place = (c, [x, y]) => Object.assign(c.style, { left: x + "px", top: y + "px", right: "auto", bottom: "auto" });
-  let title = null;
-  const shots = [];   // the diagrams' images, for the hover backdrop
-  const chart = [];   // the survey circles kept, for their hover reveal
-  const quoteText = [];
-  let greenSrc = "";
   const visit = el => {
     for (const c of el.children) {
       if (getComputedStyle(c).display === "contents") { visit(c); continue; }
-      const id = c.dataset.copyNodeId || c.dataset.nodeId, y = yOf(c), text = c.textContent.trim();
-      if (text === "Data Analysis") title = c;
-      if (text === "Survey") c.textContent = "Surveys";
-      if (OLD_BUBBLES.includes(id)) {
-        if (id === "80:70441") greenSrc = c.src;   // the green bubbles' grainy fill
-        c.style.visibility = "hidden"; continue;
-      }
-      const quote = QUOTES.find(q => q.text === id);
-      if (quote) {
-        const [x, t, w] = quote.at;
-        place(c, [x, t]);
-        Object.assign(c.style, { width: w + "px", height: "auto", whiteSpace: "normal", zIndex: 1 });
-        quoteText.push(c); continue;
-      }
+      const id = c.dataset.copyNodeId || c.dataset.nodeId, y = yOf(c);
       if (FINAL[id]) {
         const [x, t, w, h] = FINAL[id];
         place(c, [x, t]);
@@ -509,109 +443,11 @@
         continue;
       }
       if (FINAL_HIDE.includes(id)) { c.style.visibility = "hidden"; continue; }
-      if (PLACE[id]) {
-        place(c, PLACE[id]);
-        if (/^80:704(49|5[0-2])$/.test(id)) {   // a person: smaller, and turned to face their bubble
-          Object.assign(c.style, { width: PEOPLE_SIZE[0] + "px", height: (id === "80:70452" ? 115.9 : PEOPLE_SIZE[1]) + "px", zIndex: 1 });
-          if (FLIP.includes(id)) c.style.transform = "scaleX(-1)";
-        }
-        continue;
-      }
-      if (text === "tools") { place(c, TOOLS); continue; }
-      if (c.querySelector('img[src$="892dc.svg"]')) { c.style.visibility = "hidden"; continue; }   // old timeline line
-      if (CIRCLES[id]) {
-        const [x, t, d] = CIRCLES[id];
-        place(c, [x, t]); Object.assign(c.style, { width: d + "px", height: d + "px" });
-        chart.push(c); continue;
-      }
-      if (CIRCLE_TEXT[id]) {
-        const [x, t, bh] = CIRCLE_TEXT[id];
-        c.style.fontSize = parseFloat(getComputedStyle(c).fontSize) * bh / c.offsetHeight + "px";
-        place(c, [x, t]); Object.assign(c.style, { height: "auto", width: "auto", lineHeight: "normal", whiteSpace: "nowrap" });
-        chart.push(c); continue;
-      }
-      if (CUTS.some(k => y >= k.from && y < k.to)) {
-        c.style.visibility = "hidden";
-        const img = /^(hta|empathy-map|affinity-diagram) 1$/.test(c.dataset.name || "") && c.querySelector("img");
-        if (img) shots.push({ src: img.src, name: c.dataset.name.replace(/ 1$/, "") });
-      }
+      if (CUTS.some(k => y >= k.from && y < k.to)) c.style.visibility = "hidden";
       else if (shiftAt(y) || moveAt(y)) c.style.translate = `0 ${moveAt(y) - shiftAt(y)}px`;
     }
   };
   visit(root);
-  // The speech bubbles: green ones point from the left (a sharp top-left corner, a long
-  // curve down the left, round on the right); grey ones mirror that, from the right.
-  QUOTES.forEach(q => {
-    const [x, t, w, h] = q.bubble, b = document.createElement("div");
-    b.style.cssText = `position:absolute;left:${x}px;top:${t}px;width:${w}px;height:${h}px;` + (q.green
-      ? `border-radius:0 ${h / 2}px ${h / 2}px 0 / 0 ${h / 2}px ${h / 2}px 0;border-bottom-left-radius:${Math.round(h * .7)}px ${h}px;` +
-        `background:#9fe2bf url("${greenSrc}") center / cover`
-      : `border-radius:${h / 2}px 0 0 ${h / 2}px;border-bottom-right-radius:${Math.round(h * .7)}px ${h}px;` +
-        "background:linear-gradient(200deg,#f2f2f2,#e5e5e5)");
-    root.appendChild(b);
-  });
-  quoteText.forEach(c => root.appendChild(c));   // the text above its bubble
-
-  // Fade el in (to opacity `to`, rising a little) while the pointer is level with zone:
-  const reveal = (el, zone, to) => {
-    // quick in (.2 s), a little slower out (.35 s)
-    Object.assign(el.style, { opacity: 0, pointerEvents: "none" });
-    const base = el.style.transform || "";
-    const on = v => {
-      el.style.transition = v ? "opacity .2s ease-out, transform .2s ease-out" : "opacity .35s ease, transform .35s ease";
-      el.style.opacity = v ? to : 0; el.style.transform = base + (v ? "" : " translateY(8px)");
-    };
-    on(false);
-    let over = false;
-    document.addEventListener("pointermove", e => {
-      const r = zone.getBoundingClientRect();
-      const now = e.clientY >= r.top && e.clientY <= r.bottom;
-      if (now !== over) on(over = now);
-    });
-    document.addEventListener("pointerleave", () => { if (over) on(over = false); });
-  };
-  // The survey circles fade in together while the Surveys row (between the line's turns,
-  // 2125–2420) is hovered.
-  if (chart.length) {
-    const box = document.createElement("div");
-    // 10% smaller than verdure4, about the middle of the group (x 286–875, y 2144–2399)
-    box.style.cssText = "position:absolute;left:0;top:0;width:0;height:0;transform-origin:580.8px 2271.5px;transform:scale(.9)";
-    chart.forEach(c => box.appendChild(c));
-    root.appendChild(box);
-    const zone = document.createElement("div");
-    zone.style.cssText = "position:absolute;left:0;right:0;top:2125px;height:296px;pointer-events:none";
-    root.appendChild(zone);
-    reveal(box, zone, 1);
-  }
-  root.insertAdjacentHTML("afterbegin", `<svg width="952" height="1180" viewBox="0 0 952 1180" fill="none"
-    style="position:absolute;left:120px;top:1940px;overflow:visible" aria-hidden="true"><path d="${PATH}" stroke="#BFE8CF"/></svg>`);
-  if (title) {
-    const [tx, ty] = PLACE[title.dataset.copyNodeId || title.dataset.nodeId] || [164, 3148];
-    const p = document.createElement("p");
-    p.textContent = LINE;
-    // on the title's row, just after it
-    p.style.cssText = `position:absolute;left:${tx + title.offsetWidth + 24}px;top:${ty}px;margin:0;` +
-      `font:400 16px/1.3 'Geist',sans-serif;color:#737373;white-space:nowrap`;
-    root.appendChild(p);
-    // backdrop: the three diagrams side by side, faded in while the step is hovered, each named
-    // underneath (the names fade in fully, the diagrams to .28). The HTA is shown whole.
-    const NAMES = { "affinity-diagram": "Affinity diagram", "hta": "Hierarchical task analysis (HTA)", "empathy-map": "Empathy map" };
-    const CAP = 28;   // room for the names under the diagrams
-    const fade = "linear-gradient(transparent,#000 22%,#000 80%,transparent)";
-    const back = document.createElement("div");
-    back.style.cssText = `position:absolute;left:40px;right:40px;top:${STEP}px;height:${BOTTOM - STEP - CAP}px;display:flex;gap:20px`;
-    back.innerHTML = shots.map(({ src, name }) => name === "hta"
-      ? `<img src="${src}" alt="" style="flex:1;min-width:0;height:100%;object-fit:contain">`
-      : `<img src="${src}" alt="" style="flex:1;min-width:0;height:100%;object-fit:cover;-webkit-mask:${fade};mask:${fade}">`).join("");
-    root.insertBefore(back, root.firstChild);   // under the step's text
-    const caps = document.createElement("div");
-    caps.style.cssText = `position:absolute;left:40px;right:40px;top:${BOTTOM - CAP}px;height:${CAP}px;display:flex;gap:20px;` +
-      `font:400 12px/1.3 'Geist',sans-serif;color:#737373`;
-    caps.innerHTML = shots.map(({ name }) => `<span style="flex:1;min-width:0;text-align:center">${NAMES[name] || name}</span>`).join("");
-    root.appendChild(caps);
-    reveal(back, back, ".28");
-    reveal(caps, back, "1");
-  }
   {
     const T = ITER.top - shiftAt(ITER.top), W = ITER.slideW, H = ITER.slideH, n = ITER.slides.length;
     const title = document.createElement("p");
@@ -1000,7 +836,7 @@
     render(); syncDots();
   });
 </script>
-<script src="../js/case-insert.js?v=5"></script>
+<script src="../js/case-insert.js?v=7"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
@@ -1053,12 +889,14 @@
   @media (prefers-reduced-motion: reduce) { .rs-panels, .rs-panel, .rs-chev { transition: none; } }
 </style>
 <script>
-  // Research Path as one row of four figures (requested). The old timeline with its hover
-  // reveals is hidden; what it showed — the survey answers, the interview quotes, the three
-  // analysis diagrams — opens under the row when you click a figure. The page below follows.
+  // Research Path as one row of four figures. The exported research layers (between FROM and TO)
+  // are removed; the survey answers, the interview quotes and the three analysis diagrams open
+  // under the row when you click a figure, and the page below follows.
   // Keep projects.html's anchors in step (they are for the closed state).
   (() => {
-    const FROM = 1990, TO = 3740, GAP = 130;   // frame y: the old research block; space before the insights band
+    const FROM = 1990, TO = 3400, GAP = 130;   // frame y: the old research block; space before the insights band
+    // the old timeline line runs past the block, so it isn't caught by the range: remove it by name
+    document.querySelectorAll('#frame img[src$="892dc.svg"]').forEach(img => (img.closest("[data-node-id], [data-copy-node-id]") || img).remove());
     const room = makeCaseRoom(FROM, TO);
     const A = "../assets/verdure/";
     const chev = '<svg class="rs-chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';

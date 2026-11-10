@@ -1,8 +1,8 @@
 // Case studies: change the exported frame after the page's own layout scripts have run.
 //
 // makeCaseRoom(from, to) – everything that starts at or below frame-y `to` can be moved down
-//   (or up) together; layers lying wholly between `from` and `to` are hidden (pass to = from to
-//   hide nothing). Returns { move(dy) } — dy is the total offset, and can change later (an
+//   (or up) together; layers lying wholly between `from` and `to` are removed (pass to = from
+//   to remove nothing). Returns { move(dy) } — dy is the total offset, and can change later (an
 //   expanding panel), so the page below follows smoothly.
 // insertCaseSection({...}) – a text section (heading + lead line + paragraph, or columns of
 //   them) inserted at frame-y `top`; returns how far the page below moved.
@@ -18,20 +18,21 @@
     if (!frame) return { move() {} };
     const moved = [], wins = [], grown = [];
     // Inside a window: layers starting at or below `to` move; layers wholly between `from` and
-    // `to` hide; a group that straddles either line is opened up and its children sorted the
+    // `to` are removed; a group that straddles either line is opened up and its children sorted the
     // same way; anything else that straddles (a background, a long line) stays.
     const sort = el => {
       if (el.classList.contains("case-insert")) return;
       if (getComputedStyle(el).display === "contents") { [...el.children].forEach(sort); return; }
       const r = el.getBoundingClientRect();
-      if (!r.width && !r.height && !el.children.length) return;
+      // a zero-size holder (a group of absolutely placed layers): sort what it holds
+      if (!r.width && !r.height) { [...el.children].forEach(sort); return; }
       const y0 = yOf(el), y1 = bottomOf(el);
       if (y0 >= to - 0.5) {
         const [x, y] = getComputedStyle(el).translate.split(" ");
         moved.push({ el, x: x === "none" ? "0px" : x, y: parseFloat(y) || 0 });
         return;
       }
-      if (to > from && y0 >= from - 0.5 && y1 <= to + 0.5) { el.style.setProperty("visibility", "hidden", "important"); return; }
+      if (to > from && y0 >= from - 0.5 && y1 <= to + 0.5) { el.remove(); return; }
       if (y1 > from && el.children.length) [...el.children].forEach(sort);
     };
     [...frame.children].forEach(w => {
