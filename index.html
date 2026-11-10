@@ -275,9 +275,9 @@
           g.gain.setValueAtTime(gain, t0 + at); g.gain.exponentialRampToValueAtTime(.0001, t0 + at + .09);
           o.connect(g).connect(audio.destination); o.start(t0 + at); o.stop(t0 + at + .1);
         };
-        if (!full) { click(0, .12, 3200, .012); return; }
-        click(0, .22, 2600, .018); thump(0, .28);   // key goes down
-        click(.07, .12, 3800, .012);                 // the other key springs up
+        if (!full) { click(0, .05, 1900, .012); return; }
+        click(0, .09, 1500, .02); thump(0, .17);    // key goes down (quieter, less bright)
+        click(.07, .045, 2100, .012);                // the other key springs up
       } catch {}
     };
     keys.forEach((k, i) => k.addEventListener("click", () => {
