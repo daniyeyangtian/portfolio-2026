@@ -53,9 +53,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     0 1px 0 rgba(255,255,255,.9);
   pointer-events: none;
 }
-/* moving to another link: no slide, the pill fades in where it lands */
+/* moving to another link: no sideways slide, the pill fades in from just below the link */
 .nav-indicator.pop { animation: nav-pop .28s ease-out; }
-@keyframes nav-pop { from { opacity: 0; scale: .92; } }
+@keyframes nav-pop { from { opacity: 0; translate: 0 6px; } }   /* rises into place from just below */
 .nav-indicator.no-anim { transition: none; }
 
 /* ---------- exposure-dial page switcher above the nav (built by js/nav.js) ----------
