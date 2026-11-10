@@ -3,7 +3,7 @@
 // frame at frame-y `top`. Everything from `from` down moves down to make room, so the next
 // section starts `gap` px below the new one's text. Runs after the page's own layout scripts.
 // Returns how far the page below moved (keep the section anchors in projects.html in step).
-window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX, textW, textTop = 0, bodyColor, columns }) => {
+window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX, textW, textTop = 0, bodyColor, leadColor = "#141414", columns }) => {
   const frame = document.getElementById("frame");
   if (!frame) return 0;
   const z = frame.getBoundingClientRect().width / 1220;
@@ -21,7 +21,7 @@ window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX,
     <h2 id="case-insert-h" style="position:absolute;left:${headX}px;top:0;margin:0;font:500 28px/normal Geist,sans-serif;color:#000">${heading}</h2>` +
     blocks.map(c => `
     <div class="case-insert-text" style="position:absolute;left:${c.x}px;top:${textTop}px;width:${c.w}px">
-      <p style="margin:0;font:400 20px/1.4 Geist,sans-serif;color:#141414">${c.lead}</p>
+      <p style="margin:0;font:400 20px/1.4 Geist,sans-serif;color:${leadColor}">${c.lead}</p>
       <p style="margin:16px 0 0;font:400 16px/1.5 Geist,sans-serif;color:${bodyColor}">${c.body}</p>
     </div>`).join("");
   frame.appendChild(sec);
