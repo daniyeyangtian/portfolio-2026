@@ -27,6 +27,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 /* dial and links on one row (js/nav.js adds this when there is room): a little lower */
 .site-nav.is-split { padding-top: 44px; }
+/* the link row now lies across the dial: let the pointer through to it, except on the links */
+.site-nav.is-split ul { pointer-events: none; }
+.site-nav.is-split ul a { pointer-events: auto; }
 .site-nav ul {
   position: relative;
   display: flex; gap: clamp(20px, 7vw, 100px);
