@@ -326,8 +326,10 @@
   // the hero window tucks LIFT px up under the phone row (the row stays on top), so the title
   // sits closer to the phones without being clipped by its window
   const LIFT = 40;
+  // the grey behind the phones runs EXTRA px further down before the white title area starts
+  const EXTRA = 60;
   slot.style.zIndex = 1;
-  heroWin.style.top = top + slot.offsetHeight - LIFT + "px";
+  heroWin.style.top = top + slot.offsetHeight - LIFT + EXTRA + "px";
   // inside the hero window: the "verdure" title and the project info (TEAM, DURATION…) move up,
   // together, to sit under the phones, on white; the window ends BAND px down and the Overview
   // follows straight on. (The hero render that used to follow is in Final Product now.)
@@ -348,8 +350,8 @@
   // …and everything below it moves down by GROW (keep the anchors in projects.html in step)
   const GROW = BAND - heroWin.offsetHeight;   // negative: the window shrinks to the band
   heroWin.style.height = BAND + "px";
-  [...frame.children].slice(2).forEach(w => nudge(w, GROW - LIFT));
-  const h = parseFloat(getComputedStyle(frame).height) + GROW - LIFT;
+  [...frame.children].slice(2).forEach(w => nudge(w, GROW - LIFT + EXTRA));
+  const h = parseFloat(getComputedStyle(frame).height) + GROW - LIFT + EXTRA;
   document.head.insertAdjacentHTML("beforeend", `<style>#frame.case-frame { height: ${h}px; }</style>`);
 })();
 
@@ -833,7 +835,7 @@
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
   window.caseInsertShift = insertCaseSection({
-    top: 1540, from: 1690, gap: 150, headX: 114, leadColor: "#137E44", bodyColor: "#6f6f6f",
+    top: 1600, from: 1750, gap: 150, headX: 114, leadColor: "#137E44", bodyColor: "#6f6f6f",
     heading: "Problem Statement",
     columns: [
       { x: 430, w: 310,
@@ -892,7 +894,7 @@
   // under the row when you click a figure, into room kept for them.
   // Keep projects.html's anchors in step (they are for the closed state).
   (() => {
-    const FROM = 1960, TO = 3400, GAP = 130;   // frame y: the old research block; space before the insights band
+    const FROM = 2020, TO = 3460, GAP = 130;   // frame y: the old research block; space before the insights band
     const room = makeCaseRoom(FROM, TO);
     const A = "../assets/verdure/";
     const chev = '<span class="rs-more" aria-hidden="true"><svg class="rs-chev" viewBox="0 0 10 10"><path d="M2 3.6 5 6.6l3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
