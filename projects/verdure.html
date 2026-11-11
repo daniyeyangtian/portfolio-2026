@@ -60,6 +60,11 @@
    page's grey, the how-might-we statement in ink */
 :is([data-node-id="80:72408"], [data-copy-node-id="80:72408"], [data-node-id="80:72409"], [data-copy-node-id="80:72409"], [data-node-id="80:72410"], [data-copy-node-id="80:72410"]) { color: #6f6f6f !important; }
 :is([data-node-id="80:72437"], [data-copy-node-id="80:72437"]), :is([data-node-id="80:72437"], [data-copy-node-id="80:72437"]) span { color: #141414 !important; }
+/* the three insight titles set like the Problem Statement's green lines: Geist 20 px, sentence case */
+:is([data-node-id="80:72404"], [data-copy-node-id="80:72404"], [data-node-id="80:72405"], [data-copy-node-id="80:72405"], [data-node-id="80:72407"], [data-copy-node-id="80:72407"]) { font-family: Geist, sans-serif !important; font-weight: 400 !important; line-height: 1.4 !important; text-transform: none !important; letter-spacing: 0 !important; text-align: left !important; }
+/* …starting on the same line as the text under them */
+:is([data-node-id="80:72404"], [data-copy-node-id="80:72404"]) { margin-left: 6px !important; }
+:is([data-node-id="80:72405"], [data-copy-node-id="80:72405"]) { margin-left: -37px !important; }
 
 /* ---- Frame 6 phones (inserted above Overview), animated by tools/verdure_anim.js ---- */
 /* 1 · Home: notification ping around the bell's yellow badge */
@@ -830,11 +835,11 @@
     render(); syncDots();
   });
 </script>
-<script src="../js/case-insert.js?v=8"></script>
+<script src="../js/case-insert.js?v=10"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
-  window.caseInsertShift = insertCaseSection({
+  insertCaseSection({
     top: 1600, from: 1750, gap: 150, headX: 114, leadColor: "#137E44", bodyColor: "#6f6f6f",
     heading: "Problem Statement",
     columns: [
@@ -934,18 +939,21 @@
         ? `<button type="button" class="rs-stat" aria-expanded="false" aria-controls="rs-p${i}"><span class="rs-num">${s.num}</span><span class="rs-label">${s.label}${chev}</span></button>`
         : `<div class="rs-stat"><span class="rs-num">${s.num}</span><span class="rs-label">${s.label}</span></div>`) + `</li>`).join("") + `</ul>` +
       `<div class="rs-panels">` + STATS.map((s, i) => s.panel ? `<div class="rs-panel" id="rs-p${i}" role="region" aria-label="${s.label}">${s.panel}</div>` : "").join("") + `</div>`;
-    document.getElementById("frame").appendChild(sec);
+    addCaseSection(sec);
 
     // The page below sits low enough for the tallest panel, so opening one never moves it:
-    // the panels open into space that is already there.
+    // the panels open into space that is already there. Measured again once the fonts are in.
     const holder = sec.querySelector(".rs-panels");
     const buttons = [...sec.querySelectorAll("button.rs-stat")];
-    const tallest = Math.max(...[...sec.querySelectorAll(".rs-panel")].map(p => p.offsetHeight));
-    holder.style.height = tallest + "px";
-    const rowH = sec.querySelector(".rs-row").offsetTop + sec.querySelector(".rs-row").offsetHeight;
-    const shift = FROM + rowH + tallest + GAP - TO;
-    room.move(shift);
-    window.caseResearchShift = shift;
+    const layout = () => {
+      const tallest = Math.max(...[...sec.querySelectorAll(".rs-panel")].map(p => p.offsetHeight));
+      holder.style.height = tallest + "px";
+      const rowH = sec.querySelector(".rs-row").offsetTop + sec.querySelector(".rs-row").offsetHeight;
+      room.move(FROM + rowH + tallest + GAP - TO);
+    };
+    layout();
+    document.fonts?.ready.then(layout);
+    addEventListener("load", layout);
 
     let open = null;
     const show = btn => {

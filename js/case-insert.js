@@ -2,21 +2,38 @@
 //
 // makeCaseRoom(from, to) – everything that starts at or below frame-y `to` can be moved down
 //   (or up) together; layers lying wholly between `from` and `to` are removed (pass to = from
-//   to remove nothing). Returns { move(dy) } — dy is the total offset, and can change later (an
-//   expanding panel), so the page below follows smoothly.
+//   to remove nothing). Returns { move(dy) }: dy is this room's offset and can change later
+//   (once the web fonts have loaded and text has its real height). Rooms add up, so a layer
+//   below two of them sits at its own place + both offsets.
+// addCaseSection(sec) – put a new section layer on the frame; it moves with the rooms above it.
 // insertCaseSection({...}) – a text section (heading + lead line + paragraph, or columns of
-//   them) inserted at frame-y `top`; returns how far the page below moved.
+//   them) inserted at frame-y `top`.
 // Keep the section anchors in projects.html in step with what moves.
 (() => {
   const frame = document.getElementById("frame");
   const z = () => frame.getBoundingClientRect().width / 1220;
   const yOf = el => (el.getBoundingClientRect().top - frame.getBoundingClientRect().top) / z();
   const bottomOf = el => (el.getBoundingClientRect().bottom - frame.getBoundingClientRect().top) / z();
-  let rooms = 0;
+
+  // every moved layer: where it was before any room moved it, and each room's share
+  const tracked = new Map();
+  const apply = (el, t) => {
+    const dy = [...t.parts.values()].reduce((a, b) => a + b, 0);
+    if (t.kind === "translate") el.style.translate = `${t.x} ${t.base + dy}px`;
+    else el.style[t.kind] = t.base + dy + "px";
+  };
+  const track = (el, kind, base, x) => {
+    if (!tracked.has(el)) tracked.set(el, { kind, base, x, parts: new Map() });
+    return el;
+  };
+  const rooms = [];
+  let frameBase = null;
+  const frameStyle = document.createElement("style");
 
   window.makeCaseRoom = (from, to = from) => {
     if (!frame) return { move() {} };
-    const moved = [], wins = [], grown = [];
+    if (frameBase === null) { frameBase = parseFloat(getComputedStyle(frame).height); document.head.appendChild(frameStyle); }
+    const els = [];
     // Inside a window: layers starting at or below `to` move; layers wholly between `from` and
     // `to` are removed; a group that straddles either line is opened up and its children sorted the
     // same way; anything else that straddles (a background, a long line) stays.
@@ -29,7 +46,7 @@
       const y0 = yOf(el), y1 = bottomOf(el);
       if (y0 >= to - 0.5) {
         const [x, y] = getComputedStyle(el).translate.split(" ");
-        moved.push({ el, x: x === "none" ? "0px" : x, y: parseFloat(y) || 0 });
+        els.push(track(el, "translate", parseFloat(y) || 0, x === "none" ? "0px" : x));
         return;
       }
       if (to > from && y0 >= from - 0.5 && y1 <= to + 0.5) { el.remove(); return; }
@@ -37,34 +54,41 @@
     };
     [...frame.children].forEach(w => {
       if (w.classList.contains("case-insert")) {
-        if (parseFloat(w.style.top) >= to) wins.push({ w, top: parseFloat(w.style.top) });
+        if (parseFloat(w.style.top) >= to) els.push(track(w, "top", parseFloat(w.style.top)));
         return;
       }
       const cs = getComputedStyle(w), wTop = parseFloat(cs.top) || 0, wH = parseFloat(cs.height) || 0;
-      if (wTop >= to) { wins.push({ w, top: wTop }); return; }   // a window wholly below
-      if (wTop + wH <= from) return;                             // wholly above
+      if (wTop >= to) { els.push(track(w, "top", wTop)); return; }   // a window wholly below
+      if (wTop + wH <= from) return;                                // wholly above
       // a window holds a copy of the page (its root layer inside); a page without windows is its root
       const root = w.dataset.nodeId ? w : (w.querySelector("[data-node-id]") || w.firstElementChild);
       [...root.children].forEach(sort);
-      grown.push({ w, h: wH });
+      els.push(track(w, "height", wH));
     });
-    const baseH = parseFloat(getComputedStyle(frame).height);
-    const style = document.createElement("style");
-    style.id = "case-room-" + rooms++;
-    document.head.appendChild(style);
+    const room = { to, dy: 0, els };
+    rooms.push(room);
     return {
       move(dy) {
-        moved.forEach(m => { m.el.style.translate = `${m.x} ${m.y + dy}px`; });
-        wins.forEach(m => { m.w.style.top = m.top + dy + "px"; });
-        grown.forEach(m => { m.w.style.height = m.h + dy + "px"; });
-        style.textContent = `#frame.case-frame { height: ${baseH + dy}px; }`;
+        room.dy = dy;
+        room.els.forEach(el => { const t = tracked.get(el); t.parts.set(room, dy); apply(el, t); });
+        const total = rooms.reduce((a, r) => a + r.dy, 0);
+        frameStyle.textContent = `#frame.case-frame { height: ${frameBase + total}px; }`;
       },
-      layers: () => [...moved.map(m => m.el), ...wins.map(m => m.w), ...grown.map(m => m.w)],
     };
   };
 
+  window.addCaseSection = sec => {
+    frame.appendChild(sec);
+    const top = parseFloat(sec.style.top);
+    rooms.filter(r => top >= r.to).forEach(r => {
+      track(sec, "top", top);
+      r.els.push(sec);
+      const t = tracked.get(sec); t.parts.set(r, r.dy); apply(sec, t);
+    });
+  };
+
   window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX, textW, textTop = 0, bodyColor, leadColor = "#141414", columns }) => {
-    if (!frame) return 0;
+    if (!frame) return;
     // the new section, as its own layer on the frame. Its text is one block, or `columns`:
     // several blocks side by side, each [{ x, w, lead, body }]
     const blocks = columns || [{ x: textX, w: textW, lead, body }];
@@ -80,16 +104,21 @@
         <p style="margin:16px 0 0;font:400 16px/1.5 Geist,sans-serif;color:${bodyColor}">${c.body}</p>
       </div>`).join("");
     const room = makeCaseRoom(from);   // measure before the section is there
-    frame.appendChild(sec);
-    // side by side: the lead lines take the same height, so the paragraphs under them line up
-    const leads = [...sec.querySelectorAll(".case-insert-text > p:first-child")];
-    if (leads.length > 1) {
-      const h = Math.max(...leads.map(p => p.offsetHeight));
-      leads.forEach(p => { p.style.minHeight = h + "px"; });
-    }
-    const textH = Math.max(textTop + Math.max(...[...sec.querySelectorAll(".case-insert-text")].map(d => d.offsetHeight)), 37);
-    const shift = Math.max(0, Math.round(top + textH + gap - from));
-    room.move(shift);
-    return shift;
+    addCaseSection(sec);
+    const layout = () => {
+      // side by side: the lead lines take the same height, so the paragraphs under them line up
+      const leads = [...sec.querySelectorAll(".case-insert-text > p:first-child")];
+      leads.forEach(p => { p.style.minHeight = ""; });
+      if (leads.length > 1) {
+        const h = Math.max(...leads.map(p => p.offsetHeight));
+        leads.forEach(p => { p.style.minHeight = h + "px"; });
+      }
+      const textH = Math.max(textTop + Math.max(...[...sec.querySelectorAll(".case-insert-text")].map(d => d.offsetHeight)), 37);
+      room.move(Math.max(0, Math.round(top + textH + gap - from)));
+    };
+    layout();
+    // again once the text has its real height (fonts) and all styles are in (load)
+    document.fonts?.ready.then(layout);
+    addEventListener("load", layout);
   };
 })();
