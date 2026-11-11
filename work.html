@@ -34,7 +34,7 @@
   .wide { aspect-ratio: 21 / 9; }
   /* projects with an exported Figma page: its slices stacked, edge to edge */
   .slices { margin: 0 calc(-1 * clamp(16px, 4vw, 48px)); }
-  .slices img { display: block; width: 100%; height: auto; }
+  .slices iframe { display: block; width: 100%; border: 0; }
   .page.has-slices > :not(.back):not(.slices):not(.pager) { display: none; }
   .page.has-slices { max-width: 1220px; }
   .pager { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 20px; border-top: 1px solid #e3e1e6; font-size: 14px; }
@@ -93,7 +93,7 @@
 </main>
 
 <script src="js/nav.js?v=24"></script>
-<script src="js/other-work.js?v=2"></script>
+<script src="js/other-work.js?v=4"></script>
 <script>
   const n = Math.min(OTHER_WORK.length, Math.max(1, parseInt(new URLSearchParams(location.search).get("p")) || 1));
   const w = OTHER_WORK[n - 1];
@@ -108,11 +108,15 @@
     img.onload = () => { box.style.backgroundImage = `url("${src}")`; box.textContent = ""; };
     img.src = src;
   });
-  if (w.parts) {
+  if (w.h) {
+    // the project's Figma strip as an HTML page, scaled to the column's width (other/<n>.html
+    // fits its 1220-wide frame to its own width), as tall as its content
     const page = document.querySelector(".page"), box = document.getElementById("slices");
     page.classList.add("has-slices");
-    box.innerHTML = Array.from({ length: w.parts }, (_, i) =>
-      `<img src="assets/other-work/${n}/part-${String(i + 1).padStart(2, "0")}.jpg?v=2" alt="${i ? "" : w.title}" loading="${i < 2 ? "eager" : "lazy"}" decoding="async" width="1830" height="1800">`).join("");
+    box.innerHTML = `<iframe src="other/${n}.html?v=1" title="${w.title}" scrolling="no"></iframe>`;
+    const f = box.firstElementChild;
+    const size = () => { f.style.height = Math.ceil(w.h * f.clientWidth / 1220) + "px"; };
+    size(); addEventListener("resize", size);
   }
   const link = (id, k) => {
     const a = document.getElementById(id), m = ((n - 1 + k + OTHER_WORK.length) % OTHER_WORK.length) + 1;

@@ -21,3 +21,12 @@ transparency).
 
 When an image changes, bump its `?v=` (and the case study's `?v=` in `projects.html`) so browsers
 fetch the new file.
+
+## Other Work pages
+
+`other/<n>.html` are the five "Frame 3" strips (1220 wide) of the Figma file *past life*
+(FQJ2yBrRlwW8MuBtn41m78), converted to HTML with `../网页搭建 v2/tools/jsx2html.py` and
+`build_embed.py` (frame height 17068, `--cut` = `h` in `js/other-work.js`,
+`--overrides tools/other_work_overrides.css`). `work.html?p=N` shows the page in an iframe
+sized to `h`. After converting, `tools/other_work_opt.py` then `tools/other_work_webp.py`
+shrink the images and repoint the pages.

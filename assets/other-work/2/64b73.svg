@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="21.5012" height="9.89425" viewBox="0 0 21.5012 9.89425" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Group 19320">
+<g id="Rectangle 5505">
+<use xlink:href="#stroke0_0_1062" fill="#ECECEC"/>
+<mask id="stroke1_0_1062" maskUnits="userSpaceOnUse" x="-0.680056" y="-0.680056" width="23" height="11" fill="black">
+<rect fill="white" x="-0.680056" y="-0.680056" width="23" height="11"/>
+<use xlink:href="#stroke0_0_1062"/>
+</mask>
+<path d="M6.74972 1.31994H1.74237C1.50907 1.31994 1.31994 1.50907 1.31994 1.74237V8.15188C1.31994 8.38518 1.50907 8.57431 1.74237 8.57431H6.74972H15.0373H19.7589C19.9922 8.57431 20.1813 8.38518 20.1813 8.15188V1.74237C20.1813 1.50907 19.9922 1.31994 19.7589 1.31994H15.0373H6.74972Z" stroke-width="2.63989" stroke="#515151" mask="url(#stroke1_0_1062)"/>
+</g>
+<path id="Vector 2193" d="M6.28649 1.12917V8.77037" stroke-width="1.31994" stroke="#515151"/>
+<path id="Vector 2194" d="M15.0737 1.31994V8.96115" stroke-width="1.31994" stroke="#515151"/>
+</g>
+<defs>
+<path id="stroke0_0_1062" d="M1.31994 1.74237C1.31994 1.50907 1.50907 1.31994 1.74237 1.31994H6.74972H15.0373H19.7589C19.9922 1.31994 20.1813 1.50907 20.1813 1.74237V8.15188C20.1813 8.38518 19.9922 8.57431 19.7589 8.57431H15.0373H6.74972H1.74237C1.50907 8.57431 1.31994 8.38518 1.31994 8.15188V1.74237Z"/>
+</defs>
+</svg>
