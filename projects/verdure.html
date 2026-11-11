@@ -328,16 +328,11 @@
   const LIFT = 40;
   slot.style.zIndex = 1;
   heroWin.style.top = top + slot.offsetHeight - LIFT + "px";
-  // inside the hero window: the "verdure" title and the project info (TEAM, DURATION…) move up to
-  // sit under the phones, and the render moves down below them, with a margin between
+  // inside the hero window: the "verdure" title and the project info (TEAM, DURATION…) move up,
+  // together, to sit under the phones, on white; the window ends BAND px down and the Overview
+  // follows straight on. (The hero render that used to follow is in Final Product now.)
   const META = ["80:70405", "80:70406", "80:70407", "80:70408", "80:70409", "80:70410", "80:70411", "80:70412"];
-  // the title and the project info move up together (the info keeps its place under the title);
-  // 60 px of white close the window under the render
-  // The page's grey (#fafafa) behind the phones carries on down behind the title and the info,
-  // ending BAND px into the hero window; the render follows 45 px below the band.
-  // The render itself no longer shows here (it is in Final Product, in place of the three-unit
-  // render): the hero window ends with the grey band, and the Overview follows straight on.
-  const META_UP = 462, BAND = 236, RENDER_DOWN = 281;
+  const META_UP = 462, BAND = 236;
   const nudge = (el, dy) => {
     if (getComputedStyle(el).display === "contents") { [...el.children].forEach(c => nudge(c, dy)); return; }
     const cur = parseFloat((el.style.translate || "0 0").split(" ")[1]) || 0;
@@ -345,14 +340,10 @@
   };
   const q = id => heroWin.querySelector(`[data-node-id="${id}"]`);
   [...META, "80:70651"].forEach(id => { const el = q(id); if (el) nudge(el, -META_UP); });
-  nudge(q("80:70429").parentElement, RENDER_DOWN);
-  const band = document.createElement("div");
-  band.style.cssText = `position:absolute;left:0;top:0;width:1220px;height:${BAND}px;background:#fafafa`;
   const heroRoot = heroWin.querySelector("[data-node-id]");
-  heroRoot.insertBefore(band, heroRoot.firstChild);
-  // the window is now taller than the hero, so it would show the top of the page below it
-  // (the Overview title, which the next window shows anyway): only the hero's own layers stay
-  const keep = new Set([band, ...[...META, "80:70651"].map(q)]);
+  // the window would show the top of the page below the hero (the Overview title, which the
+  // next window shows anyway): only the title and the info stay
+  const keep = new Set([...META, "80:70651"].map(q));
   [...heroRoot.children].forEach(el => { if (!keep.has(el)) el.style.visibility = "hidden"; });
   // …and everything below it moves down by GROW (keep the anchors in projects.html in step)
   const GROW = BAND - heroWin.offsetHeight;   // negative: the window shrinks to the band
