@@ -38,9 +38,9 @@
   learned.innerHTML = `
     <h2 id="fi-learned-h">What I learned</h2>
     <div class="fi-learned-grid">
-      <div><h3>Doing beats displaying</h3><p>People connected faster cooking a dish together than watching one presented at a culture fair.</p></div>
-      <div><h3>Everyday food lowers the barrier</h3><p>A shared meal brought in people who would never sign up for a “cultural exchange” event.</p></div>
-      <div><h3>Local partners make it real</h3><p>Working with the Qiuga community, Shensong and Ningbo Commerce and Trade Group turned a campus club into a bridge to the city.</p></div>
+      <div><h3>Busy hands, lower walls</h3><p>Food breaks down cultural boundaries faster than anything else we tried. While everyone was focused on the dough or the pot, they forgot, for a while, where else they might disagree. The experience stopped being only about cooking and sharing memories: it became a way of being together without first having to agree on anything else.</p></div>
+      <div><h3>With partners, cost decides</h3><p>Working with Ningbo Commerce and Trade Group taught me that however creative a proposal is, it lives or dies on return on investment: doing a lot with a little. The food cart in the opening photo was meant to be fully custom-made; in the end, cost meant we built it ourselves from leftover OSB boards.</p></div>
+      <div><h3>A product of its campus</h3><p>What we built is partly a product of UNNC. A university is a bit of an ivory tower, and being students made people more willing and open to exchange than they might be elsewhere. Even there, I could feel how cultural differences shift from one setting to another.</p></div>
     </div>`;
   root.appendChild(learned);
 
