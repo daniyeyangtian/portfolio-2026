@@ -39,7 +39,7 @@
     <h2 id="fi-learned-h">What I learned</h2>
     <div class="fi-learned-grid">
       <div><h3>Busy hands, lower walls</h3><p>Food breaks down cultural boundaries faster than anything else we tried. While everyone was focused on the dough or the pot, they forgot, for a while, where else they might disagree. The experience stopped being only about cooking and sharing memories: it became a way of being together without first having to agree on anything else.</p></div>
-      <div><h3>With partners, cost decides</h3><p>Working with Ningbo Commerce and Trade Group taught me that however creative a proposal is, it lives or dies on return on investment: doing a lot with a little. The food cart in the opening photo was meant to be fully custom-made; in the end, cost meant we built it ourselves from leftover OSB boards.</p></div>
+      <div><h3>ROI comes first</h3><p>Working with Ningbo Commerce and Trade Group taught me that <strong>ROI is everything</strong>. However creative a proposal is, it only goes ahead if it does a lot with a little. The food cart in the opening photo was meant to be fully custom-made; to keep the return worth the spend, we built it ourselves from leftover OSB boards.</p></div>
       <div><h3>A product of its campus</h3><p>What we built is partly a product of UNNC. A university is a bit of an ivory tower, and being students made people more willing and open to exchange than they might be elsewhere. Even there, I could feel how cultural differences shift from one setting to another.</p></div>
     </div>`;
   root.appendChild(learned);

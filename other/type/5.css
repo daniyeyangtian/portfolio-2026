@@ -101,3 +101,4 @@
 #frame [data-node-id="61:12006"] { right: auto !important; width: 440px !important; white-space: normal !important; }
 #frame [data-node-id="61:12006"] br { display: none; }
 .fi-context { left: 580px; width: 548px; }
+.fi-learned strong { font-weight: 500; color: #1e1e1e; }
