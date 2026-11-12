@@ -151,6 +151,64 @@
   .sig { font-size: 14px; line-height: 1.3; color: var(--ink-muted); }   /* same size as the nav */
   .year { font-size: 14px; line-height: 1.3; color: var(--ink-muted); }
 
+
+  /* ---------- featured projects: below the first screen ----------
+     The cassette deck fills the first screen; scrolling down shows the case studies as large
+     cards (cover, number, title, one line, keywords, a link), then what's coming up. */
+  /* the deck still fills the first screen (less the nav, ~112px, and the cue under it) */
+  .deck { min-height: calc(100svh - 112px - 52px); }
+  .scroll-cue {
+    display: flex; justify-content: center; margin: -8px 0 28px;
+  }
+  .scroll-cue a {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: 500 11px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-muted); transition: color .2s;
+  }
+  .scroll-cue a:hover { color: var(--ink); }
+  .scroll-cue svg { width: 12px; height: 12px; animation: cue 1.8s ease-in-out infinite; }
+  @keyframes cue { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+
+  .featured { max-width: 1120px; width: 100%; margin: 0 auto; padding: 72px 24px 96px; scroll-margin-top: 24px; }
+  .featured-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 36px; }
+  .featured-head h2 { font: italic 400 44px/1.05 "Instrument Serif", Georgia, serif; letter-spacing: .005em; color: var(--ink); }
+  .featured-head a { font-size: 14px; color: var(--ink-muted); transition: color .2s; white-space: nowrap; }
+  .featured-head a:hover { color: var(--ink); }
+  .feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 32px; list-style: none; padding: 0; }
+  .feature { --accent: #6E6879; display: block; color: var(--ink); }
+  .feature-cover {
+    position: relative; display: block; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
+    background: #eceef0; box-shadow: 0 0 0 1px rgba(20,20,30,.06);
+  }
+  .feature-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
+  a.feature:hover .feature-cover img { transform: scale(1.03); }
+  .feature-meta { display: flex; align-items: baseline; gap: 12px; margin-top: 18px; }
+  .feature-num { font: 500 11px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; color: var(--accent); }
+  .feature-title { font: 500 24px/1.2 "Geist", sans-serif; }
+  .feature-blurb { display: block; margin-top: 8px; font-size: 16px; line-height: 1.5; color: var(--ink-muted); }
+  .feature-tags { display: block; margin-top: 12px; font: 500 10px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .feature-go { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; font-size: 14px; color: var(--ink); }
+  .feature-go i { display: inline-block; font-style: normal; transition: transform .25s var(--ease); }
+  a.feature:hover .feature-go i { transform: translateX(4px); }
+  a.feature:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 16px; }
+  /* coming up: a slim row, not a link */
+  .feature-next {
+    display: flex; align-items: center; gap: 16px; margin-top: 48px; padding: 18px 20px;
+    border-radius: 14px; background: #f1f0f4;
+  }
+  .feature-next .dot { width: 10px; height: 10px; border-radius: 50%; background: #8a6cc0; flex: none; }
+  .feature-next b { font-weight: 500; }
+  .feature-next span { color: var(--ink-muted); font-size: 15px; }
+  .feature-next .label { margin-left: auto; font: 500 10px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: #8a6cc0; }
+  @media (max-width: 760px) {
+    .feature-grid { grid-template-columns: 1fr; }
+    .featured { padding-top: 48px; }
+    .featured-head h2 { font-size: 36px; }
+    .feature-next { flex-wrap: wrap; }
+    .feature-next .label { margin-left: 26px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } .feature-cover img, .feature-go i { transition: none; } }
+
   @media (max-width: 900px) {
     .deck { flex-direction: column; align-items: stretch; gap: 40px; }
     .tape-col, .panels { width: 100%; max-width: 560px; margin: 0 auto; }
@@ -232,6 +290,33 @@
   </section>
   </div>
 </main>
+
+<div class="scroll-cue"><a href="#featured">Featured projects
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2v8M2.5 6.5 6 10l3.5-3.5"/></svg></a></div>
+
+<section class="featured" id="featured" aria-labelledby="featured-h">
+  <div class="featured-head">
+    <h2 id="featured-h">Featured projects</h2>
+    <a href="projects.html">All projects →</a>
+  </div>
+  <ul class="feature-grid">
+    <li><a class="feature" href="projects.html?p=verdure" style="--accent:#137E44">
+      <span class="feature-cover"><img src="assets/home3/featured-verdure.jpg" alt="Three Verdure planting modules standing side by side" loading="lazy" decoding="async"></span>
+      <span class="feature-meta"><span class="feature-num">01</span><span class="feature-title">Verdure</span></span>
+      <span class="feature-blurb">Modular indoor-planting system with FlexiSpot.</span>
+      <span class="feature-tags">Physical product · UX/UI · Complex system</span>
+      <span class="feature-go">View case study <i aria-hidden="true">→</i></span>
+    </a></li>
+    <li><a class="feature" href="projects.html?p=clicket" style="--accent:#c23a3f">
+      <span class="feature-cover"><img src="assets/home3/featured-clicket.jpg" alt="Clicket accessories beside a camera on a garden floor" loading="lazy" decoding="async"></span>
+      <span class="feature-meta"><span class="feature-num">02</span><span class="feature-title">Clicket</span></span>
+      <span class="feature-blurb">Camera accessory, app and rental service for new photographers.</span>
+      <span class="feature-tags">Physical product · App · Service</span>
+      <span class="feature-go">View case study <i aria-hidden="true">→</i></span>
+    </a></li>
+  </ul>
+  <div class="feature-next"><span class="dot" aria-hidden="true"></span><span><b>Microsoft Fabric</b> · Client project · AI · UX research</span><span class="label">Coming up</span></div>
+</section>
 
 <footer>
   <span class="sig">thanks to Claude Code &amp; GitHub</span>
