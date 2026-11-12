@@ -120,7 +120,7 @@
 </main>
 
 <script src="js/nav.js?v=24"></script>
-<script src="js/other-work.js?v=6"></script>
+<script src="js/other-work.js?v=7"></script>
 <script>
   const N = OTHER_WORK.length;
   const tabs = document.getElementById("tabs"), view = document.getElementById("view");
@@ -151,7 +151,7 @@
     view.classList.add("is-loading");
     // replace(), not a new src: a new src adds an entry to the browser's history, and Back would
     // then step the page in the window instead of switching the tab back
-    const page = new URL(`other/${n}.html?v=3`, location.href).href;
+    const page = new URL(`other/${w.id}.html?v=3`, location.href).href;
     if (view.contentWindow?.location.href.startsWith(location.origin)) view.contentWindow.location.replace(page);
     else view.src = page;
     h = w.h; size();

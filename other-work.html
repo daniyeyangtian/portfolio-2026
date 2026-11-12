@@ -84,11 +84,11 @@
 </main>
 
 <script src="js/nav.js?v=24"></script>
-<script src="js/other-work.js?v=6"></script>
+<script src="js/other-work.js?v=7"></script>
 <script>
   const grid = document.getElementById("grid");
   grid.innerHTML = OTHER_WORK.map((w, i) => {
-    const n = i + 1, thumb = `assets/other-work/${n}/thumb.jpg?v=2`;
+    const n = i + 1, thumb = `assets/other-work/${w.id}/thumb.jpg?v=2`;
     return `<li><a class="win" href="work.html?p=${n}" style="--accent:${w.accent}" aria-label="${w.title}: ${w.sub}">
       <span class="win-bar" aria-hidden="true">
         <span class="win-dots"><i></i><i></i><i></i></span>
