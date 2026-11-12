@@ -12,11 +12,12 @@
   });
   if (!parts.length) return;
   // a layer the size of the Figma layer, so the parts keep their own positions inside it;
-  // scaled to half round the diagram's top-left corner (90, 1013) and moved to the margin (50)
+  // scaled to half round the diagram's top-left corner (90, 1013) and moved to x 76, in line
+  // with the section titles below (About Food Isla, My Role)
   const g = document.createElement("div");
   g.dataset.owGroup = "";
   g.setAttribute("aria-hidden", "true");
-  g.style.cssText = "position:absolute;inset:0;transform-origin:90px 1013px;transform:translate(-40px,0) scale(.5);pointer-events:none";
+  g.style.cssText = "position:absolute;inset:0;transform-origin:90px 1013px;transform:translate(-14px,0) scale(.5);pointer-events:none";
   parts.forEach(p => g.appendChild(p));
   root.appendChild(g);
 

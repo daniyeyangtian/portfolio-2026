@@ -58,14 +58,14 @@
 #frame [data-node-id="61:11922"] { width: 240px !important; }
 
 /* ---- Impact, beside the shrunk network diagram (type/5-impact.js) ---- */
-.fi-impact { position: absolute; left: 640px; top: 1013px; width: 530px; color: #4e4e4e; }
+.fi-impact { position: absolute; left: 640px; top: 1013px; width: 488px; color: #4e4e4e; }   /* right edge at 1128, with the About text below */
 .fi-impact h2 { margin: 0; font: italic 200 48px/1.15 Inter, sans-serif; color: #1e1e1e; }
 .fi-stats { display: flex; gap: 40px; margin: 22px 0 30px; }
 .fi-stats div { display: flex; flex-direction: column-reverse; }
 .fi-stats dd { margin: 0; font: italic 200 48px/1 Inter, sans-serif; color: #1e1e1e; }
 .fi-stats dt { margin-top: 6px; font: 400 13px/1.2 Roboto, sans-serif; text-transform: uppercase; letter-spacing: .04em; color: #7a7a74; }
-.fi-impact h3 { margin: 20px 0 4px; font: 400 16px/1.3 "Roboto Condensed", sans-serif; color: #1e1e1e; }
-.fi-impact p { margin: 0; font: 300 18px/1.5 Roboto, sans-serif; }
+.fi-impact h3 { margin: 22px 0 6px; font: 400 20px/1.25 "Roboto Condensed", sans-serif; color: #1e1e1e; }
+.fi-impact p { margin: 0; font: 300 15px/1.55 Roboto, sans-serif; }
 
 /* the group's logo (hand-drawn script) beside the project name in the opening */
 .ow-logo { position: absolute; left: 474px; top: 660px; height: 120px; width: auto; }
