@@ -96,3 +96,8 @@
 /* Design Challenge, its account and the map title start on the same line as About and My Role */
 #frame [data-node-id="61:12005"], #frame [data-node-id="61:12006"], #frame [data-node-id="61:11961"] { left: 76px !important; }
 .fi-context { left: 76px; }
+/* Design Challenge as two columns under its title: the question on the left, the account of what
+   we observed on the right, both starting on the same line */
+#frame [data-node-id="61:12006"] { right: auto !important; width: 440px !important; white-space: normal !important; }
+#frame [data-node-id="61:12006"] br { display: none; }
+.fi-context { left: 580px; width: 548px; }

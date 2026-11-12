@@ -64,9 +64,9 @@
   const all = Object.values(blocks).flat();
   const layout = () => {
     all.forEach(el => { el.style.translate = ""; });
-    // the account: under the question, in Figma's own column
+    // the account: in a right-hand column, level with the question on the left
     const hb = box(hmw);
-    ctx.style.top = hb.bottom + 28 + "px";
+    ctx.style.top = hb.top + "px";
     let cursor = null;
     ORDER.forEach(name => {
       const els = blocks[name]; if (!els.length) return;
