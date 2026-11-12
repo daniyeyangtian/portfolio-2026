@@ -174,51 +174,53 @@
   .featured-head h2 { font: italic 400 44px/1.05 "Instrument Serif", Georgia, serif; letter-spacing: .005em; color: var(--ink); }
   .featured-head a { font-size: 14px; color: var(--ink-muted); transition: color .2s; white-space: nowrap; }
   .featured-head a:hover { color: var(--ink); }
-  /* each project is a larger version of the music-player tiles on the PROJECTS tape: square cover,
-     title with an equaliser, the "artist" line, keywords, a progress bar with its times, and
-     transport controls. Hover: the card lifts, play turns to pause, the bar plays to the end. */
-  .players { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; list-style: none; padding: 0; }
-  .player {
-    --accent: #6E6879;
-    display: flex; flex-direction: column; height: 100%; padding: 14px 14px 18px; border-radius: 22px;
-    background: #fff; color: var(--ink);
-    box-shadow: 0 0 0 1px rgba(20,20,30,.06), 0 1px 2px rgba(20,20,30,.05), 0 12px 32px rgba(20,20,30,.07);
+  /* each project is a record on a turntable: a dark deck with the project's picture pressed
+     into the vinyl, a progress ring round it, a tone arm, a knob, play and skip buttons, and the
+     title running down the side. Hover: the arm swings onto the record, the record spins, the
+     ring fills, play turns to pause. Under the deck: the one-line description and keywords. */
+  .players { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; list-style: none; padding: 0; }
+  .player { --accent: #6E6879; display: flex; flex-direction: column; color: var(--ink); }
+  a.player:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 28px; }
+  .deck-tt {
+    position: relative; display: block; aspect-ratio: 650 / 560; border-radius: 26px;
+    background: radial-gradient(120% 90% at 30% 20%, #fbfbfc, #e2e3e7 75%);
+    box-shadow: inset 0 1px 0 #fff, inset 0 -2px 5px rgba(0,0,0,.08), 0 0 0 1px rgba(20,20,30,.06), 0 14px 30px -14px rgba(20,20,40,.30), 0 2px 4px rgba(20,20,40,.08);
     transition: transform .35s var(--ease), box-shadow .35s var(--ease);
   }
-  a.player:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgba(20,20,30,.07), 0 2px 4px rgba(20,20,30,.06), 0 20px 44px rgba(20,20,30,.12); }
-  a.player:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-  .player-cover { position: relative; display: block; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--accent); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
-  .player-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .player-cover.is-art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 56px/1 "Instrument Serif", Georgia, serif; }
-  .player-cover .soon { left: 12px; top: 12px; font-size: 10px; padding: 5px 9px; }
-  .player-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; padding: 0 4px; }
-  .player-title { display: flex; align-items: center; gap: 8px; font: 500 22px/1.2 "Geist", sans-serif; min-width: 0; }
-  .player-title .eq { height: 12px; }
-  .player-title .eq i { width: 2.5px; }
-  .player-num { font: 500 10px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
-  .player-artist { display: block; margin-top: 6px; padding: 0 4px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
-  .player-tags { display: block; margin-top: 10px; padding: 0 4px; font: 500 9.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
-  .player-progress { display: block; margin-top: auto; padding: 18px 4px 0; }
-  .player-bar { display: block; position: relative; height: 4px; border-radius: 2px; background: #ecebef; }
-  .player-bar i { position: absolute; inset: 0 auto 0 0; width: calc(var(--p) * 100%); border-radius: 2px; background: var(--accent); transition: width 1.6s cubic-bezier(.3, 0, .2, 1); }
-  .player-bar i::after { content: ""; position: absolute; right: -5px; top: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); transform: translateY(-50%); box-shadow: 0 0 0 3px #fff; }
-  a.player:hover .player-bar i { width: 100%; }
-  .player-time { display: flex; justify-content: space-between; margin-top: 8px; font: 500 9.5px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; color: var(--ink-faint); }
-  .player-controls { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 14px; color: var(--ink); }
-  .player-controls svg { display: block; }
-  .ctl-skip svg { width: 18px; height: 18px; fill: currentColor; opacity: .75; }
-  .ctl-play { position: relative; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; box-shadow: 0 6px 14px -6px var(--accent); transition: transform .25s var(--ease); }
-  .ctl-play svg { width: 16px; height: 16px; fill: currentColor; position: absolute; transition: opacity .2s; }
-  .ctl-play .ic-pause { opacity: 0; }
-  a.player:hover .ctl-play { transform: scale(1.06); }
-  a.player:hover .ctl-play .ic-play { opacity: 0; }
-  a.player:hover .ctl-play .ic-pause { opacity: 1; }
-  a.player:hover .eq { opacity: 1; }
-  a.player:hover .eq i { animation: eq .9s ease-in-out infinite; }
-  a.player:hover .eq i:nth-child(2) { animation-delay: -.3s; }
-  a.player:hover .eq i:nth-child(3) { animation-delay: -.6s; }
-  .player.is-soon .player-controls { opacity: .35; }
-  .player.is-soon .ctl-play { background: #c9c3d6; box-shadow: none; }
+  a.player:hover .deck-tt { transform: translateY(-4px); box-shadow: inset 0 1px 0 #fff, inset 0 -2px 5px rgba(0,0,0,.08), 0 0 0 1px rgba(20,20,30,.07), 0 22px 40px -16px rgba(20,20,40,.36), 0 2px 4px rgba(20,20,40,.08); }
+  /* the record: 450 of the deck's 650 units, centred at (265, 280) */
+  .record {
+    position: absolute; left: 6.154%; top: 9.821%; width: 69.231%; aspect-ratio: 1; border-radius: 50%;
+    background: #141416; box-shadow: 0 0 0 2px #101012, 0 8px 18px rgba(20,20,40,.35);
+    animation: spin 5s linear infinite; animation-play-state: paused;
+  }
+  a.player:hover .record { animation-play-state: running; }
+  .record img, .record .art { position: absolute; inset: 3%; width: 94%; height: 94%; border-radius: 50%; object-fit: cover; display: block; }
+  .record .art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 clamp(26px, 3.2vw, 44px)/1 "Instrument Serif", Georgia, serif; }
+  /* grooves and sheen over the picture */
+  .record::before { content: ""; position: absolute; inset: 3%; border-radius: 50%; pointer-events: none;
+    background: repeating-radial-gradient(circle, rgba(0,0,0,0) 0 3px, rgba(0,0,0,.10) 3px 4px), conic-gradient(from 20deg, rgba(255,255,255,0), rgba(255,255,255,.10) 12%, rgba(255,255,255,0) 25%, rgba(255,255,255,0) 50%, rgba(255,255,255,.08) 62%, rgba(255,255,255,0) 75%); }
+  .record::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3.2%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); background: #d9d9dc; box-shadow: 0 0 0 3px rgba(0,0,0,.35); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* everything else on the deck is one SVG in the deck's own 650 x 560 units */
+  .deck-tt svg.chrome { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .ring-bg { fill: none; stroke: rgba(20,20,30,.10); stroke-width: 3; }
+  .ring { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 265px 280px;
+    stroke-dasharray: 1458; stroke-dashoffset: calc(1458 * (1 - var(--p))); transition: stroke-dashoffset 2.2s cubic-bezier(.3, 0, .2, 1); }
+  a.player:hover .ring { stroke-dashoffset: 0; }
+  .arm { transform-origin: 596px 96px; transform: rotate(0deg); transition: transform .9s cubic-bezier(.4, 0, .2, 1); }
+  a.player:hover .arm { transform: rotate(-30deg); }
+  .btn-play .ic-pause { opacity: 0; } a.player:hover .btn-play .ic-play { opacity: 0; } a.player:hover .btn-play .ic-pause { opacity: 1; }
+  .btn-play path { transition: opacity .2s; }
+  .deck-label { font: 500 13px "Geist Mono", ui-monospace, monospace; letter-spacing: .12em; fill: #77767f; }
+  .deck-side { font: 500 24px "Geist", sans-serif; fill: #1f1f24; }
+  .deck-side-sub { font: 400 16px "Geist", sans-serif; fill: #6E6879; }
+  .player.is-soon .deck-tt { filter: saturate(.7); }
+  .player-text { display: block; padding: 16px 6px 0; }
+  .player-title { display: flex; align-items: baseline; gap: 10px; font: 500 20px/1.2 "Geist", sans-serif; }
+  .player-num { font: 500 10px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; color: var(--ink-faint); }
+  .player-artist { display: block; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
+  .player-tags { display: block; margin-top: 10px; font: 500 9.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
   @media (max-width: 960px) { .players { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 600px) {
     .players { grid-template-columns: 1fr; }
@@ -227,8 +229,8 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .scroll-cue svg { animation: none; }
-    a.player:hover .eq i { animation: none; transform: scaleY(.7); }
-    .player-bar i, .player { transition: none; }
+    .record { animation: none; }
+    .ring, .arm, .deck-tt { transition: none; }
   }
 
   @media (max-width: 900px) {
@@ -322,29 +324,65 @@
     <a href="projects.html">All projects →</a>
   </div>
   <ul class="players">
-    <li><a class="player" href="projects.html?p=verdure" style="--accent:#2AB26A">
-      <span class="player-cover"><img src="assets/home3/player-verdure.jpg" alt="Two Verdure planting units in front of an arched concrete wall" loading="lazy" decoding="async"></span>
-      <span class="player-head"><span class="player-title">Verdure <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="player-num">Track 01</span></span>
-      <span class="player-artist">Modular indoor-planting system with FlexiSpot.</span>
-      <span class="player-tags">Physical product · UX/UI · Complex system</span>
-      <span class="player-progress" aria-hidden="true"><span class="player-bar" style="--p:.62"><i></i></span><span class="player-time"><span>Case study</span><span>Play →</span></span></span>
-      <span class="player-controls" aria-hidden="true"><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM9.5 12 19 5v14z"/></svg></span><span class="ctl-play"><svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></span><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM14.5 12 5 19V5z"/></svg></span></span>
+    <li><a class="player" href="projects.html?p=verdure" style="--accent:#6fd197; --p:.62">
+      <span class="deck-tt">
+        <span class="record"><img src="assets/home3/player-verdure.jpg" alt="Two Verdure planting units in front of an arched concrete wall" loading="lazy" decoding="async"></span>
+        <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
+          <text class="deck-label" x="40" y="62">TRACK 01</text>
+          <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
+          <circle cx="536" cy="236" r="15" fill="#d3d4d9"/><circle cx="536" cy="236" r="5" fill="#8b8b93"/><circle cx="584" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="584" cy="236" r="7" fill="#e5484d"/>
+          <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
+          <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
+          <text class="deck-side" x="520" y="318">Verdure</text><text class="deck-side-sub" x="520" y="344">FlexiSpot</text>
+          <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
+          <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
+        </svg>
+      </span>
+      <span class="player-text">
+        <span class="player-title">Verdure <span class="player-num">TRACK 01</span></span>
+        <span class="player-artist">Modular indoor-planting system with FlexiSpot.</span>
+        <span class="player-tags">Physical product · UX/UI · Complex system</span>
+      </span>
     </a></li>
-    <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f">
-      <span class="player-cover"><img src="assets/home3/player-clicket.jpg" alt="Clicket accessories beside a camera on a garden floor" loading="lazy" decoding="async"></span>
-      <span class="player-head"><span class="player-title">Clicket <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="player-num">Track 02</span></span>
-      <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
-      <span class="player-tags">Physical product · App · Service</span>
-      <span class="player-progress" aria-hidden="true"><span class="player-bar" style="--p:.38"><i></i></span><span class="player-time"><span>Case study</span><span>Play →</span></span></span>
-      <span class="player-controls" aria-hidden="true"><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM9.5 12 19 5v14z"/></svg></span><span class="ctl-play"><svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></span><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM14.5 12 5 19V5z"/></svg></span></span>
+    <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f; --p:.38">
+      <span class="deck-tt">
+        <span class="record"><img src="assets/home3/player-clicket.jpg" alt="Clicket accessories beside a camera on a garden floor" loading="lazy" decoding="async"></span>
+        <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
+          <text class="deck-label" x="40" y="62">TRACK 02</text>
+          <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
+          <circle cx="536" cy="236" r="15" fill="#d3d4d9"/><circle cx="536" cy="236" r="5" fill="#8b8b93"/><circle cx="584" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="584" cy="236" r="7" fill="#e5484d"/>
+          <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
+          <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
+          <text class="deck-side" x="520" y="318">Clicket</text><text class="deck-side-sub" x="520" y="344">Camera kit</text>
+          <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
+          <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
+        </svg>
+      </span>
+      <span class="player-text">
+        <span class="player-title">Clicket <span class="player-num">TRACK 02</span></span>
+        <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
+        <span class="player-tags">Physical product · App · Service</span>
+      </span>
     </a></li>
-    <li><div class="player is-soon" style="--accent:#8a6cc0" aria-label="Microsoft Fabric, coming up">
-      <span class="player-cover is-art" aria-hidden="true">Fabric<span class="soon">Coming up</span></span>
-      <span class="player-head"><span class="player-title">Microsoft Fabric <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="player-num">Track 03</span></span>
-      <span class="player-artist">Case study in progress.</span>
-      <span class="player-tags">Client project · AI · UX research</span>
-      <span class="player-progress" aria-hidden="true"><span class="player-bar" style="--p:0"><i></i></span><span class="player-time"><span>Coming up</span><span>—</span></span></span>
-      <span class="player-controls" aria-hidden="true"><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM9.5 12 19 5v14z"/></svg></span><span class="ctl-play"><svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></span><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM14.5 12 5 19V5z"/></svg></span></span>
+    <li><div class="player is-soon" style="--accent:#8a6cc0; --p:0" aria-label="Microsoft Fabric, coming up">
+      <span class="deck-tt">
+        <span class="record"><span class="art">Fabric</span></span>
+        <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
+          <text class="deck-label" x="40" y="62">TRACK 03</text>
+          <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
+          <circle cx="536" cy="236" r="15" fill="#d3d4d9"/><circle cx="536" cy="236" r="5" fill="#8b8b93"/><circle cx="584" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="584" cy="236" r="7" fill="#e5484d"/>
+          <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
+          <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
+          <text class="deck-side" x="520" y="318">Fabric</text><text class="deck-side-sub" x="520" y="344">Coming up</text>
+          <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
+          <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
+        </svg>
+      </span>
+      <span class="player-text">
+        <span class="player-title">Fabric <span class="player-num">TRACK 03</span></span>
+        <span class="player-artist">Case study in progress.</span>
+        <span class="player-tags">Client project · AI · UX research</span>
+      </span>
     </div></li>
   </ul>
 </section>
