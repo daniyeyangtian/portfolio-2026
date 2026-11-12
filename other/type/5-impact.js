@@ -51,3 +51,26 @@
     <p>Every event was built around making and tasting, so belonging came from doing things together.</p>`;
   root.appendChild(s);
 })();
+
+// The campus–community map (UNNC Campus-Community Relationship): the original reads too big, so it
+// is shown at 0.55, centred under its title; Observation Findings and the rest stay below it and
+// type/sections.js closes the space up.
+(() => {
+  const frame = document.getElementById("frame"), root = frame.querySelector(":scope > div[data-node-id]");
+  const z = () => frame.getBoundingClientRect().width / 1220;
+  const rel = el => { const b = el.getBoundingClientRect(), r = root.getBoundingClientRect(); return { y: (b.top - r.top) / z() }; };
+  const TITLE = "61:11961";
+  const parts = [...root.children].filter(c => {
+    if (getComputedStyle(c).display === "none" || c.dataset.nodeId === TITLE || c.dataset.owGroup !== undefined) return false;
+    const y = rel(c).y; return y >= 4650 && y < 5750;
+  });
+  if (!parts.length) return;
+  // map: x 164…1176, y 4667…5730 in Figma units; 0.55 of its 1012px width is 557, centred at 332
+  const S = .55, X0 = 164, Y0 = 4667, LEFT = (1220 - 1012 * S) / 2;
+  const g = document.createElement("div");
+  g.dataset.owGroup = "";
+  g.setAttribute("aria-hidden", "true");
+  g.style.cssText = `position:absolute;inset:0;transform-origin:${X0}px ${Y0}px;transform:translate(${LEFT - X0}px,0) scale(${S});pointer-events:none`;
+  parts.forEach(p => g.appendChild(p));
+  root.appendChild(g);
+})();
