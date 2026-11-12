@@ -1,5 +1,5 @@
-// Food Isla (other/5.html): the opening network diagram, shrunk to the left half of the page,
-// with the project's impact beside it. Runs before type/sections.js, which then closes the space
+// Food Isla (other/5.html): an epigraph to open the page (M.F.K. Fisher, and our own line on
+// islands), then the network diagram, shrunk to the left half, with the project's impact beside it. Runs before type/sections.js, which then closes the space
 // the smaller diagram leaves. Positions are Figma frame units (the 1220-wide Figma layer).
 (() => {
   const frame = document.getElementById("frame"), root = frame.querySelector(":scope > div[data-node-id]");
@@ -11,18 +11,28 @@
     const y = rel(c).y; return y >= 1000 && y < 2200;
   });
   if (!parts.length) return;
+  const DOWN = 290;   // room for the epigraph above the diagram and Impact
+
+  const q = document.createElement("figure");
+  q.className = "fi-epigraph";
+  q.innerHTML = `
+    <blockquote><p>There is a communion of more than our bodies when bread is broken and wine drunk.</p></blockquote>
+    <figcaption>M.F.K. Fisher, <cite>The Gastronomical Me</cite> (1943)</figcaption>
+    <p class="fi-island">Every culture is an island of its own. Food is how we reach each other’s shores.</p>`;
+  root.appendChild(q);
   // a layer the size of the Figma layer, so the parts keep their own positions inside it;
   // scaled to half round the diagram's top-left corner (90, 1013) and moved to x 76, in line
   // with the section titles below (About Food Isla, My Role)
   const g = document.createElement("div");
   g.dataset.owGroup = "";
   g.setAttribute("aria-hidden", "true");
-  g.style.cssText = "position:absolute;inset:0;transform-origin:90px 1013px;transform:translate(-14px,0) scale(.5);pointer-events:none";
+  g.style.cssText = `position:absolute;inset:0;transform-origin:90px 1013px;transform:translate(-14px,${DOWN}px) scale(.5);pointer-events:none`;
   parts.forEach(p => g.appendChild(p));
   root.appendChild(g);
 
   const s = document.createElement("section");
   s.className = "fi-impact";
+  s.style.top = 1013 + DOWN + "px";
   s.setAttribute("aria-labelledby", "fi-impact-h");
   s.innerHTML = `
     <h2 id="fi-impact-h">Impact</h2>

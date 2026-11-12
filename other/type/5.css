@@ -69,3 +69,12 @@
 
 /* the group's logo (hand-drawn script) beside the project name in the opening */
 .ow-logo { position: absolute; left: 474px; top: 660px; height: 120px; width: auto; }
+
+/* the epigraph that opens the page: Fisher's line large, its source small, then our own line */
+.fi-epigraph { position: absolute; left: 76px; top: 1013px; width: 1000px; margin: 0; }
+.fi-epigraph blockquote { margin: 0; }
+.fi-epigraph blockquote p { margin: 0; font: italic 200 44px/1.22 Inter, sans-serif; color: #1e1e1e; }
+.fi-epigraph blockquote p::before { content: "\201C"; } .fi-epigraph blockquote p::after { content: "\201D"; }
+.fi-epigraph figcaption { margin-top: 14px; font: 400 13px/1.2 Roboto, sans-serif; text-transform: uppercase; letter-spacing: .04em; color: #7a7a74; }
+.fi-epigraph cite { font-style: italic; text-transform: none; letter-spacing: 0; font-size: 14px; }
+.fi-island { margin: 26px 0 0; font: italic 300 22px/1.4 "Roboto Condensed", sans-serif; color: #4e4e4e; }
