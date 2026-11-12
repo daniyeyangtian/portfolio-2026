@@ -67,8 +67,10 @@
 .fi-impact h3 { margin: 22px 0 6px; font: 400 20px/1.25 "Roboto Condensed", sans-serif; color: #1e1e1e; }
 .fi-impact p { margin: 0; font: 300 15px/1.55 Roboto, sans-serif; }
 
-/* the group's logo (hand-drawn script) beside the project name in the opening */
-.ow-logo { position: absolute; left: 474px; top: 660px; height: 120px; width: auto; }
+/* the group's logo (hand-drawn script) on the sky at the top of the hero. The hero is cropped
+   a little lower (object-position in other/5.html) so the photo's university watermark in its
+   top-left corner falls outside the frame. */
+.ow-logo { position: absolute; left: 46px; top: 32px; height: 150px; width: auto; }
 
 /* the epigraph that opens the page: Fisher's line large, its source small, then our own line */
 .fi-epigraph { position: absolute; left: 76px; top: 1093px; width: 1000px; margin: 0; }   /* 80px more air under the opening */
