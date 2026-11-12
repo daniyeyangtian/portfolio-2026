@@ -4,13 +4,13 @@
 // strip converted to HTML, `h` px tall (Figma units). thumb.jpg is the grid's picture.
 window.OTHER_WORK = [
   { title: "Repainting Winland Blue", sub: "A co-creative service and interactive experience system for a shopping centre.",
-    year: "Service & interaction design", tags: ["Service design", "Interactive installation", "TouchDesigner"], h: 7856, figma: "55:5962" },
+    year: "Service & interaction design", tags: ["Service design", "Interactive installation", "TouchDesigner"], h: 7976, figma: "55:5962" },
   { title: "EasyTorque", sub: "A ratchet wrench and fastener system that guides torque for non-professionals.",
-    year: "Product & service design", tags: ["Ratchet wrench", "Fastener system", "Torque guidance"], h: 11641, figma: "55:2230" },
+    year: "Product & service design", tags: ["Ratchet wrench", "Fastener system", "Torque guidance"], h: 11323, figma: "55:2230" },
   { title: "Torisound", sub: "A Bluetooth speaker set that brings busy one-child families closer.",
-    year: "Individual project", tags: ["Bluetooth speaker", "Family bonding"], h: 5307, figma: "61:11380" },
+    year: "Individual project", tags: ["Bluetooth speaker", "Family bonding"], h: 5244, figma: "61:11380" },
   { title: "Phlaro", sub: "A flamingo potato masher that brings vacation vibes into the kitchen.",
-    year: "Individual project", tags: ["Kitchenware", "Emotional value"], h: 3267, figma: "59:9457" },
+    year: "Individual project", tags: ["Kitchenware", "Emotional value"], h: 3268, figma: "59:9457" },
   { title: "Food Isla", sub: "A community food working group at UNNC, exploring food from land to table.",
-    year: "Co-founder · 2024", tags: ["Community", "Food", "Cross-cultural"], h: 7584, figma: "61:11763" },
+    year: "Co-founder · 2024", tags: ["Community", "Food", "Cross-cultural"], h: 7510, figma: "61:11763" },
 ];

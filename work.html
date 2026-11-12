@@ -93,7 +93,7 @@
 </main>
 
 <script src="js/nav.js?v=24"></script>
-<script src="js/other-work.js?v=4"></script>
+<script src="js/other-work.js?v=5"></script>
 <script>
   const n = Math.min(OTHER_WORK.length, Math.max(1, parseInt(new URLSearchParams(location.search).get("p")) || 1));
   const w = OTHER_WORK[n - 1];
@@ -113,7 +113,7 @@
     // fits its 1220-wide frame to its own width), as tall as its content
     const page = document.querySelector(".page"), box = document.getElementById("slices");
     page.classList.add("has-slices");
-    box.innerHTML = `<iframe src="other/${n}.html?v=2" title="${w.title}" scrolling="no"></iframe>`;
+    box.innerHTML = `<iframe src="other/${n}.html?v=3" title="${w.title}" scrolling="no"></iframe>`;
     const f = box.firstElementChild;
     // `h` until the page reports its height (pages whose text was re-spaced grow a little)
     let h = w.h;

@@ -7,3 +7,17 @@
 #frame [class~="h-0"] > .absolute { min-height: 1px; }
 #frame [class~="w-0"] > .absolute { min-width: 1px; }
 #frame .opacity-23 { opacity: .23; }
+
+/* ---- the opening of every Other Work page: one format ----
+   hero 1220 x 640 (cropped to fill), the project name in Instrument Sans 96 in the project's
+   colour, then three facts (label in Geist Mono 12, value in Geist 16). The page's own Figma
+   opening is hidden (other/type/<n>.css) and everything else moves by --ow-shift so the content
+   starts at 940 on every page. */
+.ow-head { position: absolute; left: 0; top: 0; width: 1220px; height: 940px; z-index: 3; }
+.ow-hero { position: absolute; left: 0; top: 0; width: 1220px; height: 640px; object-fit: cover; display: block; }
+.ow-title { position: absolute; left: 46px; top: 668px; margin: 0; font: 700 96px/1 "Instrument Sans", sans-serif; letter-spacing: -.01em; white-space: nowrap; }
+.ow-meta { position: absolute; left: 50px; top: 796px; margin: 0; display: grid; grid-template-columns: 300px 300px 480px; column-gap: 20px; }
+.ow-meta dt { font: 400 12px/16px "Geist Mono", monospace; text-transform: uppercase; letter-spacing: .04em; color: var(--ow-accent); }
+.ow-meta dd { margin: 4px 0 0; font: 400 16px/1.35 Geist, sans-serif; color: #737373; }
+#frame > div[data-node-id] { margin-top: var(--ow-shift, 0px); }
+#frame.case-frame { display: flow-root; }   /* keeps that margin inside the frame (it would collapse through it) */

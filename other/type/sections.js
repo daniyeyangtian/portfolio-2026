@@ -11,8 +11,9 @@
   const BOUNDS = spec.map(([y]) => Number(y));
   const GAPS = spec.map(([, g]) => g === undefined ? GAP : Number(g.replace("=", "")));
   const EXACT = spec.map(([, g]) => !!g?.startsWith("="));
-  const frame = document.getElementById("frame"), root = frame.firstElementChild;
-  const ft = () => frame.getBoundingClientRect().top, z = () => frame.getBoundingClientRect().width / 1220;
+  const frame = document.getElementById("frame"), root = frame.querySelector(":scope > div[data-node-id]");
+  // positions in Figma frame units, measured from the Figma layer (the page opening may move it)
+  const ft = () => root.getBoundingClientRect().top, z = () => frame.getBoundingClientRect().width / 1220;
   const top = el => (el.getBoundingClientRect().top - ft()) / z();
   const bottom = el => {
     let b = el.getBoundingClientRect();

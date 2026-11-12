@@ -739,3 +739,5 @@
 #frame [data-node-id], #frame [data-node-id] * { word-break: normal !important; overflow-wrap: normal !important; }
 #frame [data-node-id="56:8858"] *, #frame [data-node-id="56:8859"] *, #frame [data-node-id="56:8860"] *,
 #frame [data-node-id="56:8861"] *, #frame [data-node-id="56:8862"] *, #frame [data-node-id="56:8863"] * { line-height: 1.2 !important; }
+/* the yellow stripe behind Background starts with the content, not behind the page opening */
+#frame [data-node-id="12:33"] { bottom: auto !important; margin-top: 297px !important; height: 280px !important; }
