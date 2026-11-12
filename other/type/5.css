@@ -1,0 +1,58 @@
+/* Food Isla (other/5.html): one type scale for the whole page. Levels:
+   section   Inter ExtraLight Italic 48 / 1.15, #1e1e1e   (were 41-66px)
+   lead      Roboto Condensed Light Italic 24 / 1.35        (the design challenge)
+   body      Roboto Light 18 / 1.5, #4e4e4e                 (were 17-29px)
+   item      Roboto Condensed 16 / 1.3                      (activity titles)
+   detail    Roboto Light 12 / 1.3, #4e4e4e                 (activity dates and notes)
+   diagram   node labels 16 (Roboto Condensed on the map, Roboto caps in the network),
+             ring labels DM Mono 18, legends Roboto 13 caps #7a7a74
+   The big activity numbers and the "Food Isla" node stay as drawn. */
+#frame [data-node-id="61:11943"], #frame [data-node-id="61:11945"], #frame [data-node-id="61:11904"], #frame [data-node-id="61:11961"], #frame [data-node-id="61:12001"], #frame [data-node-id="61:12002"], #frame [data-node-id="61:12005"], #frame [data-node-id="61:11943"] *, #frame [data-node-id="61:11945"] *, #frame [data-node-id="61:11904"] *, #frame [data-node-id="61:11961"] *, #frame [data-node-id="61:12001"] *, #frame [data-node-id="61:12002"] *, #frame [data-node-id="61:12005"] * { font-family: Inter, sans-serif !important; font-weight: 200 !important; font-style: italic !important; font-size: 48px !important; line-height: 1.15 !important; color: #1e1e1e !important; }
+#frame [data-node-id="61:11943"], #frame [data-node-id="61:11945"], #frame [data-node-id="61:11904"], #frame [data-node-id="61:11961"], #frame [data-node-id="61:12001"], #frame [data-node-id="61:12002"], #frame [data-node-id="61:12005"] { right: auto !important; bottom: auto !important; width: auto !important; height: auto !important; }
+#frame [data-node-id="61:11943"] { width: 260px !important; }
+#frame [data-node-id="61:11961"] { width: 820px !important; }
+#frame [data-node-id="61:11942"], #frame [data-node-id="61:11944"], #frame [data-node-id="61:11946"], #frame [data-node-id="61:12003"], #frame [data-node-id="61:12004"], #frame [data-node-id="61:11942"] *, #frame [data-node-id="61:11944"] *, #frame [data-node-id="61:11946"] *, #frame [data-node-id="61:12003"] *, #frame [data-node-id="61:12004"] * { font-family: Roboto, sans-serif !important; font-weight: 300 !important; font-size: 18px !important; line-height: 1.5 !important; color: #4e4e4e !important; }
+#frame [data-node-id="61:11942"], #frame [data-node-id="61:11944"], #frame [data-node-id="61:11946"], #frame [data-node-id="61:12003"], #frame [data-node-id="61:12004"] { bottom: auto !important; height: auto !important; }
+#frame [data-node-id="61:12006"], #frame [data-node-id="61:12006"] * { font-family: "Roboto Condensed", sans-serif !important; font-weight: 300 !important; font-style: italic !important; font-size: 24px !important; line-height: 1.35 !important; color: #1e1e1e !important; }
+#frame [data-node-id="61:12006"] { right: auto !important; bottom: auto !important; width: 640px !important; height: auto !important; }
+#frame [data-node-id="61:11906"], #frame [data-node-id="61:11907"], #frame [data-node-id="61:11908"], #frame [data-node-id="61:11909"], #frame [data-node-id="61:11910"], #frame [data-node-id="61:11911"], #frame [data-node-id="61:11912"], #frame [data-node-id="61:11913"], #frame [data-node-id="61:11914"], #frame [data-node-id="61:11915"], #frame [data-node-id="61:11916"], #frame [data-node-id="61:11917"], #frame [data-node-id="61:11906"] *, #frame [data-node-id="61:11907"] *, #frame [data-node-id="61:11908"] *, #frame [data-node-id="61:11909"] *, #frame [data-node-id="61:11910"] *, #frame [data-node-id="61:11911"] *, #frame [data-node-id="61:11912"] *, #frame [data-node-id="61:11913"] *, #frame [data-node-id="61:11914"] *, #frame [data-node-id="61:11915"] *, #frame [data-node-id="61:11916"] *, #frame [data-node-id="61:11917"] * { font-family: "Roboto Condensed", sans-serif !important; font-weight: 400 !important; font-size: 16px !important; line-height: 1.3 !important; color: #1e1e1e !important; }
+#frame [data-node-id="61:11918"], #frame [data-node-id="61:11919"], #frame [data-node-id="61:11920"], #frame [data-node-id="61:11921"], #frame [data-node-id="61:11922"], #frame [data-node-id="61:11923"], #frame [data-node-id="61:11924"], #frame [data-node-id="61:11925"], #frame [data-node-id="61:11926"], #frame [data-node-id="61:11927"], #frame [data-node-id="61:11928"], #frame [data-node-id="61:11929"], #frame [data-node-id="61:11918"] *, #frame [data-node-id="61:11919"] *, #frame [data-node-id="61:11920"] *, #frame [data-node-id="61:11921"] *, #frame [data-node-id="61:11922"] *, #frame [data-node-id="61:11923"] *, #frame [data-node-id="61:11924"] *, #frame [data-node-id="61:11925"] *, #frame [data-node-id="61:11926"] *, #frame [data-node-id="61:11927"] *, #frame [data-node-id="61:11928"] *, #frame [data-node-id="61:11929"] * { font-family: Roboto, sans-serif !important; font-weight: 300 !important; font-size: 12px !important; line-height: 1.3 !important; color: #4e4e4e !important; }
+#frame [data-node-id="61:11918"], #frame [data-node-id="61:11919"], #frame [data-node-id="61:11920"], #frame [data-node-id="61:11921"], #frame [data-node-id="61:11922"], #frame [data-node-id="61:11923"], #frame [data-node-id="61:11924"], #frame [data-node-id="61:11925"], #frame [data-node-id="61:11926"], #frame [data-node-id="61:11927"], #frame [data-node-id="61:11928"], #frame [data-node-id="61:11929"] { right: auto !important; bottom: auto !important; height: auto !important; }
+#frame [data-node-id="61:11918"] { width: 230px !important; }
+#frame [data-node-id="61:11927"] { width: 230px !important; }
+#frame [data-node-id="61:11928"] { width: 200px !important; }
+#frame [data-node-id="61:11929"] { width: 230px !important; }
+#frame [data-node-id="61:11919"] { width: 225px !important; }
+#frame [data-node-id="61:11920"] { width: 195px !important; }
+#frame [data-node-id="61:11921"] { width: 200px !important; }
+#frame [data-node-id="61:11922"] { width: 220px !important; }
+#frame [data-node-id="61:11926"] { width: 230px !important; }
+#frame [data-node-id="61:11925"] { width: 260px !important; }
+#frame [data-node-id="61:11924"] { width: 235px !important; }
+#frame [data-node-id="61:11923"] { width: 220px !important; }
+#frame [data-node-id="61:11983"], #frame [data-node-id="61:11984"], #frame [data-node-id="61:11985"], #frame [data-node-id="61:11986"], #frame [data-node-id="61:11987"], #frame [data-node-id="61:11988"], #frame [data-node-id="61:11989"], #frame [data-node-id="61:11990"], #frame [data-node-id="61:11991"], #frame [data-node-id="61:11992"], #frame [data-node-id="61:11993"], #frame [data-node-id="61:11994"], #frame [data-node-id="61:11995"], #frame [data-node-id="61:11996"], #frame [data-node-id="61:11983"] *, #frame [data-node-id="61:11984"] *, #frame [data-node-id="61:11985"] *, #frame [data-node-id="61:11986"] *, #frame [data-node-id="61:11987"] *, #frame [data-node-id="61:11988"] *, #frame [data-node-id="61:11989"] *, #frame [data-node-id="61:11990"] *, #frame [data-node-id="61:11991"] *, #frame [data-node-id="61:11992"] *, #frame [data-node-id="61:11993"] *, #frame [data-node-id="61:11994"] *, #frame [data-node-id="61:11995"] *, #frame [data-node-id="61:11996"] * { font-family: "Roboto Condensed", sans-serif !important; font-weight: 400 !important; font-size: 16px !important; line-height: 1.2 !important; }
+#frame [data-node-id="13:1926"], #frame [data-node-id="13:1927"], #frame [data-node-id="13:1928"], #frame [data-node-id="13:1930"], #frame [data-node-id="13:1931"], #frame [data-node-id="13:1932"], #frame [data-node-id="13:1933"], #frame [data-node-id="13:1934"], #frame [data-node-id="13:1935"], #frame [data-node-id="13:1936"], #frame [data-node-id="13:1937"], #frame [data-node-id="13:1938"], #frame [data-node-id="13:1939"], #frame [data-node-id="13:1940"], #frame [data-node-id="13:1941"], #frame [data-node-id="13:1942"], #frame [data-node-id="13:1943"], #frame [data-node-id="13:1944"], #frame [data-node-id="13:1945"], #frame [data-node-id="13:1946"], #frame [data-node-id="13:1947"], #frame [data-node-id="13:1926"] *, #frame [data-node-id="13:1927"] *, #frame [data-node-id="13:1928"] *, #frame [data-node-id="13:1930"] *, #frame [data-node-id="13:1931"] *, #frame [data-node-id="13:1932"] *, #frame [data-node-id="13:1933"] *, #frame [data-node-id="13:1934"] *, #frame [data-node-id="13:1935"] *, #frame [data-node-id="13:1936"] *, #frame [data-node-id="13:1937"] *, #frame [data-node-id="13:1938"] *, #frame [data-node-id="13:1939"] *, #frame [data-node-id="13:1940"] *, #frame [data-node-id="13:1941"] *, #frame [data-node-id="13:1942"] *, #frame [data-node-id="13:1943"] *, #frame [data-node-id="13:1944"] *, #frame [data-node-id="13:1945"] *, #frame [data-node-id="13:1946"] *, #frame [data-node-id="13:1947"] * { font-size: 14px !important; line-height: 1.2 !important; }
+#frame [data-node-id="13:1924"], #frame [data-node-id="13:1925"], #frame [data-node-id="13:1924"] *, #frame [data-node-id="13:1925"] * { font-size: 18px !important; }
+#frame [data-node-id="61:11997"], #frame [data-node-id="61:11998"], #frame [data-node-id="61:11999"], #frame [data-node-id="61:12000"], #frame [data-node-id="13:1951"], #frame [data-node-id="13:1952"], #frame [data-node-id="13:1953"], #frame [data-node-id="13:1954"], #frame [data-node-id="13:1957"], #frame [data-node-id="61:11997"] *, #frame [data-node-id="61:11998"] *, #frame [data-node-id="61:11999"] *, #frame [data-node-id="61:12000"] *, #frame [data-node-id="13:1951"] *, #frame [data-node-id="13:1952"] *, #frame [data-node-id="13:1953"] *, #frame [data-node-id="13:1954"] *, #frame [data-node-id="13:1957"] * { font-family: Roboto, sans-serif !important; font-weight: 400 !important; font-size: 13px !important; line-height: 1.2 !important; text-transform: uppercase !important; letter-spacing: .04em !important; color: #7a7a74 !important; }
+
+/* activity titles as wide as their notes, so long titles take fewer lines */
+#frame [data-node-id="61:11906"], #frame [data-node-id="61:11915"], #frame [data-node-id="61:11916"], #frame [data-node-id="61:11917"], #frame [data-node-id="61:11907"], #frame [data-node-id="61:11912"], #frame [data-node-id="61:11913"], #frame [data-node-id="61:11914"], #frame [data-node-id="61:11908"], #frame [data-node-id="61:11909"], #frame [data-node-id="61:11910"], #frame [data-node-id="61:11911"] { right: auto !important; bottom: auto !important; height: auto !important; white-space: normal !important; }
+#frame [data-node-id="61:11906"] { width: 230px !important; }
+#frame [data-node-id="61:11915"] { width: 230px !important; }
+#frame [data-node-id="61:11916"] { width: 190px !important; }
+#frame [data-node-id="61:11917"] { width: 220px !important; }
+#frame [data-node-id="61:11907"] { width: 225px !important; }
+#frame [data-node-id="61:11912"] { width: 190px !important; }
+#frame [data-node-id="61:11913"] { width: 200px !important; }
+#frame [data-node-id="61:11914"] { width: 210px !important; }
+#frame [data-node-id="61:11908"] { width: 230px !important; }
+#frame [data-node-id="61:11909"] { width: 250px !important; }
+#frame [data-node-id="61:11910"] { width: 230px !important; }
+#frame [data-node-id="61:11911"] { width: 210px !important; }
+#frame [data-node-id="61:11904"] { margin-top: -10px !important; }
+#frame [data-node-id="13:1947"] { margin-top: 3px !important; }
+/* body text keeps to the page margin, and sits closer under its (smaller) title */
+#frame [data-node-id="61:11942"] { right: auto !important; width: 750px !important; }
+#frame [data-node-id="61:12003"] { margin-top: -36px !important; }
+#frame [data-node-id="61:12004"] { margin-top: -20px !important; }
+#frame [data-node-id="61:11922"] { width: 240px !important; }

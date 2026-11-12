@@ -1,13 +1,16 @@
 // Other Work pages whose text was set larger than in Figma (other/type/<n>.css): a section can
 // now run into the next one. Each section below a boundary (Figma frame y, data-bounds on this
 // script tag; "y:gap" sets that boundary's own gap) moves down just enough to keep data-gap px
-// under the lowest thing above it; the
+// under the lowest thing above it ("y:=gap": exactly that gap, so a section can also move up
+// where the text above got smaller); the
 // page grows by the same amount and tells work.html its new height.
 (() => {
   const me = document.currentScript;
   const GAP = Number(me.dataset.gap || 48);
-  const spec = me.dataset.bounds.split(",").map(t => t.split(":").map(Number));
-  const BOUNDS = spec.map(([y]) => y), GAPS = spec.map(([, g]) => g ?? GAP);
+  const spec = me.dataset.bounds.split(",").map(t => t.split(":"));
+  const BOUNDS = spec.map(([y]) => Number(y));
+  const GAPS = spec.map(([, g]) => g === undefined ? GAP : Number(g.replace("=", "")));
+  const EXACT = spec.map(([, g]) => !!g?.startsWith("="));
   const frame = document.getElementById("frame"), root = frame.firstElementChild;
   const ft = () => frame.getBoundingClientRect().top, z = () => frame.getBoundingClientRect().width / 1220;
   const top = el => (el.getBoundingClientRect().top - ft()) / z();
@@ -37,7 +40,7 @@
     BOUNDS.forEach((b, k) => {
       const above = Math.max(...leaves.filter(el => section.get(el) <= k).map(bottom));
       const first = Math.min(...leaves.filter(el => section.get(el) === k + 1).map(top));
-      shifts[k] = Math.max(0, Math.ceil(above + GAPS[k] - first)); apply();
+      const d = Math.ceil(above + GAPS[k] - first); shifts[k] = EXACT[k] ? d : Math.max(0, d); apply();
     });
     if (parent !== window) parent.postMessage({ otherWorkHeight: baseH + total() }, location.origin);
   };

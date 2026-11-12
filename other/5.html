@@ -23,17 +23,13 @@
   /* Figma's Noto Sans "CTGR 100" (display category) is the Noto Sans Display family on the web */
   #frame [style*='"CTGR" 100'] { font-family: "Noto Sans Display", "Noto Sans", sans-serif !important; }
 /* Other Work pages (other/<n>.html): fonts Figma uses that Google Fonts doesn't have.
-   ChillDuanSans (SIL OFL) is self-hosted as a Latin subset. Galyon is a commercial font:
-   it shows where it is installed, Figtree stands in elsewhere. Copperplate and Futura are
+   ChillDuanSans (SIL OFL) is self-hosted as a Latin subset. Galyon: see type/galyon.css. Copperplate and Futura are
    macOS system fonts. */
 @font-face { font-family: "ChillDuanSans"; src: url("../assets/fonts/chillduansans-expandedbold-latin.woff2") format("woff2"); font-display: swap; }
-#frame [class*="Galyon_Book"] { font-family: "Galyon Book", "Galyon", Figtree, sans-serif !important; }
-#frame [class*="Galyon_Book_Italic"] { font-family: "Galyon Book Italic", "Galyon Book", Figtree, sans-serif !important; }
-#frame [class*="Galyon-Bold"] { font-family: "Galyon-Bold", "Galyon Bold", Figtree, sans-serif !important; font-weight: 700; }
-#frame [class*="Galyon-Bold_Italic"] { font-family: "Galyon-Bold Italic", "Galyon Bold Italic", Figtree, sans-serif !important; font-weight: 700; }
 #frame [class*="'Copperplate'"] { font-family: Copperplate, "Copperplate Gothic Light", serif !important; }
 #frame [class*="'Futura'"] { font-family: Futura, "Century Gothic", sans-serif !important; }
 </style>
+<link rel="stylesheet" href="type/5.css?v=3">
 </head>
 <body>
 
@@ -49,5 +45,6 @@
   addEventListener("resize", fit);
 
 </script>
+<script src="type/sections.js?v=3" data-bounds="2850,3220,4500,5990,6680:=110,7270:=110" data-gap="80"></script>
 </body>
 </html>
