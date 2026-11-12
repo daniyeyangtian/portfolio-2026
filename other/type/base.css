@@ -1,0 +1,9 @@
+/* Fixes for all Other Work pages (other/<n>.html), whatever their type scale.
+   - Figma draws lines as zero-height (or zero-width) boxes holding an SVG about 0.4px thick. Once
+     the page scales the frame below 100%, a box that thin rounds to nothing and the line vanishes
+     (Winland's Ideation links, for one). Keep each line box at least 1px.
+   - Figma emits opacity-23, a Tailwind v4 step the v3 CDN build doesn't generate, so those shapes
+     (Winland's Experience Flow pills) drew at full strength. */
+#frame [class~="h-0"] > .absolute { min-height: 1px; }
+#frame [class~="w-0"] > .absolute { min-width: 1px; }
+#frame .opacity-23 { opacity: .23; }
