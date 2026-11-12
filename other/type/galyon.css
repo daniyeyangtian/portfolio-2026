@@ -1,0 +1,13 @@
+/* Galyon, as installed, is four separate families that all say "regular" (Galyon Book, Galyon Book
+   Italic, Galyon-Bold, Galyon-Bold Italic), so asking for bold or italic on top fakes a second
+   bold / slant. "Galyon Web" puts the four faces in one family with their real weight and style.
+   Galyon is a commercial font and is not served: it shows where it is installed; elsewhere
+   Figtree stands in, in the same weight and style. */
+@font-face { font-family: "Galyon Web"; src: local("Galyon Book"), local("Galyon-Book"); font-weight: 400; font-style: normal; }
+@font-face { font-family: "Galyon Web"; src: local("Galyon Book Italic"), local("Galyon-Book-Italic"); font-weight: 400; font-style: italic; }
+@font-face { font-family: "Galyon Web"; src: local("Galyon Bold"), local("Galyon-Bold"); font-weight: 700; font-style: normal; }
+@font-face { font-family: "Galyon Web"; src: local("Galyon Bold Italic"), local("Galyon-Bold-Italic"); font-weight: 700; font-style: italic; }
+#frame [class*="Galyon_Book"] { font-family: "Galyon Web", Figtree, sans-serif !important; font-weight: 400 !important; font-style: normal !important; }
+#frame [class*="Galyon_Book_Italic"] { font-style: italic !important; }
+#frame [class*="Galyon-Bold"] { font-family: "Galyon Web", Figtree, sans-serif !important; font-weight: 700 !important; font-style: normal !important; }
+#frame [class*="Galyon-Bold_Italic"] { font-style: italic !important; }
