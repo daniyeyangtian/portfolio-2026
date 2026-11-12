@@ -1,0 +1,57 @@
+/* Phlaro (other/4.html): one type scale for the whole page. Levels:
+   title     Instrument Sans 144 (Figma, unchanged) · meta labels Geist Mono 12 / Geist 16 (unchanged)
+   section   ChillDuanSans 24, #59162c
+   subhead   Galyon Bold Italic 15 / 1.25, #99868c
+   intro     Galyon Book Italic 12 / 1.4, #59162c   (the note next to a section title)
+   body      Galyon Book 12 / 1.45, #59162c, sentence case
+   caption   Galyon Book Italic 12 / 1.3, #99868c   (image and dimension labels) */
+#frame [data-node-id="60:11263"], #frame [data-node-id="60:11264"], #frame [data-node-id="60:11265"], #frame [data-node-id="60:11303"], #frame [data-node-id="60:11304"], #frame [data-node-id="60:11331"], #frame [data-node-id="60:11332"], #frame [data-node-id="60:11349"], #frame [data-node-id="60:11364"], #frame [data-node-id="60:11371"], #frame [data-node-id="60:11287"] { font-size: 24px !important; line-height: 1.2 !important; color: #59162c !important; }
+#frame [data-node-id="60:11376"], #frame [data-node-id="60:11376"] *, #frame [data-node-id="60:11377"], #frame [data-node-id="60:11377"] *, #frame [data-node-id="60:11378"], #frame [data-node-id="60:11378"] *, #frame [data-node-id="60:11271"], #frame [data-node-id="60:11271"] *, #frame [data-node-id="60:11279"], #frame [data-node-id="60:11279"] *, #frame [data-node-id="60:11280"], #frame [data-node-id="60:11280"] *, #frame [data-node-id="60:11315"], #frame [data-node-id="60:11315"] *, #frame [data-node-id="60:11316"], #frame [data-node-id="60:11316"] *, #frame [data-node-id="60:11317"], #frame [data-node-id="60:11317"] *, #frame [data-node-id="60:11305"], #frame [data-node-id="60:11305"] *, #frame [data-node-id="60:11272"], #frame [data-node-id="60:11272"] *, #frame [data-node-id="60:11273"], #frame [data-node-id="60:11273"] *, #frame [data-node-id="60:11313"], #frame [data-node-id="60:11313"] *, #frame [data-node-id="60:11314"], #frame [data-node-id="60:11314"] *, #frame [data-node-id="60:11318"], #frame [data-node-id="60:11318"] * { font-family: "Galyon-Bold Italic", "Galyon Bold Italic", Figtree, sans-serif !important; font-weight: 700 !important;
+  font-size: 15px !important; line-height: 1.25 !important; color: #99868c !important; text-transform: none !important; }
+#frame [data-node-id="60:11266"], #frame [data-node-id="60:11266"] *, #frame [data-node-id="60:11267"], #frame [data-node-id="60:11267"] *, #frame [data-node-id="60:11344"], #frame [data-node-id="60:11344"] *, #frame [data-node-id="60:11350"], #frame [data-node-id="60:11350"] *, #frame [data-node-id="60:11351"], #frame [data-node-id="60:11351"] * { font-family: "Galyon Book Italic", "Galyon Book", Figtree, sans-serif !important; font-size: 12px !important; line-height: 1.4 !important; color: #59162c !important; }
+#frame [data-node-id="60:11274"], #frame [data-node-id="60:11274"] *, #frame [data-node-id="60:11275"], #frame [data-node-id="60:11275"] *, #frame [data-node-id="60:11276"], #frame [data-node-id="60:11276"] *, #frame [data-node-id="60:11311"], #frame [data-node-id="60:11311"] *, #frame [data-node-id="60:11327"], #frame [data-node-id="60:11327"] *, #frame [data-node-id="60:11306"], #frame [data-node-id="60:11306"] *, #frame [data-node-id="60:11312"], #frame [data-node-id="60:11312"] *, #frame [data-node-id="60:11309"], #frame [data-node-id="60:11309"] *, #frame [data-node-id="60:11307"], #frame [data-node-id="60:11307"] *, #frame [data-node-id="60:11308"], #frame [data-node-id="60:11308"] *, #frame [data-node-id="60:11310"], #frame [data-node-id="60:11310"] *, #frame [data-node-id="60:11292"], #frame [data-node-id="60:11292"] *, #frame [data-node-id="60:11293"], #frame [data-node-id="60:11293"] *, #frame [data-node-id="60:11294"], #frame [data-node-id="60:11294"] *, #frame [data-node-id="60:11355"], #frame [data-node-id="60:11355"] *, #frame [data-node-id="60:11356"], #frame [data-node-id="60:11356"] *, #frame [data-node-id="60:11357"], #frame [data-node-id="60:11357"] *, #frame [data-node-id="60:11277"], #frame [data-node-id="60:11277"] *, #frame [data-node-id="60:11278"], #frame [data-node-id="60:11278"] * { font-family: "Galyon Book", Figtree, sans-serif !important; font-weight: 400 !important; font-style: normal !important;
+  font-size: 12px !important; line-height: 1.45 !important; color: #59162c !important; text-transform: none !important; }
+#frame [data-node-id="60:11362"], #frame [data-node-id="60:11362"] *, #frame [data-node-id="60:11363"], #frame [data-node-id="60:11363"] *, #frame [data-node-id="60:11342"], #frame [data-node-id="60:11342"] *, #frame [data-node-id="60:11358"], #frame [data-node-id="60:11358"] *, #frame [data-node-id="60:11359"], #frame [data-node-id="60:11359"] *, #frame [data-node-id="60:11360"], #frame [data-node-id="60:11360"] *, #frame [data-node-id="60:11361"], #frame [data-node-id="60:11361"] * { font-family: "Galyon Book Italic", "Galyon Book", Figtree, sans-serif !important; font-size: 12px !important; line-height: 1.3 !important; color: #99868c !important; text-transform: none !important; }
+
+/* ---- re-spacing for the larger text (Figma frame units; whole sections are pushed down by
+   type/4.js, so these only fix positions inside a section) ---- */
+/* Product Research: product names over their bullet lists, three columns */
+#frame [data-node-id="60:11271"], #frame [data-node-id="60:11279"], #frame [data-node-id="60:11280"],
+#frame [data-node-id="60:11275"], #frame [data-node-id="60:11276"], #frame [data-node-id="60:11274"] { inset: auto !important; height: auto !important; white-space: normal !important; }
+#frame [data-node-id="60:11271"] { left: 260px !important; top: 997px !important; width: 215px !important; }
+#frame [data-node-id="60:11279"] { left: 564px !important; top: 997px !important; width: 225px !important; }
+#frame [data-node-id="60:11280"] { left: 871px !important; top: 997px !important; width: 257px !important; }
+#frame [data-node-id="60:11275"] { left: 260px !important; top: 1062px !important; width: 215px !important; }
+#frame [data-node-id="60:11276"] { left: 564px !important; top: 1062px !important; width: 225px !important; }
+#frame [data-node-id="60:11274"] { left: 871px !important; top: 1062px !important; width: 257px !important; }
+/* intro notes sit to the right of their section title, on its baseline */
+#frame [data-node-id="60:11266"], #frame [data-node-id="60:11267"], #frame [data-node-id="60:11344"],
+#frame [data-node-id="60:11350"], #frame [data-node-id="60:11351"] { inset: auto !important; height: auto !important; white-space: normal !important; }
+#frame [data-node-id="60:11266"] { left: 491px !important; top: 951px !important; width: 560px !important; }
+#frame [data-node-id="60:11267"] { left: 470px !important; top: 1129px !important; width: 660px !important; }
+#frame [data-node-id="60:11344"] { left: 534px !important; top: 1775px !important; width: 560px !important; }
+#frame [data-node-id="60:11350"] { left: 490px !important; top: 2550px !important; width: 240px !important; }
+#frame [data-node-id="60:11351"] { left: 927px !important; top: 2783px !important; width: 200px !important; }
+/* Product Testing: the findings on samples A, B, C as a row of three under the table and photos */
+#frame [data-node-id="60:11292"], #frame [data-node-id="60:11293"], #frame [data-node-id="60:11294"] { inset: auto !important; top: 1302px !important; width: 290px !important; height: auto !important; }
+#frame [data-node-id="60:11292"] { left: 199px !important; }
+#frame [data-node-id="60:11293"] { left: 509px !important; }
+#frame [data-node-id="60:11294"] { left: 819px !important; }
+/* Qualitative Research: questions in three columns, answers below them */
+#frame [data-node-id="60:11313"], #frame [data-node-id="60:11314"], #frame [data-node-id="60:11318"] { inset: auto !important; top: 1815px !important; height: auto !important; white-space: normal !important; }
+#frame [data-node-id="60:11313"] { left: 184px !important; width: 270px !important; }
+#frame [data-node-id="60:11314"] { left: 474px !important; width: 300px !important; }
+#frame [data-node-id="60:11318"] { left: 794px !important; width: 300px !important; }
+#frame [data-node-id="60:11319"], #frame [data-node-id="60:11320"], #frame [data-node-id="60:11327"],
+#frame [data-node-id="60:11311"], #frame [data-node-id="60:11306"], #frame [data-node-id="60:11312"] { margin-top: 36px !important; }
+/* Persona: needs / pain points under the "about" paragraph */
+#frame [data-node-id="60:11316"], #frame [data-node-id="60:11317"] { margin-top: 44px !important; }
+#frame [data-node-id="60:11308"], #frame [data-node-id="60:11310"] { margin-top: 54px !important; white-space: normal !important; }
+#frame [data-node-id="60:11308"] { width: 245px !important; }
+#frame [data-node-id="60:11310"] { width: 300px !important; }
+/* labels that sit on a pink line (Market Trend, Design Features): above the line, not through it */
+#frame [data-node-id="60:11272"], #frame [data-node-id="60:11273"],
+#frame [data-node-id="60:11376"], #frame [data-node-id="60:11377"], #frame [data-node-id="60:11378"] { margin-top: -9px !important; }
+/* Persona: the facts list ends a little further right, clear of the photo */
+#frame [data-node-id="60:11309"] { left: 516px !important; list-style-position: inside; }
+#frame [data-node-id="60:11309"] li { margin-inline-start: 0 !important; }

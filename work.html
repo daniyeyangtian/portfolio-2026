@@ -113,9 +113,14 @@
     // fits its 1220-wide frame to its own width), as tall as its content
     const page = document.querySelector(".page"), box = document.getElementById("slices");
     page.classList.add("has-slices");
-    box.innerHTML = `<iframe src="other/${n}.html?v=1" title="${w.title}" scrolling="no"></iframe>`;
+    box.innerHTML = `<iframe src="other/${n}.html?v=2" title="${w.title}" scrolling="no"></iframe>`;
     const f = box.firstElementChild;
-    const size = () => { f.style.height = Math.ceil(w.h * f.clientWidth / 1220) + "px"; };
+    // `h` until the page reports its height (pages whose text was re-spaced grow a little)
+    let h = w.h;
+    const size = () => { f.style.height = Math.ceil(h * f.clientWidth / 1220) + "px"; };
+    addEventListener("message", e => {
+      if (e.source === f.contentWindow && e.data?.otherWorkHeight) { h = e.data.otherWorkHeight; size(); }
+    });
     size(); addEventListener("resize", size);
   }
   const link = (id, k) => {
