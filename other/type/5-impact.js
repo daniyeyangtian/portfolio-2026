@@ -1,6 +1,5 @@
 // Food Isla (other/5.html): an epigraph to open the page (M.F.K. Fisher, and our own line on
-// islands), then the network diagram, shrunk to the left half, with the project's impact beside it. Runs before type/sections.js, which then closes the space
-// the smaller diagram leaves. Positions are Figma frame units (the 1220-wide Figma layer).
+// islands), then the network diagram, shrunk to the left half, with the project's impact beside it. type/5-order.js then lays the page's blocks out in order. Positions are Figma frame units (the 1220-wide Figma layer).
 (() => {
   const frame = document.getElementById("frame"), root = frame.querySelector(":scope > div[data-node-id]");
   const z = () => frame.getBoundingClientRect().width / 1220;
@@ -26,6 +25,7 @@
   const g = document.createElement("div");
   g.dataset.owGroup = "";
   g.setAttribute("aria-hidden", "true");
+  g.dataset.block = "impact";
   g.style.cssText = `position:absolute;inset:0;transform-origin:90px 1013px;transform:translate(-14px,${DOWN}px) scale(.5);pointer-events:none`;
   parts.forEach(p => g.appendChild(p));
   root.appendChild(g);
@@ -53,8 +53,7 @@
 })();
 
 // The campus–community map (UNNC Campus-Community Relationship): the original reads too big, so it
-// is shown at 0.55, centred under its title; Observation Findings and the rest stay below it and
-// type/sections.js closes the space up.
+// is shown at 0.55, centred under its title; type/5-order.js places it in the page.
 (() => {
   const frame = document.getElementById("frame"), root = frame.querySelector(":scope > div[data-node-id]");
   const z = () => frame.getBoundingClientRect().width / 1220;
@@ -70,6 +69,7 @@
   const g = document.createElement("div");
   g.dataset.owGroup = "";
   g.setAttribute("aria-hidden", "true");
+  g.dataset.block = "map";
   g.style.cssText = `position:absolute;inset:0;transform-origin:${X0}px ${Y0}px;transform:translate(${LEFT - X0}px,0) scale(${S});pointer-events:none`;
   parts.forEach(p => g.appendChild(p));
   root.appendChild(g);

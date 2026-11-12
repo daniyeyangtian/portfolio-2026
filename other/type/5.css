@@ -84,3 +84,15 @@
 /* Activities: the big numbers, the dots and the timeline all in one dark grey (the line's own
    #707072); the numbers stay light, so weight sets them apart from the titles */
 #frame [data-node-id="61:11892"], #frame [data-node-id="61:11892"] *, #frame [data-node-id="61:11893"], #frame [data-node-id="61:11893"] *, #frame [data-node-id="61:11894"], #frame [data-node-id="61:11894"] *, #frame [data-node-id="61:11895"], #frame [data-node-id="61:11895"] *, #frame [data-node-id="61:11896"], #frame [data-node-id="61:11896"] *, #frame [data-node-id="61:11897"], #frame [data-node-id="61:11897"] *, #frame [data-node-id="61:11898"], #frame [data-node-id="61:11898"] *, #frame [data-node-id="61:11899"], #frame [data-node-id="61:11899"] *, #frame [data-node-id="61:11900"], #frame [data-node-id="61:11900"] *, #frame [data-node-id="61:11901"], #frame [data-node-id="61:11901"] *, #frame [data-node-id="61:11902"], #frame [data-node-id="61:11902"] *, #frame [data-node-id="61:11903"], #frame [data-node-id="61:11903"] * { color: #707072 !important; }
+
+/* ---- page order (type/5-order.js): the short account under the Design Challenge, and
+   What I learned at the end ---- */
+.fi-context { position: absolute; left: 130px; width: 760px; margin: 0; font: 300 18px/1.5 Roboto, sans-serif; color: #4e4e4e; }
+.fi-learned { position: absolute; left: 76px; top: 7700px; width: 1052px; }
+.fi-learned h2 { margin: 0; font: italic 200 48px/1.15 Inter, sans-serif; color: #1e1e1e; }
+.fi-learned-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 40px; margin-top: 32px; }
+.fi-learned h3 { margin: 0 0 6px; font: 400 20px/1.25 "Roboto Condensed", sans-serif; color: #1e1e1e; }
+.fi-learned p { margin: 0; font: 300 15px/1.55 Roboto, sans-serif; color: #4e4e4e; }
+/* Design Challenge, its account and the map title start on the same line as About and My Role */
+#frame [data-node-id="61:12005"], #frame [data-node-id="61:12006"], #frame [data-node-id="61:11961"] { left: 76px !important; }
+.fi-context { left: 76px; }
