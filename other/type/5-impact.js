@@ -31,12 +31,10 @@
       <div><dt>participations</dt><dd>950+</dd></div>
       <div><dt>months</dt><dd>14</dd></div>
     </dl>
-    <h3>Partnered with Ningbo organisations</h3>
-    <p>Worked with Ningbo Commerce and Trade Group and the Qiuga community on a series of workshops, and delivered design proposals for renovating their community spaces.</p>
+    <h3>Connected the campus with Ningbo</h3>
+    <p>Partnered with Ningbo Commerce and Trade Group and the Qiuga community on a series of workshops, and delivered design proposals for renovating their community spaces. A third of all events took students off campus, from a 500-visitor farmers' market with Shensong to a pop-up in Daimeng Hutong.</p>
     <h3>Cultural exchange through food</h3>
     <p>Food became the shared language: Chinese and international students cooked xuecai, baklava, focaccia and Yunnan dipping sauce together, and traded the stories behind each dish, instead of watching each other's culture on display.</p>
-    <h3>Took students into Ningbo</h3>
-    <p>A third of the events left campus: fieldwork in Qiuga, a 500-visitor farmers' market with Shensong, a pop-up in Daimeng Hutong and a farm stay in Shanghai.</p>
     <h3>Put shared space to use</h3>
     <p>A self-designed food cart served 300+ staff and students outdoors during Sustainability Week.</p>
     <h3>Made food a medium, not a prop</h3>
