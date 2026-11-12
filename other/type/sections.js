@@ -24,6 +24,8 @@
   const leaves = [];
   const walk = el => [...el.children].forEach(c => {
     if (getComputedStyle(c).display === "none") return;
+    // a group laid over the page (data-ow-group, e.g. a scaled diagram) counts by its contents
+    if (c.dataset.owGroup !== undefined) { walk(c); return; }
     const r = c.getBoundingClientRect(); r.width || r.height ? leaves.push(c) : walk(c);
   });
   walk(root);
