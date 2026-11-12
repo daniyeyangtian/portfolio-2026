@@ -43,6 +43,7 @@
     BOUNDS.forEach((b, k) => {
       const above = Math.max(...leaves.filter(el => section.get(el) <= k).map(bottom));
       const first = Math.min(...leaves.filter(el => section.get(el) === k + 1).map(top));
+      if (!isFinite(first)) return;   // nothing starts in this section any more
       const d = Math.ceil(above + GAPS[k] - first); shifts[k] = EXACT[k] ? d : Math.max(0, d); apply();
     });
     if (parent !== window) parent.postMessage({ otherWorkHeight: baseH + total() }, location.origin);

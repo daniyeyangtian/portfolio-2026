@@ -84,3 +84,11 @@
 /* Activities: the big numbers, the dots and the timeline all in one dark grey (the line's own
    #707072); the numbers stay light, so weight sets them apart from the titles */
 #frame [data-node-id="61:11892"], #frame [data-node-id="61:11892"] *, #frame [data-node-id="61:11893"], #frame [data-node-id="61:11893"] *, #frame [data-node-id="61:11894"], #frame [data-node-id="61:11894"] *, #frame [data-node-id="61:11895"], #frame [data-node-id="61:11895"] *, #frame [data-node-id="61:11896"], #frame [data-node-id="61:11896"] *, #frame [data-node-id="61:11897"], #frame [data-node-id="61:11897"] *, #frame [data-node-id="61:11898"], #frame [data-node-id="61:11898"] *, #frame [data-node-id="61:11899"], #frame [data-node-id="61:11899"] *, #frame [data-node-id="61:11900"], #frame [data-node-id="61:11900"] *, #frame [data-node-id="61:11901"], #frame [data-node-id="61:11901"] *, #frame [data-node-id="61:11902"], #frame [data-node-id="61:11902"] *, #frame [data-node-id="61:11903"], #frame [data-node-id="61:11903"] * { color: #707072 !important; }
+
+/* ---- the campus–community map at 0.55, Observation Findings and Key Insights beside it
+   (type/5-impact.js). The four text layers are in normal flow inside .fi-beside. ---- */
+.fi-beside { position: absolute; left: 700px; top: 4690px; width: 428px; }
+#frame .fi-beside > [data-node-id] { position: static !important; inset: auto !important; width: auto !important; height: auto !important;
+  margin: 0 !important; transform: none !important; white-space: normal !important; }
+#frame .fi-beside > [data-node-id="61:12003"], #frame .fi-beside > [data-node-id="61:12004"] { margin-top: 18px !important; }
+#frame .fi-beside > [data-node-id="61:12002"] { margin-top: 64px !important; }
