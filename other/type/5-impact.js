@@ -33,8 +33,8 @@
     </dl>
     <h3>Connected the campus with Ningbo</h3>
     <p>Partnered with Ningbo Commerce and Trade Group and the Qiuga community on a series of workshops, and delivered design proposals for renovating their community spaces. A third of all events took students off campus, from a 500-visitor farmers' market with Shensong to a pop-up in Daimeng Hutong.</p>
-    <h3>Cultural exchange through food</h3>
-    <p>Food became the shared language: Chinese and international students cooked xuecai, baklava, focaccia and Yunnan dipping sauce together, and traded the stories behind each dish, instead of watching each other's culture on display.</p>
+    <h3>Food as a common language</h3>
+    <p>Chinese and international students cooked xuecai, baklava, focaccia and Yunnan dipping sauce together, and traded the stories behind each dish, instead of watching each other's culture on display.</p>
     <h3>Put shared space to use</h3>
     <p>A self-designed food cart served 300+ staff and students outdoors during Sustainability Week.</p>
     <h3>Made food a medium, not a prop</h3>
