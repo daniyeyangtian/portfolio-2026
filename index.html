@@ -174,40 +174,62 @@
   .featured-head h2 { font: italic 400 44px/1.05 "Instrument Serif", Georgia, serif; letter-spacing: .005em; color: var(--ink); }
   .featured-head a { font-size: 14px; color: var(--ink-muted); transition: color .2s; white-space: nowrap; }
   .featured-head a:hover { color: var(--ink); }
-  .feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 32px; list-style: none; padding: 0; }
-  .feature { --accent: #6E6879; display: block; color: var(--ink); }
-  .feature-cover {
-    position: relative; display: block; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
-    background: #eceef0; box-shadow: 0 0 0 1px rgba(20,20,30,.06);
+  /* each project is a larger version of the music-player tiles on the PROJECTS tape: square cover,
+     title with an equaliser, the "artist" line, keywords, a progress bar with its times, and
+     transport controls. Hover: the card lifts, play turns to pause, the bar plays to the end. */
+  .players { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; list-style: none; padding: 0; }
+  .player {
+    --accent: #6E6879;
+    display: flex; flex-direction: column; height: 100%; padding: 14px 14px 18px; border-radius: 22px;
+    background: #fff; color: var(--ink);
+    box-shadow: 0 0 0 1px rgba(20,20,30,.06), 0 1px 2px rgba(20,20,30,.05), 0 12px 32px rgba(20,20,30,.07);
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease);
   }
-  .feature-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
-  a.feature:hover .feature-cover img { transform: scale(1.03); }
-  .feature-meta { display: flex; align-items: baseline; gap: 12px; margin-top: 18px; }
-  .feature-num { font: 500 11px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; color: var(--accent); }
-  .feature-title { font: 500 24px/1.2 "Geist", sans-serif; }
-  .feature-blurb { display: block; margin-top: 8px; font-size: 16px; line-height: 1.5; color: var(--ink-muted); }
-  .feature-tags { display: block; margin-top: 12px; font: 500 10px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
-  .feature-go { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; font-size: 14px; color: var(--ink); }
-  .feature-go i { display: inline-block; font-style: normal; transition: transform .25s var(--ease); }
-  a.feature:hover .feature-go i { transform: translateX(4px); }
-  a.feature:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 16px; }
-  /* coming up: a slim row, not a link */
-  .feature-next {
-    display: flex; align-items: center; gap: 16px; margin-top: 48px; padding: 18px 20px;
-    border-radius: 14px; background: #f1f0f4;
-  }
-  .feature-next .dot { width: 10px; height: 10px; border-radius: 50%; background: #8a6cc0; flex: none; }
-  .feature-next b { font-weight: 500; }
-  .feature-next span { color: var(--ink-muted); font-size: 15px; }
-  .feature-next .label { margin-left: auto; font: 500 10px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: #8a6cc0; }
-  @media (max-width: 760px) {
-    .feature-grid { grid-template-columns: 1fr; }
+  a.player:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgba(20,20,30,.07), 0 2px 4px rgba(20,20,30,.06), 0 20px 44px rgba(20,20,30,.12); }
+  a.player:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+  .player-cover { position: relative; display: block; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--accent); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+  .player-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .player-cover.is-art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 56px/1 "Instrument Serif", Georgia, serif; }
+  .player-cover .soon { left: 12px; top: 12px; font-size: 10px; padding: 5px 9px; }
+  .player-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; padding: 0 4px; }
+  .player-title { display: flex; align-items: center; gap: 8px; font: 500 22px/1.2 "Geist", sans-serif; min-width: 0; }
+  .player-title .eq { height: 12px; }
+  .player-title .eq i { width: 2.5px; }
+  .player-num { font: 500 10px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+  .player-artist { display: block; margin-top: 6px; padding: 0 4px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
+  .player-tags { display: block; margin-top: 10px; padding: 0 4px; font: 500 9.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .player-progress { display: block; margin-top: auto; padding: 18px 4px 0; }
+  .player-bar { display: block; position: relative; height: 4px; border-radius: 2px; background: #ecebef; }
+  .player-bar i { position: absolute; inset: 0 auto 0 0; width: calc(var(--p) * 100%); border-radius: 2px; background: var(--accent); transition: width 1.6s cubic-bezier(.3, 0, .2, 1); }
+  .player-bar i::after { content: ""; position: absolute; right: -5px; top: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); transform: translateY(-50%); box-shadow: 0 0 0 3px #fff; }
+  a.player:hover .player-bar i { width: 100%; }
+  .player-time { display: flex; justify-content: space-between; margin-top: 8px; font: 500 9.5px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; color: var(--ink-faint); }
+  .player-controls { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 14px; color: var(--ink); }
+  .player-controls svg { display: block; }
+  .ctl-skip svg { width: 18px; height: 18px; fill: currentColor; opacity: .75; }
+  .ctl-play { position: relative; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; box-shadow: 0 6px 14px -6px var(--accent); transition: transform .25s var(--ease); }
+  .ctl-play svg { width: 16px; height: 16px; fill: currentColor; position: absolute; transition: opacity .2s; }
+  .ctl-play .ic-pause { opacity: 0; }
+  a.player:hover .ctl-play { transform: scale(1.06); }
+  a.player:hover .ctl-play .ic-play { opacity: 0; }
+  a.player:hover .ctl-play .ic-pause { opacity: 1; }
+  a.player:hover .eq { opacity: 1; }
+  a.player:hover .eq i { animation: eq .9s ease-in-out infinite; }
+  a.player:hover .eq i:nth-child(2) { animation-delay: -.3s; }
+  a.player:hover .eq i:nth-child(3) { animation-delay: -.6s; }
+  .player.is-soon .player-controls { opacity: .35; }
+  .player.is-soon .ctl-play { background: #c9c3d6; box-shadow: none; }
+  @media (max-width: 960px) { .players { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) {
+    .players { grid-template-columns: 1fr; }
     .featured { padding-top: 48px; }
     .featured-head h2 { font-size: 36px; }
-    .feature-next { flex-wrap: wrap; }
-    .feature-next .label { margin-left: 26px; }
   }
-  @media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } .feature-cover img, .feature-go i { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue svg { animation: none; }
+    a.player:hover .eq i { animation: none; transform: scaleY(.7); }
+    .player-bar i, .player { transition: none; }
+  }
 
   @media (max-width: 900px) {
     .deck { flex-direction: column; align-items: stretch; gap: 40px; }
@@ -299,23 +321,32 @@
     <h2 id="featured-h">Featured projects</h2>
     <a href="projects.html">All projects →</a>
   </div>
-  <ul class="feature-grid">
-    <li><a class="feature" href="projects.html?p=verdure" style="--accent:#137E44">
-      <span class="feature-cover"><img src="assets/home3/featured-verdure.jpg" alt="Three Verdure planting modules standing side by side" loading="lazy" decoding="async"></span>
-      <span class="feature-meta"><span class="feature-num">01</span><span class="feature-title">Verdure</span></span>
-      <span class="feature-blurb">Modular indoor-planting system with FlexiSpot.</span>
-      <span class="feature-tags">Physical product · UX/UI · Complex system</span>
-      <span class="feature-go">View case study <i aria-hidden="true">→</i></span>
+  <ul class="players">
+    <li><a class="player" href="projects.html?p=verdure" style="--accent:#2AB26A">
+      <span class="player-cover"><img src="assets/home3/player-verdure.jpg" alt="Two Verdure planting units in front of an arched concrete wall" loading="lazy" decoding="async"></span>
+      <span class="player-head"><span class="player-title">Verdure <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="player-num">Track 01</span></span>
+      <span class="player-artist">Modular indoor-planting system with FlexiSpot.</span>
+      <span class="player-tags">Physical product · UX/UI · Complex system</span>
+      <span class="player-progress" aria-hidden="true"><span class="player-bar" style="--p:.62"><i></i></span><span class="player-time"><span>Case study</span><span>Play →</span></span></span>
+      <span class="player-controls" aria-hidden="true"><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM9.5 12 19 5v14z"/></svg></span><span class="ctl-play"><svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></span><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM14.5 12 5 19V5z"/></svg></span></span>
     </a></li>
-    <li><a class="feature" href="projects.html?p=clicket" style="--accent:#c23a3f">
-      <span class="feature-cover"><img src="assets/home3/featured-clicket.jpg" alt="Clicket accessories beside a camera on a garden floor" loading="lazy" decoding="async"></span>
-      <span class="feature-meta"><span class="feature-num">02</span><span class="feature-title">Clicket</span></span>
-      <span class="feature-blurb">Camera accessory, app and rental service for new photographers.</span>
-      <span class="feature-tags">Physical product · App · Service</span>
-      <span class="feature-go">View case study <i aria-hidden="true">→</i></span>
+    <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f">
+      <span class="player-cover"><img src="assets/home3/player-clicket.jpg" alt="Clicket accessories beside a camera on a garden floor" loading="lazy" decoding="async"></span>
+      <span class="player-head"><span class="player-title">Clicket <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="player-num">Track 02</span></span>
+      <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
+      <span class="player-tags">Physical product · App · Service</span>
+      <span class="player-progress" aria-hidden="true"><span class="player-bar" style="--p:.38"><i></i></span><span class="player-time"><span>Case study</span><span>Play →</span></span></span>
+      <span class="player-controls" aria-hidden="true"><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM9.5 12 19 5v14z"/></svg></span><span class="ctl-play"><svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></span><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM14.5 12 5 19V5z"/></svg></span></span>
     </a></li>
+    <li><div class="player is-soon" style="--accent:#8a6cc0" aria-label="Microsoft Fabric, coming up">
+      <span class="player-cover is-art" aria-hidden="true">Fabric<span class="soon">Coming up</span></span>
+      <span class="player-head"><span class="player-title">Microsoft Fabric <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="player-num">Track 03</span></span>
+      <span class="player-artist">Case study in progress.</span>
+      <span class="player-tags">Client project · AI · UX research</span>
+      <span class="player-progress" aria-hidden="true"><span class="player-bar" style="--p:0"><i></i></span><span class="player-time"><span>Coming up</span><span>—</span></span></span>
+      <span class="player-controls" aria-hidden="true"><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM9.5 12 19 5v14z"/></svg></span><span class="ctl-play"><svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></span><span class="ctl-skip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM14.5 12 5 19V5z"/></svg></span></span>
+    </div></li>
   </ul>
-  <div class="feature-next"><span class="dot" aria-hidden="true"></span><span><b>Microsoft Fabric</b> · Client project · AI · UX research</span><span class="label">Coming up</span></div>
 </section>
 
 <footer>
@@ -324,7 +355,7 @@
 </footer>
 
 <script src="js/nav.js?v=24"></script>
-<script src="js/track-sound.js?v=3"></script>
+<script src="js/track-sound.js?v=4"></script>
 <script>
   // give the 3D cassette 8 s; if it hasn't appeared by then, show the flat one
   setTimeout(() => { const t = document.getElementById("tape"); if (!t.classList.contains("is-3d")) t.classList.add("no-3d"); }, 8000);

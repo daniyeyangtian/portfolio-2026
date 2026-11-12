@@ -1,11 +1,12 @@
-// Home, PROJECTS tape: pointing at a track card plays a short sound, a soft two-note
+// Home, PROJECTS tape and the Featured projects players below it: pointing at a card plays a short sound, a soft two-note
 // electric-piano chime, low and rounded, pitched per track (Verdure lowest, Fabric highest), with a little
 // tape wobble. Made on the fly with Web Audio, no audio files. Browsers only allow sound
 // after a click or key press on the page, which pressing the PROJECTS key already is.
 (() => {
   const AC = window.AudioContext || window.webkitAudioContext;
-  const cards = [...document.querySelectorAll('[data-tape="works"] .track')];
-  if (!AC || !cards.length) return;
+  // each set counts from its first card, so Verdure, Clicket and Fabric keep their own chime
+  const sets = ['[data-tape="works"] .track', ".featured .player"].map(q => [...document.querySelectorAll(q)]);
+  if (!AC || !sets.some(s => s.length)) return;
   const CHIMES = [[60, 67], [64, 71], [67, 74]];   // C4–G4, E4–B4, G4–D5: an octave lower, softer
   const VOLUME = 0.11;
   const hz = m => 440 * Math.pow(2, (m - 69) / 12);
@@ -36,5 +37,5 @@
       note(a, t, VOLUME); note(b, t + 0.07, VOLUME * 0.7);
     } catch {}
   };
-  cards.forEach((card, i) => card.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") chime(i); }));
+  sets.forEach(cards => cards.forEach((card, i) => card.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") chime(i); })));
 })();
