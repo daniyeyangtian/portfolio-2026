@@ -176,7 +176,7 @@
   .featured-head a:hover { color: var(--ink); }
   /* each project is a record on a turntable: a dark deck with the project's picture pressed
      into the vinyl, a progress ring round it, a tone arm, a knob, play and skip buttons, and the
-     title running down the side. Hover: the arm swings onto the record, the record spins, the
+     title running down the side. Hover: the arm swings onto the record (it doesn't spin), the
      ring fills, play turns to pause. Under the deck: the one-line description and keywords. */
   .players { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; list-style: none; padding: 0; }
   .player { --accent: #6E6879; display: flex; flex-direction: column; color: var(--ink); }
@@ -192,16 +192,15 @@
   .record {
     position: absolute; left: 6.154%; top: 9.821%; width: 69.231%; aspect-ratio: 1; border-radius: 50%;
     background: #141416; box-shadow: 0 0 0 2px #101012, 0 8px 18px rgba(20,20,40,.35);
-    animation: spin 5s linear infinite; animation-play-state: paused;
   }
-  a.player:hover .record { animation-play-state: running; }
-  .record img, .record .art { position: absolute; inset: 3%; width: 94%; height: 94%; border-radius: 50%; object-fit: cover; display: block; }
+  .record .scene, .record .art { position: absolute; inset: 3%; border-radius: 50%; overflow: hidden; display: block; }
+  /* the app's screen on its photo, as on the PROJECTS tape: the screen centred, 78% of the circle's height */
+  .record .scene { background: var(--scene) center / cover; }
+  .record .scene img { position: absolute; left: 50%; top: 50%; height: 78%; width: auto; max-width: none; transform: translate(-50%, -50%);
+    border-radius: 9px; box-shadow: 0 2px 4px rgba(10,30,0,.25), 0 14px 28px rgba(10,30,0,.35); }
   .record .art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 clamp(26px, 3.2vw, 44px)/1 "Instrument Serif", Georgia, serif; }
-  /* grooves and sheen over the picture */
-  .record::before { content: ""; position: absolute; inset: 3%; border-radius: 50%; pointer-events: none;
-    background: repeating-radial-gradient(circle, rgba(0,0,0,0) 0 3px, rgba(0,0,0,.10) 3px 4px), conic-gradient(from 20deg, rgba(255,255,255,0), rgba(255,255,255,.10) 12%, rgba(255,255,255,0) 25%, rgba(255,255,255,0) 50%, rgba(255,255,255,.08) 62%, rgba(255,255,255,0) 75%); }
-  .record::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3.2%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); background: #d9d9dc; box-shadow: 0 0 0 3px rgba(0,0,0,.35); }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  /* a soft rim of light round the picture */
+  .record::before { content: ""; position: absolute; inset: 3%; border-radius: 50%; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), inset 0 0 18px rgba(0,0,0,.25); }
   /* everything else on the deck is one SVG in the deck's own 650 x 560 units */
   .deck-tt svg.chrome { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .ring-bg { fill: none; stroke: rgba(20,20,30,.10); stroke-width: 3; }
@@ -229,7 +228,6 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .scroll-cue svg { animation: none; }
-    .record { animation: none; }
     .ring, .arm, .deck-tt { transition: none; }
   }
 
@@ -326,7 +324,7 @@
   <ul class="players">
     <li><a class="player" href="projects.html?p=verdure" style="--accent:#6fd197; --p:.62">
       <span class="deck-tt">
-        <span class="record"><img src="assets/home3/player-verdure.jpg" alt="Two Verdure planting units in front of an arched concrete wall" loading="lazy" decoding="async"></span>
+        <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><img src="assets/home3/verdure-screen.png" alt="The Verdure app on a phone, over a field of grass" loading="lazy" decoding="async"></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 01</text>
           <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
@@ -346,7 +344,7 @@
     </a></li>
     <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f; --p:.38">
       <span class="deck-tt">
-        <span class="record"><img src="assets/home3/player-clicket.jpg" alt="Clicket accessories beside a camera on a garden floor" loading="lazy" decoding="async"></span>
+        <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><img src="assets/home3/clicket-screen.png?v=2" alt="The Clicket app on a phone, over a table of old cameras" loading="lazy" decoding="async"></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 02</text>
           <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
