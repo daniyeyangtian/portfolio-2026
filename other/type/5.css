@@ -70,7 +70,7 @@
 /* the group's logo (hand-drawn script) on the sky at the top of the hero. The hero is cropped
    a little lower (object-position in other/5.html) so the photo's university watermark in its
    top-left corner falls outside the frame. */
-.ow-logo { position: absolute; left: 46px; top: 18px; height: 115px; width: auto; }
+.ow-logo { position: absolute; left: 46px; top: 18px; height: 115px; width: auto; transform: rotate(-15deg); transform-origin: 50% 50%; }
 
 /* the epigraph that opens the page: Fisher's line large, its source small, then our own line */
 .fi-epigraph { position: absolute; left: 76px; top: 1093px; width: 1000px; margin: 0; }   /* 80px more air under the opening */
