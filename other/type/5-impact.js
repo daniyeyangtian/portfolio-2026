@@ -33,8 +33,8 @@
     </dl>
     <h3>Partnered with Ningbo organisations</h3>
     <p>Worked with Ningbo Commerce and Trade Group and the Qiuga community on a series of workshops, and delivered design proposals for renovating their community spaces.</p>
-    <h3>Brought cultures to the same table</h3>
-    <p>Chinese and international students cooked xuecai, baklava, focaccia and Yunnan dipping sauce side by side, instead of watching each other's culture on display.</p>
+    <h3>Cultural exchange through food</h3>
+    <p>Food became the shared language: Chinese and international students cooked xuecai, baklava, focaccia and Yunnan dipping sauce together, and traded the stories behind each dish, instead of watching each other's culture on display.</p>
     <h3>Took students into Ningbo</h3>
     <p>A third of the events left campus: fieldwork in Qiuga, a 500-visitor farmers' market with Shensong, a pop-up in Daimeng Hutong and a farm stay in Shanghai.</p>
     <h3>Put shared space to use</h3>
