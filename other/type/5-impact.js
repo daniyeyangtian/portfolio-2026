@@ -30,6 +30,8 @@
       <div><dt>participations</dt><dd>950+</dd></div>
       <div><dt>months</dt><dd>14</dd></div>
     </dl>
+    <h3>Partnered with Ningbo organisations</h3>
+    <p>Worked with Ningbo Commerce and Trade Group and the Qiuga community on a series of workshops, and delivered design proposals for renovating their community spaces.</p>
     <h3>Brought cultures to the same table</h3>
     <p>Chinese and international students cooked xuecai, baklava, focaccia and Yunnan dipping sauce side by side, instead of watching each other's culture on display.</p>
     <h3>Took students into Ningbo</h3>
