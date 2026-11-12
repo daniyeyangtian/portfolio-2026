@@ -71,7 +71,7 @@
 .ow-logo { position: absolute; left: 474px; top: 660px; height: 120px; width: auto; }
 
 /* the epigraph that opens the page: Fisher's line large, its source small, then our own line */
-.fi-epigraph { position: absolute; left: 76px; top: 1013px; width: 1000px; margin: 0; }
+.fi-epigraph { position: absolute; left: 76px; top: 1093px; width: 1000px; margin: 0; }   /* 80px more air under the opening */
 .fi-epigraph blockquote { margin: 0; }
 .fi-epigraph blockquote p { margin: 0; font: italic 200 44px/1.22 Inter, sans-serif; color: #1e1e1e; }
 .fi-epigraph blockquote p::before { content: "\201C"; } .fi-epigraph blockquote p::after { content: "\201D"; }

@@ -11,7 +11,7 @@
     const y = rel(c).y; return y >= 1000 && y < 2200;
   });
   if (!parts.length) return;
-  const DOWN = 290;   // room for the epigraph above the diagram and Impact
+  const DOWN = 380;   // room for the epigraph (and the margin round it) above the diagram and Impact
 
   const q = document.createElement("figure");
   q.className = "fi-epigraph";
