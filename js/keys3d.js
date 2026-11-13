@@ -1,7 +1,7 @@
 // Home, the ABOUT / PROJECTS / OTHER keys as real 3D keys (three.js), drawn on a canvas laid over
 // the HTML buttons. The buttons stay where they are, invisible, and still take the clicks, focus and
 // screen readers; this only draws them. Each key is a rounded plastic block standing on the deck,
-// seen from the front and above, lit from the top right so it casts a soft shadow down to the
+// standing in a well with rounded ends, seen from the front and above, lit from the top right so it casts a soft shadow down to the
 // left. The key that is down (aria-pressed) sits low with a red label; a hovered key rises a
 // little; the keys move on a spring. Semi-gloss plastic: a light clear coat over a satin body. If WebGL isn't there, the CSS keys stay as they are.
 import * as THREE from "three";
@@ -16,7 +16,7 @@ const keys = group ? [...group.querySelectorAll(".key")] : [];
 // 12px front (4px down, 14px hovered) as the CSS keys.
 const A = THREE.MathUtils.degToRad(55), SIN = Math.sin(A), COS = Math.cos(A);
 const W = 66, TOP = 32 / SIN, R = 3;
-const HEIGHT = { up: 12 / COS, hover: 14 / COS, down: 4 / COS };
+const HEIGHT = { up: 12 / COS, hover: 14 / COS, down: 4 / COS };   // above the deck (the well adds its depth)
 const PAD = { l: 26, r: 18, t: 14, b: 26 };     // room round the keys for the shadow
 const ICONS = ["M2 0v9l8-4.5z", "M0 0v9l6-4.5zM6 0v9l6-4.5z", "M1 6h10v2H1zM6 0l5 5H1z"];
 
@@ -47,10 +47,22 @@ async function init() {
   Object.assign(sun.shadow.camera, { left: -200, right: 200, top: 200, bottom: -200, near: 1, far: 800 });
   scene.add(sun, new THREE.AmbientLight(0xffffff, 0.45));
 
-  // the deck the keys stand on: only its shadow shows
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(800, 800), new THREE.ShadowMaterial({ opacity: 0.22 }));
-  floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true;
-  scene.add(floor);
+  // the deck: the page itself (only the shadows on it show), with a well cut into it, rounded at
+  // both ends, that the keys rise out of. Its inner walls and floor are real; built in layout().
+  const WELL = { d: 6, side: 6, front: 5, back: 5, r: 9 };
+  const deckMat = new THREE.ShadowMaterial({ opacity: 0.22 });
+  const wallMat = [new THREE.MeshBasicMaterial({ visible: false }),
+    new THREE.MeshStandardMaterial({ color: 0xd3d6db, roughness: 0.6, envMapIntensity: 0.3, side: THREE.BackSide })];
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0xc9cdd2, roughness: 0.7, envMapIntensity: 0.3 });
+  const deck = new THREE.Mesh(undefined, deckMat), walls = new THREE.Mesh(undefined, wallMat), floor = new THREE.Mesh(undefined, floorMat);
+  [deck, walls, floor].forEach(m => { m.rotation.x = -Math.PI / 2; m.receiveShadow = true; scene.add(m); });
+  walls.position.y = -WELL.d; floor.position.y = -WELL.d + 0.01;
+  const rounded = (sh, x0, y0, x1, y1, r) => {
+    sh.moveTo(x0 + r, y0); sh.lineTo(x1 - r, y0); sh.quadraticCurveTo(x1, y0, x1, y0 + r);
+    sh.lineTo(x1, y1 - r); sh.quadraticCurveTo(x1, y1, x1 - r, y1); sh.lineTo(x0 + r, y1);
+    sh.quadraticCurveTo(x0, y1, x0, y1 - r); sh.lineTo(x0, y0 + r); sh.quadraticCurveTo(x0, y0, x0 + r, y0);
+    return sh;
+  };
 
   const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 4000);
   cam.position.set(0, 1500 * SIN, 1500 * COS);
@@ -81,7 +93,7 @@ async function init() {
     return t;
   };
 
-  const clip = [new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)];   // nothing below the deck
+  const clip = [new THREE.Plane(new THREE.Vector3(0, 1, 0), WELL.d)];   // nothing below the well floor
   const body = new THREE.MeshPhysicalMaterial({ color: 0xe4e7eb, roughness: 0.36, clearcoat: 0.65, clearcoatRoughness: 0.22, envMapIntensity: 0.3, clippingPlanes: clip });
   const DEPTH = TOP;
   const geo = new RoundedBoxGeometry(W, 60, DEPTH, 4, R);
@@ -116,16 +128,27 @@ async function init() {
       const x = b.left + b.width / 2 - box.left + PAD.l - cw / 2;
       const up = ch / 2 - (b.bottom - box.top + PAD.t);   // screen-up of the foot, from the centre
       it.z = -up / SIN;
-      it.g.position.set(x, 0, it.z);
+      it.g.position.set(x, -WELL.d, it.z);
     });
+    // the well round the keys (shape y is world -z once laid flat)
+    const xs = items.map(it => it.g.position.x), z = items[0].z;
+    const x0 = Math.min(...xs) - W / 2 - WELL.side, x1 = Math.max(...xs) + W / 2 + WELL.side;
+    const y0 = -(z + WELL.front), y1 = -(z - TOP - WELL.back);
+    const hole = () => rounded(new THREE.Shape(), x0, y0, x1, y1, WELL.r);
+    const plate = new THREE.Shape(); plate.moveTo(-600, -600); plate.lineTo(600, -600); plate.lineTo(600, 600); plate.lineTo(-600, 600);
+    plate.holes.push(rounded(new THREE.Path(), x0, y0, x1, y1, WELL.r));
+    [deck, walls, floor].forEach(m => m.geometry?.dispose());
+    deck.geometry = new THREE.ShapeGeometry(plate, 24);
+    walls.geometry = new THREE.ExtrudeGeometry(hole(), { depth: WELL.d, bevelEnabled: false, curveSegments: 24 });
+    floor.geometry = new THREE.ShapeGeometry(hole(), 24);
     draw = true;
   };
 
   const target = it => it.k.getAttribute("aria-pressed") === "true" || it.k.classList.contains("is-tapping")
     ? HEIGHT.down : it.hover ? HEIGHT.hover : HEIGHT.up;
   const place = it => {
-    it.mesh.position.set(0, it.h - 30, -DEPTH / 2);
-    it.face.position.set(0, it.h + 0.05, -TOP / 2);
+    it.mesh.position.set(0, it.h + WELL.d - 30, -DEPTH / 2);
+    it.face.position.set(0, it.h + WELL.d + 0.05, -TOP / 2);
     const down = it.k.getAttribute("aria-pressed") === "true";
     const map = down ? it.tex.red : it.tex.ink;
     if (it.face.material.map !== map) { it.face.material.map = map; it.face.material.needsUpdate = true; }
