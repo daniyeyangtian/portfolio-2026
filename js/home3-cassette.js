@@ -36,7 +36,7 @@ const PRINTS = {
                     { code: "B2", name: "CLICKET", color: "#ff6f6f", at: 0.4 },
                     { code: "B3", name: "MICROSOFT FABRIC", color: "#8a6cc0", at: 0.74 }] },
   other: { title: "OTHER WORK", sub: "SIDE C · VOL.03 · BONUS TRACKS", mark: "DYT 03", num: "03", side: "C", ink: "#22262C",
-           name: "S I D E   P R O J E C T S   ·   S O O N" },
+           name: "S I D E   P R O J E C T S" },
 };
 // frost: a matte, grainy finish (rougher, softer highlights, fine speckle in colour and
 // opacity) that veils the inside more, instead of glossy clear plastic; rough overrides its roughness.
