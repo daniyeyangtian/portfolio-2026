@@ -195,9 +195,7 @@
   }
   .record .scene, .record .art { position: absolute; inset: 3%; border-radius: 50%; overflow: hidden; display: block; }
   /* the app's screen on its photo, as on the PROJECTS tape: the screen centred, 78% of the circle's height */
-  /* the photo turns like the vinyl; the app's screen on it stays still */
-  .record .scene::before { content: ""; position: absolute; inset: 0; background: var(--scene) center / cover; animation: record-spin 30s linear infinite; }
-  @keyframes record-spin { to { transform: rotate(360deg); } }
+  .record .scene { background: var(--scene) center / cover; }
   /* the screen plays the app's flow, as on the case study pages: a tap, then the next screen
      slides in from the right (js below); at rest it shows the first screen */
   .record .screen { position: absolute; left: 50%; top: 50%; height: 89%; aspect-ratio: 390 / 844; transform: translate(-50%, -50%);
@@ -249,7 +247,6 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .scroll-cue svg { animation: none; }
-    .record .scene::before { animation: none; }
     .ring, .arm, .deck-tt { transition: none; }
   }
 
