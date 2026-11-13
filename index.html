@@ -97,7 +97,7 @@
   /* the keys under the panels (More about me, Projects page, Previous work): physical keys in a
      bezel, made of the same plastic as the tape above them: see-through grey for About, misty
      grey-white for Projects, solid white for Other (the shells in js/home3-cassette.js), with
-     its matte grain, its ink for the label and its red for the arrow. The cap lifts a touch
+     its matte grain and its ink for the label. The cap lifts a touch
      on hover and sinks flush when pressed. */
   .vkey {
     --cap-1: #ffffff; --cap-2: #f3f4f6; --side: #c3c8ce; --edge: #b9bfc6; --ink-k: #22262c;   /* Other: solid white */
@@ -121,7 +121,7 @@
   .vk-well { display: block; padding: 2px 2px 3px; border-radius: 10px; background: linear-gradient(#a6acb3, #c4c9cf);
     box-shadow: inset 0 2px 3px rgba(20,28,40,.35), inset 0 -1px 0 rgba(255,255,255,.5); }
   .vk-cap {
-    display: flex; align-items: center; gap: 4px; padding: 7px 8px 7px 13px; border-radius: 8px;
+    display: flex; align-items: center; gap: 4px; padding: 7px 13px; border-radius: 8px;
     font: 500 13px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase;
     color: var(--ink-k); text-shadow: 0 1px 0 rgba(255,255,255,.55);
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(var(--cap-1), var(--cap-2));
@@ -129,7 +129,6 @@
     transform: translateY(-3px);
     transition: transform .28s cubic-bezier(.3, 1.8, .5, 1), box-shadow .28s cubic-bezier(.3, 1.8, .5, 1);
   }
-  .vk-cap svg { width: 15px; height: 15px; color: #d2412f; }
   .vkey:hover .vk-cap { transform: translateY(-4px); box-shadow: 0 4px 0 var(--side), 0 5px 4px rgba(20,28,40,.26), inset 0 0 0 1px color-mix(in srgb, var(--edge) 45%, transparent), inset 0 1px 0 rgba(255,255,255,.75), inset 0 -2px 1px rgba(0,0,0,.05); }
   .vkey:active .vk-cap, .vkey.is-pressed .vk-cap {
     transform: translateY(0); box-shadow: 0 0 0 var(--side), 0 1px 1px rgba(20,28,40,.2), inset 0 1px 2px rgba(0,0,0,.12), inset 0 -1px 0 rgba(255,255,255,.5);
@@ -339,8 +338,7 @@
       <li><a href="https://www.linkedin.com/in/dani-yeyang-tian-39b5b9410/" target="_blank" rel="noopener">Linkedin</a></li>
       <li><a href="mailto:yeyangtian873@gmail.com">Email</a></li>
     </ul>
-    <div class="vkey-row"><a class="vkey" href="about.html"><span class="vk-well"><span class="vk-cap">More about me
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></span></span></a></div>
+    <div class="vkey-row"><a class="vkey" href="about.html"><span class="vk-well"><span class="vk-cap">More about me</span></span></a></div>
   </section>
 
   <section class="panel" data-tape="works" aria-label="Works" hidden>
@@ -373,13 +371,11 @@
         </span>
       </div></li>
     </ul>
-    <div class="vkey-row"><a class="vkey" href="projects.html"><span class="vk-well"><span class="vk-cap">Projects page
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></span></span></a></div>
+    <div class="vkey-row"><a class="vkey" href="projects.html"><span class="vk-well"><span class="vk-cap">Projects page</span></span></a></div>
   </section>
 
   <section class="panel copy" data-tape="other" aria-label="Other work" hidden>
-    <p>come see my <a class="vkey" href="other-work.html"><span class="vk-well"><span class="vk-cap">Previous work
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></span></span></a></p>
+    <p>come see my <a class="vkey" href="other-work.html"><span class="vk-well"><span class="vk-cap">Previous work</span></span></a></p>
   </section>
   </div>
 </main>
