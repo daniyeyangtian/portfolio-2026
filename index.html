@@ -18,14 +18,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@500&family=Instrument+Sans:ital,wght@0,500;0,600;1,600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@500&family=Instrument+Sans:ital,wght@0,600;1,600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/site.css?v=31">
 <style>
   /* Home 3 · cassette (Figma: 2026 babies › home3 › "v3 · cassette · about").
-     Three transport keys sit above a clear cassette; each key loads a different tape and the
-     reels never stop. This first pass builds the About tape; keys 2 and 3 press and spring
-     back until their tapes exist. (All three tapes exist now.) The cassette is three.js (js/home3-cassette.js); the
-     SVG under it is the fallback if WebGL or the module doesn't load. */
+     Three transport keys sit above a cassette; each key loads a different tape (About,
+     Projects, Other) and the reels never stop. The cassette is three.js (js/home3-cassette.js);
+     the SVG under it is the fallback if WebGL or the module doesn't load. */
   html, body { min-height: 100%; }
   body { display: flex; flex-direction: column; min-height: 100vh; }
 
@@ -45,41 +44,33 @@
     position: relative; width: 66px; height: 48px;
     -webkit-tap-highlight-color: transparent;
   }
-  .key::before {   /* soft shadow on the surface, cast down and to the left (light from the top right),
-                      wider and lighter the higher the key stands */
+  .key::before {   /* soft shadow on the surface, wider and lighter the higher the key stands */
     content: ""; position: absolute; left: 3px; right: 3px; bottom: -3px; height: calc(var(--s) + 6px);
     border-radius: 4px; background: rgba(24, 28, 36, .22); filter: blur(calc(var(--s) * .45 + 1px));
-    transform: translate(calc(var(--s) * -.4), calc(var(--s) * .3));
+    transform: translateY(calc(var(--s) * .25));
     transition: height .3s cubic-bezier(.3, 1.6, .5, 1), filter .3s, transform .3s;
   }
   .key-side {   /* front face */
     position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--s) + 4px);
     border-radius: 0 0 3px 3px;
-    /* lit from the top right: brighter on the right, falling off to the left */
-    background: linear-gradient(270deg, rgba(255,255,255,.22), rgba(255,255,255,0) 45%, rgba(0,0,0,.1)), linear-gradient(#cbced3, #a9adb4);
-    box-shadow: 0 0 0 1px rgba(30,36,48,.13), inset 0 -1px 0 rgba(0,0,0,.18), inset -1px 0 0 rgba(255,255,255,.45), inset 1px 0 0 rgba(0,0,0,.16);
+    background: linear-gradient(#cbced3, #a9adb4);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.18), inset 1px 0 0 rgba(255,255,255,.25), inset -1px 0 0 rgba(0,0,0,.08);
     transition: height .3s cubic-bezier(.3, 1.6, .5, 1);
   }
   .key-cap {    /* top face */
-    position: absolute; left: 0; right: 0; bottom: var(--s); height: 32px; border-radius: 3px 3px 2px 2px;
+    position: absolute; left: 0; right: 0; bottom: var(--s); height: 32px; border-radius: 3px 3px 0 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    background: linear-gradient(225deg, #f7f8f9, #dcdfe3);
-    /* a hairline round the top face, so its upper edge doesn't melt into the white page */
-    box-shadow: 0 0 0 1px rgba(30,36,48,.13), inset -1px 1px 0 rgba(255,255,255,.9), inset 1px -1px 0 rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.12);
+    background: linear-gradient(#eceef1, #d7dade);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.7);   /* runs straight into the front face, no seam line */
     font: 500 8.5px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .1em; color: #666a72;
     transition: bottom .3s cubic-bezier(.3, 1.6, .5, 1), color .2s, background .2s;
   }
   .key-cap svg { width: 12px; height: 9px; fill: currentColor; }
   .key:hover { --s: 14px; }
-  .key[aria-pressed="true"], .key.is-tapping { --s: 4px; }
-  .key[aria-pressed="true"] .key-side, .key[aria-pressed="true"] .key-cap,
-  .key.is-tapping .key-side, .key.is-tapping .key-cap { transition-duration: .09s; transition-timing-function: ease-in; }
-  .key[aria-pressed="true"] .key-cap { color: var(--red, #d2412f); background: linear-gradient(225deg, #f0f1f3, #d4d7dc); }
+  .key[aria-pressed="true"] { --s: 4px; }
+  .key[aria-pressed="true"] .key-side, .key[aria-pressed="true"] .key-cap { transition-duration: .09s; transition-timing-function: ease-in; }
+  .key[aria-pressed="true"] .key-cap { color: var(--red, #d2412f); background: linear-gradient(#e9ebee, #cfd3d8); }
   .key:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
-  /* 3D keys (js/keys3d.js): a canvas over the buttons draws them; the buttons stay as the click
-     and focus targets, their CSS faces hidden */
-  .keys-3d { position: absolute; pointer-events: none; z-index: 1; }
-  .keys.is-3d .key-side, .keys.is-3d .key-cap, .keys.is-3d .key::before { opacity: 0; }
 
   /* ---------- cassette ---------- */
   .tape {
@@ -87,7 +78,9 @@
   }
   /* the flat SVG only shows if the 3D cassette can't load (no WebGL, script blocked or slow);
      while it loads the space stays empty and the 3D fades in */
-  .tape-fallback { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .4s; }
+  /* hidden, it must not catch the pointer either: dragging it would show the browser's drag
+     ghost of the flat SVG over the 3D tape */
+  .tape-fallback { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .4s; pointer-events: none; -webkit-user-drag: none; user-select: none; }
   .tape.no-3d .tape-fallback { opacity: 1; }
   .tape.is-3d .tape-fallback { opacity: 0; }   /* 3D arrived after all: it wins */
   /* the WebGL canvas is larger than the tape so it can tilt without clipping */
@@ -112,7 +105,7 @@
   .copy p { font-size: 21.6px; line-height: 1.4; color: var(--ink); }
   /* the name, set in Instrument Serif italic (a touch larger: its x-height is smaller than Geist's) */
   .copy .name { font: italic 400 1.25em/1 "Instrument Serif", Georgia, serif; letter-spacing: .005em; }
-  /* the keys under the panels (More about me, Projects page, Previous work): physical keys in a
+  /* the keys under the panels (More about me, Previous work): physical keys in a
      bezel, made of the same plastic as the tape above them: see-through grey for About, misty
      grey-white for Projects, solid white for Other (the shells in js/home3-cassette.js), with
      its matte grain and its ink for the label. The cap lifts a touch
@@ -138,7 +131,6 @@
   [data-tape="about"] .vkey { background: linear-gradient(rgba(255,255,255,.75), rgba(214,219,225,.5) 50%, rgba(170,177,186,.5));
     box-shadow: 0 0 0 1px rgba(30,40,55,.24), 0 2px 5px rgba(30,40,55,.2), 0 8px 18px rgba(30,40,55,.12), inset 0 1px 0 #fff, inset 0 -1px 0 rgba(30,40,55,.16); }
   [data-tape="about"] .vkey:hover .vk-cap { box-shadow: 0 4px 0 var(--side), 0 5px 4px rgba(20,28,40,.16), inset 0 0 0 1px rgba(125,133,144,.3), inset 0 -3px 4px rgba(120,128,140,.18); }
-  [data-tape="works"] .vkey { --cap-1: #f3f4f6; --cap-2: #e0e3e7; --side: #aab1b9; --edge: #9ea6af; --ink-k: #22262c; }   /* misty grey-white */
   .vk-well { display: block; padding: 2px 2px 3px; border-radius: 10px; background: linear-gradient(#a6acb3, #c4c9cf);
     box-shadow: inset 0 2px 3px rgba(20,28,40,.35), inset 0 -1px 0 rgba(255,255,255,.5); }
   .vk-cap {
@@ -156,7 +148,7 @@
     transition-duration: .06s; transition-timing-function: ease-out;
   }
   .vkey:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  /* the same key on a line of its own, under the About links and under the Projects tracks */
+  /* the same key on a line of its own, under the About links */
   .vkey-row { margin-top: 32px; }
   .vkey-row .vkey { margin-left: 0; }
   .links { display: flex; gap: 24px; margin-top: 24px; list-style: none; padding: 0; font-size: 16.2px; }
@@ -344,7 +336,7 @@
       <button type="button" class="key" aria-pressed="false" aria-label="Other work"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M1 6h10v2H1zM6 0l5 5H1z"/></svg>OTHER</span></button>
     </div>
     <div class="tape" id="tape">
-      <img class="tape-fallback" src="assets/home3/cassette-about.svg" alt="A clear cassette labelled About me, side A, vol. 01">
+      <img class="tape-fallback" draggable="false" src="assets/home3/cassette-about.svg" alt="A clear cassette labelled About me, side A, vol. 01">
       <canvas aria-hidden="true"></canvas>
     </div>
   </div>
@@ -381,7 +373,7 @@
           <span class="track-time"><span>Track 02</span></span>
         </span>
       </a></li>
-      <li><div class="track is-soon" style="--accent:#8a6cc0" aria-label="Microsoft Fabric, coming up">
+      <li><div class="track" style="--accent:#8a6cc0" aria-label="Microsoft Fabric, coming up">
         <span class="track-art"><span class="track-cover is-art" aria-hidden="true">Fabric</span><span class="soon">Coming up</span></span>
         <span class="track-info">
           <span class="track-title">Microsoft Fabric <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
@@ -391,7 +383,7 @@
         </span>
       </div></li>
     </ul>
-    <div class="vkey-row"><a class="vkey" href="projects.html"><span class="vk-well"><span class="vk-cap">Projects page</span></span></a></div>
+    <ul class="links"><li><a href="projects.html">Projects page</a></li></ul>
   </section>
 
   <section class="panel copy" data-tape="other" aria-label="Other work" hidden>
@@ -491,7 +483,6 @@
 <script>
   // Keys: each loads a tape. The pressed key latches down, the right side swaps panels and
   // the cassette (js/home3-cassette.js, listening for "tape") reprints its label and spins on.
-  // A key without a tape (none right now) presses and springs back.
   (() => {
     const TAPES = ["about", "works", "other"];
     const keys = [...document.querySelectorAll(".key")];
@@ -526,12 +517,7 @@
     };
     keys.forEach((k, i) => k.addEventListener("click", () => {
       const tape = TAPES[i];
-      sound(tape && tape !== current);
-      if (!tape) {
-        k.classList.add("is-tapping");
-        setTimeout(() => k.classList.remove("is-tapping"), 160);
-        return;
-      }
+      sound(tape !== current);
       if (tape === current) return;
       current = tape;
       keys.forEach((o, j) => o.setAttribute("aria-pressed", TAPES[j] === tape));
@@ -541,7 +527,7 @@
     }));
 
     // Works: pointing at a card winds the cassette to that track; clicking one plays it for a
-    // moment (the button turns to pause, the equaliser runs) before the case study opens
+    // moment (the bar runs to the end, the equaliser runs) before the case study opens
     const tracks = [...document.querySelectorAll('[data-tape="works"] .track')];
     const cue = i => window.dispatchEvent(new CustomEvent("track", { detail: i }));
     tracks.forEach((card, i) => {
@@ -686,7 +672,6 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
-<script type="module" src="js/home3-cassette.js?v=71"></script>
-<script type="module" src="js/keys3d.js?v=9"></script>
+<script type="module" src="js/home3-cassette.js?v=72"></script>
 </body>
 </html>

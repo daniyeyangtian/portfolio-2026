@@ -24,9 +24,9 @@ const CW = 720, CH = 516;                 // canvas, in the same units
 const fx = x => x - W / 2, fy = y => H / 2 - y;   // drawing → world
 
 // Each tape (the keys on the page swap between them with a "tape" event): its print, and the
-// shell it's moulded in. About is light grey with dark print; Works is cool white, matte and
-// misty grey-white, with dark print and its tracklist on it; Other is solid white, dark print. Hovering a project card on the page sends a "track" event:
-// the tape winds to that track, its row lights up and the big number shows it.
+// shell it's moulded in. About is see-through grey; Works is misty grey-white with its
+// tracklist on the print; Other is solid white. Hovering a project card on the page sends a
+// "track" event: the tape winds to that track, its row lights up and the big number shows it.
 const RED = "#D2412F";
 const PRINTS = {
   about: { title: "ABOUT ME", sub: "SIDE A · VOL.01 · NORMAL POSITION", mark: "DYT 01", num: "01", side: "A", ink: "#2B2B2E",
@@ -38,13 +38,13 @@ const PRINTS = {
   other: { title: "OTHER WORK", sub: "SIDE C · VOL.03 · BONUS TRACKS", mark: "DYT 03", num: "03", side: "C", ink: "#22262C",
            name: "S I D E   P R O J E C T S" },
 };
-// frost: a matte, grainy finish (rougher, softer highlights, fine speckle in colour and
-// opacity) that veils the inside more, instead of glossy clear plastic; rough overrides its roughness.
-// The three step from see-through grey (About) through misty grey-white (Works) to solid white (Other).
+// All three shells are frosted (a matte, grainy finish: soft highlights, a fine speckle in
+// colour and opacity) and step from see-through grey (About) through misty grey-white (Works)
+// to solid white (Other). rough: how matte; edge / ghost / light: the moulding lines.
 const SHELLS = {
-  about: { color: 0xa9afb7, opacity: 0.5, edge: 0x737c87, ghost: 0x6f7883, light: 0.7, frost: true, rough: 0.82 },
-  works: { color: 0xd3d7dc, opacity: 0.76, edge: 0x9ea6af, ghost: 0x949ca5, light: 0.8, frost: true, rough: 0.45 },
-  other: { color: 0xf7f8f9, opacity: 0.99, edge: 0xb9bfc6, ghost: 0xaeb4bb, light: 0.9, frost: true, rough: 0.5 },
+  about: { color: 0xa9afb7, opacity: 0.5, edge: 0x737c87, ghost: 0x6f7883, light: 0.7, rough: 0.82 },
+  works: { color: 0xd3d7dc, opacity: 0.76, edge: 0x9ea6af, ghost: 0x949ca5, light: 0.8, rough: 0.45 },
+  other: { color: 0xf7f8f9, opacity: 0.99, edge: 0xb9bfc6, ghost: 0xaeb4bb, light: 0.9, rough: 0.5 },
 };
 const REELS = [{ x: 160, y: 166 }, { x: 398, y: 167 }];   // supply (left), take-up (right)
 const HUB = { r: 61, inner: 40, hole: 29 };
@@ -358,16 +358,7 @@ async function init() {
   scene.add(sun, new THREE.AmbientLight(0xffffff, 0.45));
 
   // ---------- materials ----------
-  // Tinted light-grey polystyrene: see-through, both faces drawn so walls and edges layer up.
-  const shellMat = new THREE.MeshPhysicalMaterial({
-    color: 0x9ea5ae, metalness: 0, roughness: 0.2,
-    transparent: true, opacity: 0.3, depthWrite: false, side: THREE.DoubleSide,
-    clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 1.3,
-  });
-  const edge = new THREE.LineBasicMaterial({ color: 0x737c87, transparent: true, opacity: 0.85 });
-  const edgeLight = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
-  const ghost = new THREE.LineBasicMaterial({ color: 0x6f7883, transparent: true, opacity: 0.45 });
-  // fine grain for frosted shells
+  // fine grain for the frosted shells
   const grain = (() => {
     const c = document.createElement("canvas"); c.width = c.height = 256;
     const g = c.getContext("2d"), d = g.createImageData(256, 256);
@@ -377,15 +368,17 @@ async function init() {
     t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(3, 2);
     return t;
   })();
+  // Frosted polystyrene: see-through, both faces drawn so walls and edges layer up. Colour,
+  // opacity and roughness come from the tape's SHELLS entry (setShell).
+  const shellMat = new THREE.MeshPhysicalMaterial({
+    metalness: 0, transparent: true, depthWrite: false, side: THREE.DoubleSide,
+    clearcoat: 0.25, clearcoatRoughness: 0.45, envMapIntensity: 0.9, map: grain, alphaMap: grain,
+  });
+  const edge = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.85 });
+  const edgeLight = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true });
+  const ghost = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.45 });
   const setShell = sh => {
-    shellMat.color.setHex(sh.color); shellMat.opacity = sh.opacity;
-    shellMat.roughness = sh.rough ?? (sh.frost ? 0.62 : 0.2);
-    shellMat.clearcoat = sh.frost ? 0.25 : 1;
-    shellMat.clearcoatRoughness = sh.frost ? 0.45 : 0.05;
-    shellMat.envMapIntensity = sh.frost ? 0.9 : 1.3;
-    shellMat.map = sh.frost ? grain : null;
-    shellMat.alphaMap = sh.frost ? grain : null;
-    shellMat.needsUpdate = true;
+    shellMat.color.setHex(sh.color); shellMat.opacity = sh.opacity; shellMat.roughness = sh.rough;
     edge.color.setHex(sh.edge); ghost.color.setHex(sh.ghost); edgeLight.opacity = sh.light;
   };
   setShell(SHELLS.about);
@@ -396,7 +389,6 @@ async function init() {
   const metal = new THREE.MeshStandardMaterial({ color: 0xb8bcc2, roughness: 0.3, metalness: 0.9 });
   const felt = new THREE.MeshStandardMaterial({ color: 0x8d9096, roughness: 0.9 });
   const print = new THREE.MeshBasicMaterial({ map: await printTexture(PRINTS.about), transparent: true, depthWrite: false, depthTest: false, toneMapped: false });
-  // switching tapes: reprint the label and give the reels a quick fast-forward spin
   // switching tapes: new print and shell, and a quick fast-forward spin; tracks: wind to one
   let boost = 0, tapeName = "about", active = -1, printJob = 0;
   const reprint = async () => {
@@ -474,7 +466,6 @@ async function init() {
     p.r = R;
   };
 
-  // ---------- head section ----------
   // ---------- tape path ----------
   // Off the bottom-outer side of each pack, down round the corner guide roller and along the
   // bottom edge past the head: two slanted runs (they swing as the packs grow and shrink),
