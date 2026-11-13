@@ -1,4 +1,4 @@
-// Top nav: a pill sits behind the current page's link; hovering another link underlines it.
+// Top nav: a pill sits behind the current page's link; hovering another link darkens it.
 // Going to another page, the pill doesn't slide (it would sweep across the dial): it
 // reappears under the new link.
 (() => {
@@ -35,7 +35,7 @@
   addEventListener("pageshow", place); // back/forward cache
 
   links.forEach(a => {
-    // hover / focus: only an underline (site.css); the pill stays on the current page and
+    // hover / focus: the link only darkens (site.css); the pill stays on the current page and
     // moves when you actually go somewhere
     a.addEventListener("click", e => {
       if (a.getAttribute("aria-disabled") === "true" || a === current) { e.preventDefault(); return; }
@@ -103,7 +103,7 @@
     const d2 = dial.getBoundingClientRect();
     const dy = split ? (d2.top + d2.height / 2) - (a2.top + a2.height / 2) : 0;
     list.style.transform = `translate(${mid - (a2.right + b2.left) / 2}px, ${dy}px)`;
-    place();   // the links after the split moved: put the underline back under the current one
+    place();   // the links after the split moved: put the pill back behind the current one
   };
   document.fonts.ready.then(centre);
   centre();
@@ -127,7 +127,7 @@
     links[i] ? links[i].click() : bump(dir);
   }));
   // Click the bar → nearest page. Press and drag → the whole bar rolls with the
-  // pointer (beads, red light and knurling together) and the nav underline follows;
+  // pointer (beads, red light and knurling together) and the nav pill follows;
   // on release it clicks into the nearest step and goes to that page. Rolling onto a
   // "coming soon" page, or past either end, springs back.
   const nearestTo = x => links.reduce((best, a, i) => Math.abs(xOf(i) - x) < Math.abs(xOf(links.indexOf(best)) - x) ? a : best, links[0]);
