@@ -70,7 +70,9 @@ async function init() {
 
   // the top face: label and icon printed on it (red when the key is down)
   const label = (i, ink) => {
-    const S = 6, c = document.createElement("canvas");
+    // printed at the screen's own pixel density and shown without mipmaps, so the label is as sharp
+    // as text on the page (a bigger texture scaled down blurs it)
+    const S = Math.max(2, Math.ceil(devicePixelRatio || 1)), c = document.createElement("canvas");
     c.width = Math.round((W - 2 * R) * S); c.height = Math.round((TOP - 2 * R) * S);
     const g = c.getContext("2d"); g.scale(S, S);
     const w = W - 2 * R, h = TOP - 2 * R;
@@ -89,7 +91,7 @@ async function init() {
     g.fillText(keys[i].textContent.trim().toUpperCase(), 0.4, 0);
     g.restore();
     const t = new THREE.CanvasTexture(c);
-    t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+    t.colorSpace = THREE.SRGBColorSpace; t.generateMipmaps = false; t.minFilter = THREE.LinearFilter;
     return t;
   };
 
@@ -116,7 +118,7 @@ async function init() {
   let cw = 0, ch = 0;
   const layout = () => {
     const box = group.getBoundingClientRect();
-    cw = box.width + PAD.l + PAD.r; ch = box.height + PAD.t + PAD.b;
+    cw = Math.round(box.width) + PAD.l + PAD.r; ch = Math.round(box.height) + PAD.t + PAD.b;
     renderer.setPixelRatio(Math.min(2.5, devicePixelRatio || 1));
     renderer.setSize(cw, ch, false);
     Object.assign(canvas.style, { left: -PAD.l + "px", top: -PAD.t + "px", width: cw + "px", height: ch + "px" });
@@ -125,7 +127,9 @@ async function init() {
     // the foot of each key's front sits on its button's bottom edge
     items.forEach(it => {
       const b = it.k.getBoundingClientRect();
-      const x = b.left + b.width / 2 - box.left + PAD.l - cw / 2;
+      // on whole device pixels, so the keys' edges are crisp
+      const px = Math.min(2.5, devicePixelRatio || 1);
+      const x = Math.round((b.left + b.width / 2 - box.left + PAD.l - cw / 2) * px) / px;
       const up = ch / 2 - (b.bottom - box.top + PAD.t);   // screen-up of the foot, from the centre
       it.z = -up / SIN;
       it.g.position.set(x, -WELL.d, it.z);
