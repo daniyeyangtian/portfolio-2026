@@ -235,8 +235,8 @@
   .featured-head a:hover { color: var(--ink); }
   /* each project is a record on a turntable: a dark deck with the project's picture pressed
      into the vinyl, a progress ring round it, a tone arm, a knob, play and skip buttons (the title
-     sits under the deck). Hover: the arm swings onto the record (it doesn't spin), the
-     ring fills, play turns to pause. Under the deck: the one-line description and keywords. */
+     sits under the deck). While a record is on screen its app plays: the arm sits on the record
+     (it doesn't spin), the ring fills, play shows pause. Hover lifts the deck and plays a chime. Under the deck: the one-line description and keywords. */
   .players { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; list-style: none; padding: 0; }
   .player { --accent: #6E6879; display: flex; flex-direction: column; color: var(--ink); }
   a.player:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 28px; }
@@ -288,14 +288,13 @@
     stroke-dasharray: 1571; stroke-dashoffset: 1571; transition: stroke-dashoffset .6s cubic-bezier(.3, 0, .2, 1); }
   .ring.is-playing { transition: none; }
   .arm { transform-origin: 596px 96px; transform: rotate(0deg); transition: transform .9s cubic-bezier(.4, 0, .2, 1); }
-  a.player:hover .arm { transform: rotate(-30deg); }
-  .btn-play .ic-pause { opacity: 0; } a.player:hover .btn-play .ic-play { opacity: 0; } a.player:hover .btn-play .ic-pause { opacity: 1; }
+  .player.is-on .arm { transform: rotate(-30deg); }
+  .btn-play .ic-pause { opacity: 0; } .player.is-on .btn-play .ic-play { opacity: 0; } .player.is-on .btn-play .ic-pause { opacity: 1; }
   .btn-play path { transition: opacity .2s; }
   .deck-label { font: 500 13px "Geist Mono", ui-monospace, monospace; letter-spacing: .12em; fill: #77767f; }
   .player.is-soon .deck-tt { filter: saturate(.7); }
   .player-text { display: block; padding: 16px 6px 0; }
   .player-title { display: flex; align-items: baseline; gap: 10px; font: 500 20px/1.2 "Geist", sans-serif; }
-  .player-num { font: 500 10px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; color: var(--ink-faint); }
   .player-artist { display: block; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
   /* tags side by side with space between them, no dots; each tag stays on one line */
   .track-sub > span, .player-tags > span { white-space: nowrap; }
@@ -418,7 +417,7 @@
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title">Verdure <span class="player-num">TRACK 01</span></span>
+        <span class="player-title">Verdure</span>
         <span class="player-artist">Modular indoor-planting system with FlexiSpot.</span>
         <span class="player-tags"><span>Client project</span><span>UX/UI</span><span>Complex system</span></span>
       </span>
@@ -437,7 +436,7 @@
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title">Clicket <span class="player-num">TRACK 02</span></span>
+        <span class="player-title">Clicket</span>
         <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
         <span class="player-tags"><span>Physical product</span><span>App</span><span>Service</span></span>
       </span>
@@ -456,7 +455,7 @@
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title">Fabric <span class="player-num">TRACK 03</span></span>
+        <span class="player-title">Microsoft Fabric</span>
         <span class="player-artist">Case study in progress.</span>
         <span class="player-tags"><span>Client project</span><span>AI</span><span>UX research</span></span>
       </span>
@@ -607,7 +606,7 @@
       });
       let cur = 0, on = false, run = 0, timer = 0, raf = 0, t0 = 0;
       // the deck's ring shows how far through the flow we are
-      const ring = scr.closest(".player").querySelector(".ring"), C = 1571;
+      const player = scr.closest(".player"), ring = player.querySelector(".ring"), C = 1571;
       const DUR = { wipe: 700, expand: 650, push: 520, fade: 450 };
       const span = sc => (sc.hold || 750) + sc.taps.length * 300 + DUR[sc.next.t] + 250;
       const setRing = p => { ring.style.strokeDashoffset = C * (1 - Math.min(1, p)); };
@@ -653,31 +652,25 @@
         cur = n; show(n); t0 = performance.now();
         await wait(250); if (live()) go(n, id);
       };
-      // the arm on the record (hover or keyboard focus) plays the flow from its first screen; on
-      // touch screens it plays while the record is in view. Lifting the arm settles the phone back
-      // on its first screen and empties the ring.
+      // the flow plays from its first screen while the record is in view; scrolling it away
+      // settles the phone back on its first screen and empties the ring.
       const start = () => {
         if (on) return; on = true; const id = ++run;
         layers.forEach(l => l.el.getAnimations({ subtree: true }).forEach(a => a.cancel()));
         cur = 0; show(0); t0 = performance.now();
-        ring.classList.add("is-playing"); cancelAnimationFrame(raf); tick();
+        ring.classList.add("is-playing"); player.classList.add("is-on"); cancelAnimationFrame(raf); tick();
         build(layers[0], 0); go(0, id);
       };
       const stop = () => {
         if (!on) return; on = false; run++; clearTimeout(timer); cancelAnimationFrame(raf);
-        ring.classList.remove("is-playing"); setRing(0);
+        ring.classList.remove("is-playing"); player.classList.remove("is-on"); setRing(0);
         if (cur === 0) return;
         const first = layers[0].el; first.style.visibility = "visible"; first.style.zIndex = 4;
         first.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: "ease-out" })
           .finished.then(() => { if (!on) { cur = 0; show(0); } }).catch(() => {});
       };
-      if (matchMedia("(hover: none)").matches) {
-        new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop(), { threshold: .5 }).observe(scr);
-      } else {
-        const player = scr.closest(".player");
-        player.addEventListener("mouseenter", start); player.addEventListener("mouseleave", stop);
-        player.addEventListener("focusin", start); player.addEventListener("focusout", stop);
-      }
+      // plays all the time while the record is on screen (hover only adds the chime, js/track-sound.js)
+      new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop(), { threshold: .25 }).observe(scr);
     });
   })();
 </script>
