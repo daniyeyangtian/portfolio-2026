@@ -94,6 +94,32 @@
   .copy p { font-size: 21.6px; line-height: 1.4; color: var(--ink); }
   /* the name, set in Instrument Serif italic (a touch larger: its x-height is smaller than Geist's) */
   .copy .name { font: italic 400 1.25em/1 "Instrument Serif", Georgia, serif; letter-spacing: .005em; }
+  /* "previous work": a physical key in a light metal bezel, like the PROJECTS key on the
+     projects page. The cap lifts a touch on hover and sinks flush when pressed. */
+  .vkey {
+    display: inline-block; vertical-align: middle; margin-left: 6px; padding: 3px; border-radius: 13px;
+    background: linear-gradient(#fdfdfc, #e4e3e0 45%, #c9c8c4);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.14), 0 2px 5px rgba(0,0,0,.22), 0 8px 18px rgba(0,0,0,.12), inset 0 1px 0 #fff, inset 0 -1px 0 rgba(0,0,0,.12);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .vk-well { display: block; padding: 2px 2px 3px; border-radius: 10px; background: linear-gradient(#a9a8a4, #c7c6c2);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.5); }
+  .vk-cap {
+    display: flex; align-items: center; gap: 3px; padding: 7px 8px 7px 13px; border-radius: 8px;
+    font: 500 13px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase;
+    color: #3b3a3f; text-shadow: 0 1px 0 rgba(255,255,255,.9);
+    background: linear-gradient(#ffffff, #f1f0ed 55%, #e5e4e0);
+    box-shadow: 0 3px 0 #9d9c98, 0 4px 3px rgba(0,0,0,.28), inset 0 1px 0 #fff, inset 0 -2px 1px rgba(0,0,0,.05);
+    transform: translateY(-3px);
+    transition: transform .28s cubic-bezier(.3, 1.8, .5, 1), box-shadow .28s cubic-bezier(.3, 1.8, .5, 1);
+  }
+  .vk-cap svg { width: 15px; height: 15px; filter: drop-shadow(0 1px 0 rgba(255,255,255,.9)); }
+  .vkey:hover .vk-cap { transform: translateY(-4px); box-shadow: 0 4px 0 #9d9c98, 0 5px 4px rgba(0,0,0,.26), inset 0 1px 0 #fff, inset 0 -2px 1px rgba(0,0,0,.05); }
+  .vkey:active .vk-cap, .vkey.is-pressed .vk-cap {
+    transform: translateY(0); box-shadow: 0 0 0 #9d9c98, 0 1px 1px rgba(0,0,0,.2), inset 0 1px 2px rgba(0,0,0,.1), inset 0 -1px 0 rgba(255,255,255,.6);
+    transition-duration: .06s; transition-timing-function: ease-out;
+  }
+  .vkey:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .links { display: flex; gap: 24px; margin-top: 24px; list-style: none; padding: 0; font-size: 16.2px; }
   .links a { color: var(--ink-muted); cursor: pointer; transition: color .2s; }
   .links a:hover { color: var(--ink); }
@@ -329,7 +355,8 @@
   </section>
 
   <section class="panel copy" data-tape="other" aria-label="Other work" hidden>
-    <p>come see my previous work</p>
+    <p>come see my <a class="vkey" href="other-work.html"><span class="vk-well"><span class="vk-cap">Previous work
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></span></span></a></p>
   </section>
   </div>
 </main>
@@ -410,6 +437,14 @@
 
 <script src="js/nav.js?v=24"></script>
 <script src="js/track-sound.js?v=4"></script>
+<script>
+  // the previous-work key: hold it down for a beat so the press reads, then go
+  document.querySelectorAll(".vkey").forEach(k => k.addEventListener("click", e => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+    e.preventDefault(); k.classList.add("is-pressed");
+    setTimeout(() => { location.href = k.href; }, 140);
+  }));
+</script>
 <script>
   // give the 3D cassette 8 s; if it hasn't appeared by then, show the flat one
   setTimeout(() => { const t = document.getElementById("tape"); if (!t.classList.contains("is-3d")) t.classList.add("no-3d"); }, 8000);
