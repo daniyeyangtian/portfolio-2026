@@ -76,6 +76,10 @@
   .key.is-tapping .key-side, .key.is-tapping .key-cap { transition-duration: .09s; transition-timing-function: ease-in; }
   .key[aria-pressed="true"] .key-cap { color: var(--red, #d2412f); background: linear-gradient(225deg, #f0f1f3, #d4d7dc); }
   .key:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+  /* 3D keys (js/keys3d.js): a canvas over the buttons draws them; the buttons stay as the click
+     and focus targets, their CSS faces hidden */
+  .keys-3d { position: absolute; pointer-events: none; z-index: 1; }
+  .keys.is-3d .key-side, .keys.is-3d .key-cap, .keys.is-3d .key::before { opacity: 0; }
 
   /* ---------- cassette ---------- */
   .tape {
@@ -683,5 +687,6 @@
 } }
 </script>
 <script type="module" src="js/home3-cassette.js?v=71"></script>
+<script type="module" src="js/keys3d.js?v=5"></script>
 </body>
 </html>
