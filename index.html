@@ -196,8 +196,13 @@
   .record .scene, .record .art { position: absolute; inset: 3%; border-radius: 50%; overflow: hidden; display: block; }
   /* the app's screen on its photo, as on the PROJECTS tape: the screen centred, 78% of the circle's height */
   .record .scene { background: var(--scene) center / cover; }
-  .record .scene img { position: absolute; left: 50%; top: 50%; height: 78%; width: auto; max-width: none; transform: translate(-50%, -50%);
-    border-radius: 9px; box-shadow: 0 2px 4px rgba(10,30,0,.25), 0 14px 28px rgba(10,30,0,.35); }
+  /* the screen plays the app's flow, as on the case study pages: a tap, then the next screen
+     slides in from the right (js below); at rest it shows the first screen */
+  .record .screen { position: absolute; left: 50%; top: 50%; height: 78%; aspect-ratio: 390 / 844; transform: translate(-50%, -50%);
+    border-radius: 10.8% / 5%; overflow: hidden; background: #f4f5f5; box-shadow: 0 2px 4px rgba(10,30,0,.25), 0 14px 28px rgba(10,30,0,.35); }
+  .record .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .record .screen .tap { position: absolute; width: 11.7%; aspect-ratio: 1; border-radius: 50%; background: rgba(26,27,25,.28);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.6); opacity: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 4; }
   .record .art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 clamp(26px, 3.2vw, 44px)/1 "Instrument Serif", Georgia, serif; }
   /* a soft rim of light round the picture */
   .record::before { content: ""; position: absolute; inset: 3%; border-radius: 50%; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), inset 0 0 18px rgba(0,0,0,.25); }
@@ -324,7 +329,7 @@
   <ul class="players">
     <li><a class="player" href="projects.html?p=verdure" style="--accent:#6fd197; --p:.62">
       <span class="deck-tt">
-        <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><img src="assets/home3/verdure-screen.png" alt="The Verdure app on a phone, over a field of grass" loading="lazy" decoding="async"></span></span>
+        <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><span class="screen" data-flow="verdure" role="img" aria-label="The Verdure app on a phone, over a field of grass"><img src="assets/home3/verdure-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 01</text>
           <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
@@ -344,7 +349,7 @@
     </a></li>
     <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f; --p:.38">
       <span class="deck-tt">
-        <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><img src="assets/home3/clicket-screen.png?v=2" alt="The Clicket app on a phone, over a table of old cameras" loading="lazy" decoding="async"></span></span>
+        <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 02</text>
           <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
@@ -465,6 +470,75 @@
       });
     });
     addEventListener("pageshow", () => tracks.forEach(c => c.classList.remove("is-playing")));
+  })();
+</script>
+<script>
+  // Featured records: each screen plays its app's flow while the arm is on the record (hover or
+  // keyboard focus) — on touch screens, while the record is on screen. As on the case study pages:
+  // a tap, then the next screen slides in from the right; the last one fades back to the first.
+  (() => {
+    const FLOWS = {
+      // Verdure · Everyday care (Home → Garden → Rosemary · M2 → Water M2)
+      verdure: { n: 4, taps: [[[.386, .923]], [[.5, .604]], [[.5, .923]], [[.5, .923]]] },
+      // Clicket · Rent (Home → Scan to log in → Rent gear → Your order → Locker open)
+      clicket: { n: 5, taps: [[[.5, .94]], [], [[.88, .84]], [[.5, .84]], [[.5, .84]]] },
+    };
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const touch = matchMedia("(hover: none)").matches;
+    document.querySelectorAll(".record .screen[data-flow]").forEach(scr => {
+      const name = scr.dataset.flow, fl = FLOWS[name]; if (!fl) return;
+      const src = k => `assets/home3/${name}-flow-${k + 1}.jpg`;
+      const [a, b] = scr.querySelectorAll("img"), tap = scr.querySelector(".tap");
+      let front = a, back = b, s = 0, on = false, run = 0, timer = 0, loaded = false;
+      const wait = ms => new Promise(r => { timer = setTimeout(r, ms); });
+      const layer = () => { front.style.zIndex = 2; back.style.zIndex = 1; };
+      layer();
+      const step = async id => {
+        const live = () => on && id === run;
+        await wait(s === 0 ? 700 : 1300); if (!live()) return;
+        for (const [x, y] of fl.taps[s]) {
+          tap.style.left = x * 100 + "%"; tap.style.top = y * 100 + "%";
+          tap.animate([{ opacity: 0, transform: "translate(-50%,-50%) scale(.4)" }, { opacity: .9, offset: .3, transform: "translate(-50%,-50%) scale(1)" },
+                       { opacity: 0, transform: "translate(-50%,-50%) scale(1.6)" }], { duration: 520, easing: "ease-out" });
+          await wait(560); if (!live()) return;
+        }
+        const n = (s + 1) % fl.n, loop = n === 0;
+        back.src = src(n);
+        await back.decode().catch(() => {}); if (!live()) return;
+        back.style.zIndex = 3; front.style.zIndex = 2;   // the incoming screen slides over the outgoing one
+        const opts = { duration: loop ? 600 : 460, easing: "cubic-bezier(.3,.7,.2,1)", fill: "both" };
+        if (loop) back.animate([{ opacity: 0 }, { opacity: 1 }], opts);
+        else {
+          back.animate([{ transform: "translateX(100%)" }, { transform: "translateX(0)" }], opts);
+          front.animate([{ transform: "translateX(0)", filter: "brightness(1)" }, { transform: "translateX(-30%)", filter: "brightness(.9)" }], opts);
+        }
+        await wait(opts.duration);
+        [front, back] = [back, front]; layer();
+        a.getAnimations().forEach(x => x.cancel()); b.getAnimations().forEach(x => x.cancel());
+        s = n;
+        if (live()) step(id);
+      };
+      const preload = () => { if (loaded) return; loaded = true; for (let k = 1; k < fl.n; k++) new Image().src = src(k); };
+      let settle = null;
+      const start = () => { if (on) return; preload(); settle?.finish(); on = true; step(++run); };
+      // stopping lets the record settle back on its first screen, so it rests where it began
+      const stop = () => {
+        if (!on) return; on = false; run++; clearTimeout(timer);
+        a.getAnimations().forEach(x => x.cancel()); b.getAnimations().forEach(x => x.cancel());
+        if (s === 0) { layer(); return; }   // still on the first screen (perhaps mid-slide): just put it back
+        back.src = src(0); s = 0;
+        back.style.zIndex = 3; front.style.zIndex = 2;
+        settle = back.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: "ease-out", fill: "both" });
+        settle.finished.then(() => { settle = null; [front, back] = [back, front]; layer(); a.getAnimations().forEach(x => x.cancel()); b.getAnimations().forEach(x => x.cancel()); }).catch(() => {});
+      };
+      if (touch) {
+        new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop(), { threshold: .6 }).observe(scr);
+      } else {
+        const player = scr.closest(".player");
+        player.addEventListener("mouseenter", start); player.addEventListener("mouseleave", stop);
+        player.addEventListener("focusin", start); player.addEventListener("focusout", stop);
+      }
+    });
   })();
 </script>
 <script type="importmap">
