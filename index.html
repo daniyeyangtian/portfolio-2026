@@ -123,7 +123,7 @@
   .track-cover.is-art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 30px/1 "Instrument Serif", Georgia, serif; }
   .track-info { display: flex; flex-direction: column; flex: 1; min-width: 0; padding: 0 2px; }
   .track-title { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; line-height: 1.2; }
-  .track-sub { display: block; margin-top: 2px; font: 500 8.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
+  .track-sub { display: flex; flex-wrap: wrap; column-gap: 1.2em; margin-top: 2px; font: 500 8.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
   .track-bar { display: block; position: relative; height: 3px; margin-top: auto; border-radius: 2px; background: #ecebef; overflow: hidden; }
   .track-bar i { position: absolute; inset: 0 auto 0 0; width: calc(var(--p) * 100%); border-radius: 2px; background: var(--accent); transition: width 1.6s cubic-bezier(.3, 0, .2, 1); }
   a.track:hover .track-bar i { width: 100%; }
@@ -238,7 +238,9 @@
   .player-title { display: flex; align-items: baseline; gap: 10px; font: 500 20px/1.2 "Geist", sans-serif; }
   .player-num { font: 500 10px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; color: var(--ink-faint); }
   .player-artist { display: block; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
-  .player-tags { display: block; margin-top: 10px; font: 500 9.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  /* tags side by side with space between them, no dots; each tag stays on one line */
+  .track-sub > span, .player-tags > span { white-space: nowrap; }
+  .player-tags { display: flex; flex-wrap: wrap; column-gap: 1.4em; margin-top: 10px; font: 500 9.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
   @media (max-width: 960px) { .players { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 600px) {
     .players { grid-template-columns: 1fr; }
@@ -300,7 +302,7 @@
         <span class="track-art"><span class="track-cover is-scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)" aria-hidden="true"><img src="assets/home3/verdure-screen.png" alt=""></span></span>
         <span class="track-info">
           <span class="track-title">Verdure <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
-          <span class="track-sub">Client project · UX/UI · Complex system</span>
+          <span class="track-sub"><span>Client project</span><span>UX/UI</span><span>Complex system</span></span>
           <span class="track-bar" style="--p:.62"><i></i></span>
           <span class="track-time"><span>Track 01</span></span>
         </span>
@@ -309,7 +311,7 @@
         <span class="track-art"><span class="track-cover is-scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)" aria-hidden="true"><img src="assets/home3/clicket-screen.png?v=2" alt=""></span></span>
         <span class="track-info">
           <span class="track-title">Clicket <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
-          <span class="track-sub">Physical product · App · Service</span>
+          <span class="track-sub"><span>Physical product</span><span>App</span><span>Service</span></span>
           <span class="track-bar" style="--p:.38"><i></i></span>
           <span class="track-time"><span>Track 02</span></span>
         </span>
@@ -318,7 +320,7 @@
         <span class="track-art"><span class="track-cover is-art" aria-hidden="true">Fabric</span><span class="soon">Coming up</span></span>
         <span class="track-info">
           <span class="track-title">Microsoft Fabric <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
-          <span class="track-sub">Client project · AI · UX research</span>
+          <span class="track-sub"><span>Client project</span><span>AI</span><span>UX research</span></span>
           <span class="track-bar" style="--p:0"><i></i></span>
           <span class="track-time"><span>Track 03</span></span>
         </span>
@@ -357,7 +359,7 @@
       <span class="player-text">
         <span class="player-title">Verdure <span class="player-num">TRACK 01</span></span>
         <span class="player-artist">Modular indoor-planting system with FlexiSpot.</span>
-        <span class="player-tags">Client project · UX/UI · Complex system</span>
+        <span class="player-tags"><span>Client project</span><span>UX/UI</span><span>Complex system</span></span>
       </span>
     </a></li>
     <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f; --p:.38">
@@ -376,7 +378,7 @@
       <span class="player-text">
         <span class="player-title">Clicket <span class="player-num">TRACK 02</span></span>
         <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
-        <span class="player-tags">Physical product · App · Service</span>
+        <span class="player-tags"><span>Physical product</span><span>App</span><span>Service</span></span>
       </span>
     </a></li>
     <li><div class="player is-soon" style="--accent:#8a6cc0; --p:0" aria-label="Microsoft Fabric, coming up">
@@ -395,7 +397,7 @@
       <span class="player-text">
         <span class="player-title">Fabric <span class="player-num">TRACK 03</span></span>
         <span class="player-artist">Case study in progress.</span>
-        <span class="player-tags">Client project · AI · UX research</span>
+        <span class="player-tags"><span>Client project</span><span>AI</span><span>UX research</span></span>
       </span>
     </div></li>
   </ul>
