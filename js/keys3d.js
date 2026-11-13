@@ -3,7 +3,7 @@
 // screen readers; this only draws them. Each key is a rounded plastic block standing on the deck,
 // seen from the front and above, lit from the top right so it casts a soft shadow down to the
 // left. The key that is down (aria-pressed) sits low with a red label; a hovered key rises a
-// little; the keys move on a spring. If WebGL isn't there, the CSS keys stay as they are.
+// little; the keys move on a spring. Glossy plastic: a clear coat over a satin body. If WebGL isn't there, the CSS keys stay as they are.
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -82,7 +82,7 @@ async function init() {
   };
 
   const clip = [new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)];   // nothing below the deck
-  const body = new THREE.MeshPhysicalMaterial({ color: 0xe4e7eb, roughness: 0.42, clearcoat: 0.35, clearcoatRoughness: 0.4, envMapIntensity: 0.25, clippingPlanes: clip });
+  const body = new THREE.MeshPhysicalMaterial({ color: 0xe4e7eb, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 0.35, clippingPlanes: clip });
   const DEPTH = TOP;
   const geo = new RoundedBoxGeometry(W, 60, DEPTH, 4, R);
   const faceGeo = new THREE.PlaneGeometry(W - 2 * R, TOP - 2 * R);
@@ -90,7 +90,7 @@ async function init() {
   const items = keys.map((k, i) => {
     const mesh = new THREE.Mesh(geo, body);
     mesh.castShadow = true;
-    const face = new THREE.Mesh(faceGeo, new THREE.MeshStandardMaterial({ roughness: 0.5, envMapIntensity: 0.25 }));
+    const face = new THREE.Mesh(faceGeo, new THREE.MeshPhysicalMaterial({ roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 0.35 }));
     face.rotation.x = -Math.PI / 2;
     const tex = { ink: label(i, "#5b6068"), red: label(i, "#d2412f") };
     const g = new THREE.Group(); g.add(mesh, face); scene.add(g);
