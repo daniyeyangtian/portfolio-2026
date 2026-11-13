@@ -191,9 +191,9 @@
   /* the record: 490 of the deck's 650 units, centred at (280, 282) */
   .record {
     position: absolute; left: 5.385%; top: 6.607%; width: 75.385%; aspect-ratio: 1; border-radius: 50%;
-    background: #141416; box-shadow: 0 0 0 2px #101012, 0 8px 18px rgba(20,20,40,.35);
+    box-shadow: 0 10px 22px -8px rgba(20,20,40,.35);   /* no vinyl rim: the progress ring frames the picture */
   }
-  .record .scene, .record .art { position: absolute; inset: 3%; border-radius: 50%; overflow: hidden; display: block; }
+  .record .scene, .record .art { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; display: block; }
   /* the app's screen on its photo, as on the PROJECTS tape: the screen centred, 78% of the circle's height */
   .record .scene { background: var(--scene) center / cover; }
   /* the screen plays the app's flow, as on the case study pages: a tap, then the next screen
@@ -220,14 +220,14 @@
   .record .screen .tap { position: absolute; width: 11.7%; aspect-ratio: 1; border-radius: 50%; background: rgba(26,27,25,.28);
     box-shadow: 0 0 0 1px rgba(255,255,255,.6); opacity: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 4; }
   .record .art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 clamp(26px, 3.2vw, 44px)/1 "Instrument Serif", Georgia, serif; }
-  /* a soft rim of light round the picture */
-  .record::before { content: ""; position: absolute; inset: 3%; border-radius: 50%; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), inset 0 0 18px rgba(0,0,0,.25); }
   /* everything else on the deck is one SVG in the deck's own 650 x 560 units */
   .deck-tt svg.chrome { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .ring-bg { fill: none; stroke: rgba(20,20,30,.10); stroke-width: 3; }
-  .ring { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 280px 282px;
-    stroke-dasharray: 1602; stroke-dashoffset: calc(1602 * (1 - var(--p))); transition: stroke-dashoffset 2.2s cubic-bezier(.3, 0, .2, 1); }
-  a.player:hover .ring { stroke-dashoffset: 0; }
+  /* the ring is the flow's progress bar: empty at rest, it fills as the app plays through its
+     screens (js below) and runs back to empty when the arm lifts */
+  .ring-bg { fill: none; stroke: rgba(20,20,30,.13); stroke-width: 10; }
+  .ring { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 280px 282px;
+    stroke-dasharray: 1571; stroke-dashoffset: 1571; transition: stroke-dashoffset .6s cubic-bezier(.3, 0, .2, 1); }
+  .ring.is-playing { transition: none; }
   .arm { transform-origin: 596px 96px; transform: rotate(0deg); transition: transform .9s cubic-bezier(.4, 0, .2, 1); }
   a.player:hover .arm { transform: rotate(-30deg); }
   .btn-play .ic-pause { opacity: 0; } a.player:hover .btn-play .ic-play { opacity: 0; } a.player:hover .btn-play .ic-pause { opacity: 1; }
@@ -346,7 +346,7 @@
         <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><span class="screen" data-flow="verdure" role="img" aria-label="The Verdure app on a phone, over a field of grass"><img src="assets/home3/verdure-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 01</text>
-          <circle class="ring-bg" cx="280" cy="282" r="255"/><circle class="ring" cx="280" cy="282" r="255"/>
+          <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
           <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
           <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
@@ -365,7 +365,7 @@
         <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 02</text>
-          <circle class="ring-bg" cx="280" cy="282" r="255"/><circle class="ring" cx="280" cy="282" r="255"/>
+          <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
           <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
           <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
@@ -384,7 +384,7 @@
         <span class="record"><span class="art">Fabric</span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 03</text>
-          <circle class="ring-bg" cx="280" cy="282" r="255"/><circle class="ring" cx="280" cy="282" r="255"/>
+          <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
           <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
           <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
@@ -484,8 +484,8 @@
   })();
 </script>
 <script>
-  // Featured records: each phone plays its app like a recorded prototype, while the record is on
-  // screen. Every screen builds in block by block; a tap leads on, as a colour wipe from the tap,
+  // Featured records: each phone plays its app like a recorded prototype while the arm is on the
+  // record. Every screen builds in block by block; a tap leads on, as a colour wipe from the tap,
   // a card growing into the next page, or a slide. Positions are fractions of the screen
   // (screens: assets/home3/<app>-flow-<n>.jpg).
   (() => {
@@ -534,7 +534,16 @@
         scr.insertBefore(L, tap);
         return { el: L, moving, sc };
       });
-      let cur = 0, on = false, run = 0, timer = 0;
+      let cur = 0, on = false, run = 0, timer = 0, raf = 0, t0 = 0;
+      // the deck's ring shows how far through the flow we are
+      const ring = scr.closest(".player").querySelector(".ring"), C = 1571;
+      const DUR = { wipe: 700, expand: 650, push: 520, fade: 450 };
+      const span = sc => (sc.hold || 1300) + sc.taps.length * 380 + DUR[sc.next.t] + 600;
+      const setRing = p => { ring.style.strokeDashoffset = C * (1 - Math.min(1, p)); };
+      const tick = () => {
+        const p = (cur + Math.min(.999, (performance.now() - t0) / span(FL[cur]))) / FL.length;
+        setRing(p); raf = requestAnimationFrame(tick);
+      };
       const show = k => layers.forEach((l, i) => { l.el.style.visibility = i === k ? "visible" : "hidden"; l.el.style.zIndex = i === k ? 2 : 1; });
       show(0); scr.classList.add("is-live");
       const wait = ms => new Promise(r => { timer = setTimeout(r, ms); });
@@ -570,12 +579,34 @@
         } else a = nx.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: dur = 450, easing: "ease-out" });
         build(nx, t === "fade" ? 120 : Math.round(dur * .45));
         await wait(dur); if (!live()) return;
-        cur = n; show(n);
+        cur = n; show(n); t0 = performance.now();
         await wait(600); if (live()) go(n, id);
       };
-      const start = () => { if (on) return; on = true; const id = ++run; build(layers[cur], 0); go(cur, id); };
-      const stop = () => { if (!on) return; on = false; run++; clearTimeout(timer); };
-      new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop(), { threshold: .5 }).observe(scr);
+      // the arm on the record (hover or keyboard focus) plays the flow from its first screen; on
+      // touch screens it plays while the record is in view. Lifting the arm settles the phone back
+      // on its first screen and empties the ring.
+      const start = () => {
+        if (on) return; on = true; const id = ++run;
+        layers.forEach(l => l.el.getAnimations({ subtree: true }).forEach(a => a.cancel()));
+        cur = 0; show(0); t0 = performance.now();
+        ring.classList.add("is-playing"); cancelAnimationFrame(raf); tick();
+        build(layers[0], 0); go(0, id);
+      };
+      const stop = () => {
+        if (!on) return; on = false; run++; clearTimeout(timer); cancelAnimationFrame(raf);
+        ring.classList.remove("is-playing"); setRing(0);
+        if (cur === 0) return;
+        const first = layers[0].el; first.style.visibility = "visible"; first.style.zIndex = 4;
+        first.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: "ease-out" })
+          .finished.then(() => { if (!on) { cur = 0; show(0); } }).catch(() => {});
+      };
+      if (matchMedia("(hover: none)").matches) {
+        new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop(), { threshold: .5 }).observe(scr);
+      } else {
+        const player = scr.closest(".player");
+        player.addEventListener("mouseenter", start); player.addEventListener("mouseleave", stop);
+        player.addEventListener("focusin", start); player.addEventListener("focusout", stop);
+      }
     });
   })();
 </script>
