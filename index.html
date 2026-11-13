@@ -175,8 +175,8 @@
   .featured-head a { font-size: 14px; color: var(--ink-muted); transition: color .2s; white-space: nowrap; }
   .featured-head a:hover { color: var(--ink); }
   /* each project is a record on a turntable: a dark deck with the project's picture pressed
-     into the vinyl, a progress ring round it, a tone arm, a knob, play and skip buttons, and the
-     title running down the side. Hover: the arm swings onto the record (it doesn't spin), the
+     into the vinyl, a progress ring round it, a tone arm, a knob, play and skip buttons (the title
+     sits under the deck). Hover: the arm swings onto the record (it doesn't spin), the
      ring fills, play turns to pause. Under the deck: the one-line description and keywords. */
   .players { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; list-style: none; padding: 0; }
   .player { --accent: #6E6879; display: flex; flex-direction: column; color: var(--ink); }
@@ -188,9 +188,9 @@
     transition: transform .35s var(--ease), box-shadow .35s var(--ease);
   }
   a.player:hover .deck-tt { transform: translateY(-4px); box-shadow: inset 0 1px 0 #fff, inset 0 -2px 5px rgba(0,0,0,.08), 0 0 0 1px rgba(20,20,30,.07), 0 22px 40px -16px rgba(20,20,40,.36), 0 2px 4px rgba(20,20,40,.08); }
-  /* the record: 450 of the deck's 650 units, centred at (265, 280) */
+  /* the record: 490 of the deck's 650 units, centred at (280, 282) */
   .record {
-    position: absolute; left: 6.154%; top: 9.821%; width: 69.231%; aspect-ratio: 1; border-radius: 50%;
+    position: absolute; left: 5.385%; top: 6.607%; width: 75.385%; aspect-ratio: 1; border-radius: 50%;
     background: #141416; box-shadow: 0 0 0 2px #101012, 0 8px 18px rgba(20,20,40,.35);
   }
   .record .scene, .record .art { position: absolute; inset: 3%; border-radius: 50%; overflow: hidden; display: block; }
@@ -225,16 +225,14 @@
   /* everything else on the deck is one SVG in the deck's own 650 x 560 units */
   .deck-tt svg.chrome { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .ring-bg { fill: none; stroke: rgba(20,20,30,.10); stroke-width: 3; }
-  .ring { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 265px 280px;
-    stroke-dasharray: 1458; stroke-dashoffset: calc(1458 * (1 - var(--p))); transition: stroke-dashoffset 2.2s cubic-bezier(.3, 0, .2, 1); }
+  .ring { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 280px 282px;
+    stroke-dasharray: 1602; stroke-dashoffset: calc(1602 * (1 - var(--p))); transition: stroke-dashoffset 2.2s cubic-bezier(.3, 0, .2, 1); }
   a.player:hover .ring { stroke-dashoffset: 0; }
   .arm { transform-origin: 596px 96px; transform: rotate(0deg); transition: transform .9s cubic-bezier(.4, 0, .2, 1); }
   a.player:hover .arm { transform: rotate(-30deg); }
   .btn-play .ic-pause { opacity: 0; } a.player:hover .btn-play .ic-play { opacity: 0; } a.player:hover .btn-play .ic-pause { opacity: 1; }
   .btn-play path { transition: opacity .2s; }
   .deck-label { font: 500 13px "Geist Mono", ui-monospace, monospace; letter-spacing: .12em; fill: #77767f; }
-  .deck-side { font: 500 24px "Geist", sans-serif; fill: #1f1f24; }
-  .deck-side-sub { font: 400 16px "Geist", sans-serif; fill: #6E6879; }
   .player.is-soon .deck-tt { filter: saturate(.7); }
   .player-text { display: block; padding: 16px 6px 0; }
   .player-title { display: flex; align-items: baseline; gap: 10px; font: 500 20px/1.2 "Geist", sans-serif; }
@@ -348,11 +346,10 @@
         <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><span class="screen" data-flow="verdure" role="img" aria-label="The Verdure app on a phone, over a field of grass"><img src="assets/home3/verdure-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 01</text>
-          <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
-          <circle cx="536" cy="236" r="15" fill="#d3d4d9"/><circle cx="536" cy="236" r="5" fill="#8b8b93"/><circle cx="584" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="584" cy="236" r="7" fill="#e5484d"/>
+          <circle class="ring-bg" cx="280" cy="282" r="255"/><circle class="ring" cx="280" cy="282" r="255"/>
+          <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
           <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
-          <text class="deck-side" x="520" y="318">Verdure</text><text class="deck-side-sub" x="520" y="344">FlexiSpot</text>
           <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
           <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
         </svg>
@@ -368,11 +365,10 @@
         <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 02</text>
-          <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
-          <circle cx="536" cy="236" r="15" fill="#d3d4d9"/><circle cx="536" cy="236" r="5" fill="#8b8b93"/><circle cx="584" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="584" cy="236" r="7" fill="#e5484d"/>
+          <circle class="ring-bg" cx="280" cy="282" r="255"/><circle class="ring" cx="280" cy="282" r="255"/>
+          <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
           <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
-          <text class="deck-side" x="520" y="318">Clicket</text><text class="deck-side-sub" x="520" y="344">Camera kit</text>
           <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
           <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
         </svg>
@@ -388,11 +384,10 @@
         <span class="record"><span class="art">Fabric</span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 03</text>
-          <circle class="ring-bg" cx="265" cy="280" r="232"/><circle class="ring" cx="265" cy="280" r="232"/>
-          <circle cx="536" cy="236" r="15" fill="#d3d4d9"/><circle cx="536" cy="236" r="5" fill="#8b8b93"/><circle cx="584" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="584" cy="236" r="7" fill="#e5484d"/>
+          <circle class="ring-bg" cx="280" cy="282" r="255"/><circle class="ring" cx="280" cy="282" r="255"/>
+          <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
           <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
-          <text class="deck-side" x="520" y="318">Fabric</text><text class="deck-side-sub" x="520" y="344">Coming up</text>
           <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
           <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
         </svg>
