@@ -274,6 +274,15 @@
 </style>
 </head>
 <body>
+<script>
+  // Start in the state the page will open in, before the first paint: the pockets, unless a link
+  // asked for a project (?p=, and not a reload). Otherwise the case-study view (its back key, the
+  // viewer) shows for a moment and then animates away as the pockets come in.
+  (() => {
+    const reload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+    if (reload || !new URLSearchParams(location.search).get("p")) document.body.classList.add("is-pocket");
+  })();
+</script>
 
 <nav class="site-nav" aria-label="Primary">
   <ul>
