@@ -557,8 +557,25 @@
     const stories = [...canvas.querySelectorAll(":scope > .story")], piles = [...canvas.querySelectorAll(":scope > .pile")];
     const seen = (() => { try { return sessionStorage.getItem("about-laid-out") === "1"; } catch { return false; } })();
     if (seen || stories.length !== 3 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // where each paragraph's centre sits at the start, in canvas px: a staggered row across the top
-    const START = [[262, 193], [742, 328], [1165, 300]];
+    // where each paragraph's centre sits at the start, in canvas px: a staggered row across the
+    // top. The papers must not overlap: the three are too wide for one clean row, so the middle one
+    // drops below the third wherever they would meet (a paper reaches past its text by PAPER).
+    const PAPER = { t: 46, r: 52, b: 50, l: 50 }, GAP = 18;
+    const X = [246, 722, 1164], Y = [215, 330, 150];
+    const START = [];
+    const paper = (i, [cx, cy]) => {
+      const w = stories[i].offsetWidth, h = stories[i].offsetHeight;
+      return { l: cx - w / 2 - PAPER.l, r: cx + w / 2 + PAPER.r, t: cy - h / 2 - PAPER.t, b: cy + h / 2 + PAPER.b };
+    };
+    [0, 2, 1].forEach(i => {
+      let c = [X[i], Y[i]];
+      START.forEach((o, j) => {
+        if (!o) return;
+        const a = paper(i, c), q = paper(j, o);
+        if (a.l < q.r && a.r > q.l && a.t < q.b + GAP && a.b > q.t - GAP) c = [c[0], c[1] + (q.b + GAP - a.t)];
+      });
+      START[i] = c;
+    });
     const home = stories.map(el => el.style.translate || "0px 0px");
     const at = stories.map((el, i) => {
       const [hx, hy] = home[i].split(" ").map(parseFloat);
