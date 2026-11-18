@@ -52,6 +52,29 @@
   @media (prefers-reduced-motion: reduce) {
     .js .pile, .js .story { opacity: 1; transform: none; }
   }
+  /* the path so far, drawn through the opening: a line rising from Nottingham to Michigan (now),
+     then dashed on to what's next. Only in the opening; it fades when the page lays itself out. */
+  .timeline { position: absolute; left: 0; top: 0; width: 1420px; height: 640px; margin: 0; padding: 0; list-style: none;
+    pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .5s, visibility 0s .5s; }
+  .canvas.is-stacked .timeline { opacity: 1; visibility: visible; transition: opacity .5s; }
+  .timeline svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .tl-path { fill: none; stroke: #6E6879; stroke-width: 2; stroke-linecap: round; }
+  .tl-past { stroke-dasharray: 1; stroke-dashoffset: 0; animation: tl-draw 1.5s cubic-bezier(.45,0,.2,1) .2s backwards; }
+  .tl-next { stroke-dasharray: 2 9; opacity: .9; animation: tl-in .8s ease 1.5s backwards; }
+  @keyframes tl-draw { from { stroke-dashoffset: 1; } }
+  @keyframes tl-in { from { opacity: 0; } }
+  .tl-dot { fill: #fafafa; stroke: #6E6879; stroke-width: 2; }
+  .tl-dot.is-now { fill: #d2412f; stroke: #d2412f; }
+  .tl-dot.is-next { stroke-dasharray: 3 3; }
+  .tl-ring { fill: none; stroke: #d2412f; stroke-width: 1.5; transform-box: fill-box; transform-origin: center; animation: tl-pulse 2.2s ease-out 1.6s infinite backwards; }
+  @keyframes tl-pulse { from { opacity: .7; scale: 1; } to { opacity: 0; scale: 2.6; } }
+  .tl-item { position: absolute; width: 230px; animation: tl-in .6s ease backwards; }
+  .tl-when { display: block; font: 500 11px/1.2 "Geist", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #6E6879; }
+  .tl-item.is-now .tl-when { color: #d2412f; }
+  .tl-what { display: block; margin-top: 6px; font: 500 16px/1.3 "Geist", sans-serif; color: #141414; }
+  .tl-more { display: block; margin-top: 4px; font: 300 13.5px/1.4 "Geist", sans-serif; color: #4f4b57; }
+  .tl-note { display: block; margin-top: 6px; font: 15px/1.2 "Grape Nuts", cursive; color: #6E6879; }
+  @media (prefers-reduced-motion: reduce) { .tl-past, .tl-next, .tl-ring, .tl-item { animation: none; } }
   /* ---------- opening: the three paragraphs in a row, nothing else ----------
      The second one says "drag it"; dragging (or clicking) it sends the three to their places
      and the photo cards come in after them. Once a visit (sessionStorage). */
@@ -204,6 +227,31 @@
 
 <main class="about">
   <div class="canvas" id="canvas">
+    <ol class="timeline" aria-label="My path so far">
+      <svg viewBox="0 0 1420 640" aria-hidden="true">
+        <path class="tl-path tl-past" pathLength="1" d="M70 512 C160 512 230 496 330 412 S560 190 690 172"/>
+        <path class="tl-path tl-next" d="M690 172 S880 158 990 258 S1180 430 1290 446"/>
+        <circle class="tl-dot" cx="70" cy="512" r="7"/>
+        <circle class="tl-ring" cx="690" cy="172" r="7"/>
+        <circle class="tl-dot is-now" cx="690" cy="172" r="7"/>
+        <circle class="tl-dot is-next" cx="1290" cy="446" r="7"/>
+      </svg>
+      <li class="tl-item" style="left:56px;top:536px;animation-delay:.4s">
+        <span class="tl-when">2022 – 2026</span>
+        <span class="tl-what">University of Nottingham</span>
+        <span class="tl-more">B.Eng. Product Design and Manufacture, with a product design internship at Guoanda and game-based learning research</span>
+      </li>
+      <li class="tl-item is-now" style="left:575px;top:58px;animation-delay:1.3s">
+        <span class="tl-when">2026 – now</span>
+        <span class="tl-what">University of Michigan, MSI</span>
+        <span class="tl-more">User Research and Design, studying how AI shapes software discovery for Microsoft Fabric</span>
+      </li>
+      <li class="tl-item is-next" style="left:1170px;top:470px;animation-delay:1.9s">
+        <span class="tl-when">Next</span>
+        <span class="tl-what">Summer 2027 internship, then a full-time role in 2028</span>
+        <span class="tl-note">in UX research &amp; product design ✦</span>
+      </li>
+    </ol>
     <div class="pile">
       <img class="paper" src="assets/about/paper-ipod.svg" alt="" style="left:620px;top:8px;width:292px;height:354px">
       <p class="note" id="ipod-hint" style="left:637px;top:29px;width:174px;white-space:nowrap">click to play ♪</p>
