@@ -52,6 +52,24 @@
   @media (prefers-reduced-motion: reduce) {
     .js .pile, .js .story { opacity: 1; transform: none; }
   }
+  /* ---------- opening: the three paragraphs in a row, nothing else ----------
+     The second one says "drag it"; dragging (or clicking) it sends the three to their places
+     and the photo cards come in after them. Once a visit (sessionStorage). */
+  .canvas.is-stacked .pile { opacity: 0; transform: translateY(40px) scale(.94); pointer-events: none; }
+  .canvas.is-stacked .story { opacity: 1; transform: none; }
+  .canvas.is-stacked .story.is-grab { z-index: 3; cursor: grab; touch-action: none; }
+  .canvas.is-stacked .story.is-grab:active { cursor: grabbing; }
+  .canvas.is-stacked .story.is-grab:focus-visible { outline: 2px solid var(--ink, #222); outline-offset: 56px; border-radius: 8px; }
+  .drag-hint {
+    position: absolute; right: -6px; top: -44px; margin: 0; white-space: nowrap; pointer-events: none;
+    font: 21px/1 "Grape Nuts", cursive; color: #d2412f; rotate: -4deg;
+    opacity: 0; transition: opacity .3s;
+  }
+  .story .drag-hint + p { margin-top: 0; }
+  .canvas.is-stacked .drag-hint { opacity: 1; animation: hint-nudge 1.6s ease-in-out infinite; }
+  @keyframes hint-nudge { 50% { transform: translate(4px, -2px); } }
+  .canvas.is-arranging .story { transition: translate 1s cubic-bezier(.5,0,.15,1), opacity .8s, transform .9s; }
+  .canvas.is-arranging .pile { transition: opacity .7s ease, transform .9s cubic-bezier(.2,.8,.2,1.15); }
   /* ---------- iPod classic: plays 30-second Apple Music previews ----------
      One click brings it forward (straightens up and grows) and starts playing; then the click wheel works:
      centre / ▶II / screen = play-pause, ◂◂ / ▸▸ = previous / next song, MENU = back.
@@ -265,7 +283,7 @@
       <img class="photo gr-shot" src="assets/about/gr-8.jpg" alt="Photo taken on the GR" loading="lazy" decoding="async" style="left:607px;top:961.00px;width:111.075px;height:166.591px">
     </div>
     <div class="story" style="left:219px;top:83px;width:366px"><p>I started my journey in undergrad major in Product Design and Manufacture at the University of Nottingham, because I thought this is “cool”, turned out I’m actually right</p><p>---I’m serious, designers are the coolest people on this planet (no offense).</p></div>
-    <div class="story" style="left:600px;top:524px;width:355px"><p>I’ve always wondered how I could help make the world a better place.</p><p>I once dreamed of becoming a lawyer, advocating for others and fighting for justice. Today, I pursue that same purpose through design, creating meaningful experiences for a certain community and amplifying their voice.</p></div>
+    <div class="story" style="left:600px;top:524px;width:355px"><p class="drag-hint" aria-hidden="true">drag it ↘</p><p>I’ve always wondered how I could help make the world a better place.</p><p>I once dreamed of becoming a lawyer, advocating for others and fighting for justice. Today, I pursue that same purpose through design, creating meaningful experiences for a certain community and amplifying their voice.</p></div>
     <div class="story" style="left:795px;top:1098px;width:407px"><p>To me, design is a intersection of intention, empathy and craft, and a little bit of beauty. Design is never about technical skills, but it’s always about people: how deeply it resonates with them, and how meaningfully it shapes the way they feel, think, and live.</p></div>
   </div>
 <script>
@@ -282,7 +300,8 @@
   const pos = el => { const n = v => parseFloat(el.style[v]) || 0; return [n("top"), n("height")]; };
   document.querySelectorAll(".canvas > .pile, .canvas > .story").forEach(el => {
     const [t, h] = el.classList.contains("pile") ? pos(el.querySelector(".paper")) : [parseFloat(el.style.top), el.offsetHeight];
-    el.style.translate = `0 ${Math.round((t + h / 2) * (SQUEEZE - 1))}px`;
+    const x = getComputedStyle(el).translate.split(" ")[0];
+    el.style.translate = `${x === "none" ? "0px" : x} ${Math.round((t + h / 2) * (SQUEEZE - 1))}px`;
   });
 </script>
 </main>
@@ -529,6 +548,63 @@
       if (es.some(e => e.isIntersecting)) { io.disconnect(); setTimeout(() => { if (!out) play(); }, 350); }
     }, { threshold: 0.35 });
     io.observe(pile.querySelector(".paper"));
+  })();
+</script>
+<script>
+  // ---------- opening: three paragraphs in a row; drag the second and the page lays itself out ----------
+  (() => {
+    const canvas = document.getElementById("canvas");
+    const stories = [...canvas.querySelectorAll(":scope > .story")], piles = [...canvas.querySelectorAll(":scope > .pile")];
+    const seen = (() => { try { return sessionStorage.getItem("about-laid-out") === "1"; } catch { return false; } })();
+    if (seen || stories.length !== 3 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // where each paragraph's centre sits at the start, in canvas px: a staggered row across the top
+    const START = [[262, 193], [742, 328], [1165, 300]];
+    const home = stories.map(el => el.style.translate || "0px 0px");
+    const at = stories.map((el, i) => {
+      const [hx, hy] = home[i].split(" ").map(parseFloat);
+      const cx = parseFloat(el.style.left) + hx + el.offsetWidth / 2, cy = parseFloat(el.style.top) + (hy || 0) + el.offsetHeight / 2;
+      return [hx + START[i][0] - cx, (hy || 0) + START[i][1] - cy];
+    });
+    const put = (el, [x, y]) => { el.style.translate = `${x}px ${y}px`; };
+    canvas.classList.add("is-stacked");
+    stories.forEach((el, i) => { el.classList.add("is-in"); put(el, at[i]); });
+    const grab = stories[1];
+    grab.classList.add("is-grab");
+    grab.tabIndex = 0; grab.setAttribute("role", "button");
+    grab.setAttribute("aria-label", "Drag or press to lay out the page");
+
+    let done = false;
+    const layOut = () => {
+      if (done) return; done = true;
+      try { sessionStorage.setItem("about-laid-out", "1"); } catch {}
+      canvas.classList.add("is-arranging");
+      canvas.classList.remove("is-stacked");
+      grab.classList.remove("is-grab"); grab.removeAttribute("role"); grab.removeAttribute("aria-label"); grab.removeAttribute("tabindex");
+      stories.forEach((el, i) => { el.style.transitionDelay = i * 70 + "ms"; el.style.translate = home[i]; });
+      // the photo cards come in after the paragraphs, nearest the top first
+      piles.slice().sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)
+        .forEach((p, i) => { p.style.transitionDelay = 450 + i * 90 + "ms"; p.classList.add("is-in"); });
+      setTimeout(() => {
+        canvas.classList.remove("is-arranging");
+        [...stories, ...piles].forEach(el => { el.style.transitionDelay = ""; });
+      }, 2400);
+    };
+
+    // drag: the paragraph follows the pointer; letting go lays the page out
+    let start = null;
+    grab.addEventListener("pointerdown", e => {
+      if (done || e.button) return;
+      start = { x: e.clientX, y: e.clientY, z: parseFloat(canvas.style.zoom) || 1 };
+      grab.setPointerCapture(e.pointerId);
+    });
+    grab.addEventListener("pointermove", e => {
+      if (!start) return;
+      put(grab, [at[1][0] + (e.clientX - start.x) / start.z, at[1][1] + (e.clientY - start.y) / start.z]);
+    });
+    const release = () => { if (start) { start = null; layOut(); } };
+    grab.addEventListener("pointerup", release);
+    grab.addEventListener("pointercancel", release);
+    grab.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); layOut(); } });
   })();
 </script>
 </body>
