@@ -13,7 +13,7 @@
   /* The collage is laid out on Figma's 1420-wide "Aboutme" frame (272:59591), cropped
      to y 130–1580, and scaled to the window width by the script at the bottom. */
   .about { width: 100%; overflow: hidden; }
-  .canvas { position: relative; width: 1420px; height: 1450px; margin-top: 40px; }
+  .canvas { position: relative; width: 1420px; height: 1160px; margin-top: 40px; }   /* 20% shorter than the Figma crop: see SQUEEZE below */
   .canvas > .pile, .canvas > .story { position: absolute; }
   .pile { left: 0; top: 0; }
   /* the torn-paper cards are 5% smaller (each about its own centre, set by the script below);
@@ -275,6 +275,14 @@
     if (!paper) return;
     const n = v => parseFloat(paper.style[v]) || 0;
     p.style.transformOrigin = `${n("left") + n("width") / 2}px ${n("top") + n("height") / 2}px`;
+  });
+  // SQUEEZE: the page is 20% shorter than the Figma layout. Each card and paragraph keeps its
+  // size and moves up so its centre sits at 80% of its old height (the gaps close up).
+  const SQUEEZE = 0.8;
+  const pos = el => { const n = v => parseFloat(el.style[v]) || 0; return [n("top"), n("height")]; };
+  document.querySelectorAll(".canvas > .pile, .canvas > .story").forEach(el => {
+    const [t, h] = el.classList.contains("pile") ? pos(el.querySelector(".paper")) : [parseFloat(el.style.top), el.offsetHeight];
+    el.style.translate = `0 ${Math.round((t + h / 2) * (SQUEEZE - 1))}px`;
   });
 </script>
 </main>
