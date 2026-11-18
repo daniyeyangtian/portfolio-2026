@@ -66,8 +66,10 @@
   .tl-dot { fill: #fafafa; stroke: #6E6879; stroke-width: 2; }
   .tl-dot.is-next { stroke-dasharray: 3 3; }
   /* "now" is a little blue dragon (hand-painted, cut out), gliding gently over the line */
-  .tl-dragon { transform-box: fill-box; transform-origin: center; animation: tl-in .6s ease 1.2s backwards, tl-glide 3.2s ease-in-out 1.8s infinite; }
-  @keyframes tl-glide { 50% { transform: translate(3px, -5px) rotate(-3deg); } }
+  /* the line meets under the middle of its body, and it sways about that point (no drifting),
+     so the line's ends always stay hidden under it */
+  .tl-dragon { transform-box: fill-box; transform-origin: 53.6% 44.9%; animation: tl-in .6s ease 1.2s backwards, tl-glide 3.2s ease-in-out 1.8s infinite; }
+  @keyframes tl-glide { 50% { transform: rotate(-5deg) scale(1.03); } }
   .tl-item { position: absolute; width: 230px; animation: tl-in .6s ease backwards; }
   .tl-when { display: block; font: 500 11px/1.2 "Geist", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #6E6879; }
   .tl-item.is-now .tl-when { color: #d2412f; }
@@ -232,7 +234,7 @@
         <path class="tl-path tl-past" pathLength="1" d="M70 512 C160 512 230 496 330 412 S560 190 690 172"/>
         <path class="tl-path tl-next" d="M690 172 S880 158 990 258 S1180 430 1290 446"/>
         <circle class="tl-dot" cx="70" cy="512" r="7"/>
-        <image class="tl-dragon" href="assets/about/dragon.svg?v=1" x="652" y="134" width="78" height="75"/>
+        <image class="tl-dragon" href="assets/about/dragon.svg?v=1" x="648" y="138" width="78" height="75"/>
         <circle class="tl-dot is-next" cx="1290" cy="446" r="7"/>
       </svg>
       <li class="tl-item" style="left:56px;top:536px;animation-delay:.4s">
