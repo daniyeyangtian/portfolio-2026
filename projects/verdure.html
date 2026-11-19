@@ -1017,7 +1017,7 @@
     const room = makeCaseRoom(bottom - 1);
     const wf = document.createElement("div");
     wf.className = "wf";
-    wf.style.cssText = `left:${old.style.left};top:${old.style.top};width:${old.style.width}`;
+    wf.style.cssText = `left:114px;top:${old.style.top};width:992px`;   // in line with the section titles (x 114)
     const chev = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 5 4 4 4-4"/></svg>`;
     wf.innerHTML = `<div class="wf-cards">` + FLOWS.map(([k, name]) =>
         `<button type="button" class="wf-card" aria-expanded="false" aria-controls="wf-panel">` +
