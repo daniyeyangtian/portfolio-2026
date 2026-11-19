@@ -246,16 +246,16 @@
     box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--tint, #ccc) 55%, #fff);
   }
   .pi-track i { margin-top: auto; color: var(--ink-faint); }
-  /* contrast card: two short lines, the first faded, the second in the project's colour (Fabric: PLG vs ALG) */
+  /* contrast card: "A vs B", the first faded, the second in the project's colour (Fabric: PLG vs ALG) */
   .pi-vs .pi-inner {
-    min-height: 120px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 12px;
-    padding: 14px 16px; border-radius: 14px; text-align: left; background: #fff; color: var(--ink);
+    min-height: 120px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px 16px; border-radius: 14px; background: #fff;
     box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.08), 0 8px 18px rgba(0,0,0,.07);
+    font: 500 34px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .02em;
   }
-  .pi-vs span { display: block; font: 400 15px/1.3 Geist, sans-serif; color: var(--ink-faint); }
-  .pi-vs b { display: block; margin-bottom: 3px; font: 500 13px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
-  .pi-vs span + span { color: var(--ink); }
-  .pi-vs span + span b { color: color-mix(in srgb, var(--tint, #888) 75%, #000); }
+  .pi-vs span { color: var(--ink-faint); }
+  .pi-vs i { font: 400 18px/1 Geist, sans-serif; font-style: normal; color: var(--ink-faint); }
+  .pi-vs span + i + span { color: color-mix(in srgb, var(--tint, #888) 75%, #000); }
   /* blank card, for a pocket whose project isn't up yet */
   .pi-blank { cursor: default; }
   .pi-blank .pi-inner {
@@ -369,7 +369,7 @@
       // fallbacks: fabric.html publishes the live ones (window.caseSections); no final product yet
       sections: { overview: 0, "problem statement": 2053, research: 3301, development: 5574, "final product": null, outcomes: 6809 },
       pocket: [
-        { vs: [["PLG", "People find and choose software"], ["ALG", "An AI agent does it for them"]], w: 200 },
+        { vs: ["PLG", "ALG"], w: 200 },
         { track: "Client project · AI · UX research", n: "03", w: 210 },
         { photo: "assets/pocket/fabric-logo.jpg", w: 130, ar: 1 }
       ]
@@ -707,7 +707,7 @@
         node.innerHTML = `<span class="pi-inner">${
           it.photo || it.sticker ? `<img src="${it.photo || it.sticker}" alt="" draggable="false">` :
           it.track ? `<span class="chips">${it.track.split(" · ").map(t => `<small>${t}</small>`).join("")}</span><i>Track ${it.n}</i>` :
-          it.vs ? it.vs.map(([k, v]) => `<span><b>${k}</b>${v}</span>`).join("") : ""}</span>`;
+          it.vs ? `<span>${it.vs[0]}</span><i>vs</i><span>${it.vs[1]}</span>` : ""}</span>`;
         const h = it.photo ? w / it.ar + 10 : it.sticker ? w : it.track || it.vs ? 150 : w / it.ar;
         // Tucked: blown up to nearly fill the pocket's width and sunk deep, its bottom near
         // the pocket's floor (the front is 210 tall), but always with a strip above the edge.
