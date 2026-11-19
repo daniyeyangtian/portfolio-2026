@@ -974,5 +974,87 @@
     buttons.forEach(b => b.addEventListener("click", () => show(b)));
   })();
 </script>
+<style>
+  /* Workflows: three cards (flows A, B, C), each a peek at the top of its flow; opening one shows
+     the whole flow below the row (one at a time), like the Research Path figures */
+  .wf { position: absolute; z-index: 2; }
+  .wf-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .wf-card { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit; }
+  .wf-peek { position: relative; display: block; width: 100%; height: 260px; overflow: hidden; border-radius: 14px;
+             box-shadow: 0 0 0 1px rgba(0,0,0,.06); transition: box-shadow .25s, transform .3s cubic-bezier(.3,.7,.2,1); }
+  .wf-peek img { display: block; width: 100%; height: auto; }
+  .wf-peek::after { content: ""; position: absolute; inset: auto 0 0 0; height: 110px; background: linear-gradient(rgba(255,255,255,0), #fff 85%); }
+  .wf-card:hover .wf-peek { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(19,126,68,.25), 0 10px 24px rgba(0,0,0,.08); }
+  .wf-card[aria-expanded="true"] .wf-peek { box-shadow: 0 0 0 2px #137E44; }
+  .wf-more { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 18px; border-radius: 999px; background: #e3f3e9; color: #137E44;
+             font: 500 15px/1 Geist, sans-serif; transition: background .2s, color .2s; }
+  .wf-more svg { width: 13px; height: 13px; transition: transform .3s; }
+  .wf-card:hover .wf-more, .wf-card[aria-expanded="true"] .wf-more { background: #137E44; color: #fff; }
+  .wf-card[aria-expanded="true"] .wf-more svg { transform: rotate(180deg); }
+  .wf-card:focus-visible { outline: none; }
+  .wf-card:focus-visible .wf-peek { box-shadow: 0 0 0 2px #137E44, 0 0 0 5px #e3f3e9; }
+  .wf-panel { position: relative; overflow: hidden; height: 0; }
+  .wf-panel img { position: absolute; left: 50%; top: 32px; translate: -50% 0; width: 720px; height: auto; opacity: 0; transition: opacity .35s; }
+  .wf-panel img.is-on { opacity: 1; }
+</style>
+<script>
+  // Workflows: the three user flows (assets/verdure/workflow-a|b|c.png, cut from workflows.png) as
+  // three cards in a row; a card opens its flow underneath, full size, and the page below moves down
+  // (a case room). projects.html reads window.caseSections for the Outcomes anchor, which moves with it.
+  (() => {
+    const frame = document.getElementById("frame");
+    const old = [...frame.querySelectorAll("img")].find(i => /workflows\.png/.test(i.getAttribute("src") || ""));
+    if (!old) return;
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const H = parseFloat(old.style.height), OUTCOMES = 17628, W = 720, CARDS = 318, PAD = 64;
+    const FLOWS = [["a", "Plant care and management", 1047, 1913], ["b", "Plant selection and start growing", 1025, 2684], ["c", "Smart physical adjustment", 1044, 2354]];
+    const bottom = (old.getBoundingClientRect().bottom - frame.getBoundingClientRect().top) / z();
+    const room = makeCaseRoom(bottom - 1);
+    const wf = document.createElement("div");
+    wf.className = "wf";
+    wf.style.cssText = `left:${old.style.left};top:${old.style.top};width:${old.style.width}`;
+    const chev = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 5 4 4 4-4"/></svg>`;
+    wf.innerHTML = `<div class="wf-cards">` + FLOWS.map(([k, name]) =>
+        `<button type="button" class="wf-card" aria-expanded="false" aria-controls="wf-panel">` +
+        `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png" alt="" loading="lazy"></span>` +
+        `<span class="wf-more">Flow ${k.toUpperCase()}${chev}</span></button>`).join("") + `</div>` +
+      `<div class="wf-panel" id="wf-panel" role="region" aria-label="Workflow">` + FLOWS.map(([k, name]) =>
+        `<img src="../assets/verdure/workflow-${k}.png" alt="Flow ${k.toUpperCase()}: ${name}" loading="lazy">`).join("") + `</div>`;
+    old.replaceWith(wf);
+    // the rooms above move the old picture with \`translate\`; the cards take it over
+    const follow = () => { const tr = old.style.translate; if (tr && tr !== "none") wf.style.translate = tr; };
+    follow();
+    new MutationObserver(follow).observe(old, { attributes: true, attributeFilter: ["style"] });
+    const cards = [...wf.querySelectorAll(".wf-card")], imgs = [...wf.querySelectorAll(".wf-panel img")], panel = wf.querySelector(".wf-panel");
+    const full = f => PAD + W * FLOWS[f][3] / FLOWS[f][2];
+    let ph = 0, raf = 0, open = -1;
+    const set = v => {
+      ph = v; panel.style.height = v + "px";
+      const total = CARDS + v;
+      room.move(total - H);   // the page below sits right under the cards (and the open flow)
+      window.caseSections = { outcomes: OUTCOMES + total - H };
+    };
+    set(0);
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    const go = to => {
+      cancelAnimationFrame(raf);
+      if (still.matches) return set(to);
+      const from = ph, t0 = performance.now(), D = 600;
+      const step = now => {
+        const t = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - t, 3);
+        set(from + (to - from) * e);
+        if (t < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+    cards.forEach((c, f) => c.addEventListener("click", () => {
+      open = open === f ? -1 : f;
+      cards.forEach((o, k) => o.setAttribute("aria-expanded", k === open));
+      imgs.forEach((im, k) => im.classList.toggle("is-on", k === open));
+      panel.setAttribute("aria-label", open < 0 ? "Workflow" : `Flow ${FLOWS[open][0].toUpperCase()}`);
+      go(open < 0 ? 0 : full(open));
+    }));
+  })();
+</script>
 </body>
 </html>

@@ -324,7 +324,7 @@
       title: "Verdure",
       blurb: "Modular indoor-planting system with FlexiSpot.",
       color: "#6fd197",   // signature colour (the case study's green): the pocket's back
-      src: "projects/verdure.html?v=118",
+      src: "projects/verdure.html?v=122",
       sections: { overview: 0, "problem statement": 1600, research: 1952, development: 5325, "final product": 9913, outcomes: 17628 },
       // pieces in the pocket: photo (w = width in px, ar = aspect ratio), sticker, tag
       pocket: [
@@ -398,10 +398,14 @@
   // ---------- fader ----------
   // Stops: for each section that exists, the y of its name in the panel and the scroll
   // position (in the case-study page) where that section's top reaches the top of the viewer.
+  // a section's y in the page: the page can override it (window.caseSections) when a block on it
+  // opens and closes and moves what is below (Verdure's Workflows)
+  const secY = (win, name) => { try { const v = win.caseSections?.[name]; if (typeof v === "number") return v; } catch {} return PROJECTS[active].sections[name]; };
   function faderStops() {
     const win = iframe.contentWindow, z = zoomOf(win);
     const max = win.document.documentElement.scrollHeight - win.innerHeight;
-    return Object.entries(PROJECTS[active].sections).filter(([, y]) => y !== null).map(([name, y]) => {
+    return Object.entries(PROJECTS[active].sections).filter(([, y]) => y !== null).map(([name]) => {
+      const y = secY(win, name);
       const b = sectionList.querySelector(`[data-section="${name}"]`);
       return { y: b.offsetTop + b.offsetHeight / 2, at: Math.min(max, y * z) };   // same spot a click on the name scrolls to
     });
@@ -611,7 +615,7 @@
     markSection(b.dataset.section);
     springKnob(b.dataset.section);
     spyPausedUntil = performance.now() + (smooth ? 1200 : 0);
-    win.scrollTo({ top: PROJECTS[active].sections[b.dataset.section] * zoomOf(win), behavior: smooth ? "smooth" : "auto" });
+    win.scrollTo({ top: secY(win, b.dataset.section) * zoomOf(win), behavior: smooth ? "smooth" : "auto" });
   });
 
   projectList.addEventListener("click", e => {
