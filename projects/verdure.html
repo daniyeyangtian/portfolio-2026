@@ -840,23 +840,22 @@
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
   insertCaseSection({
-    top: 1600, from: 1750, gap: 150, headX: 114, leadColor: "#137E44", bodyColor: "#6f6f6f",
-    // the heading asks the question the two columns answer; a small label above it keeps the section name
-    heading: '<span class="ps-label">Problem statement</span>What could FlexiSpot make next, beyond the desk?',
+    top: 1600, from: 1750, gap: 150, headX: 114, textTop: 72, leadColor: "#137E44", bodyColor: "#6f6f6f",
+    // the heading asks the question, on one line across the top; the two columns below answer it
+    heading: "What could FlexiSpot make next, beyond the desk?",
     columns: [
-      { x: 430, w: 310,
+      { x: 114, w: 440,
         lead: "FlexiSpot is a worldwide top-5 standing desk brand, but they want more.",
         body: "Standing desks are a fragmented market: the top five brands, FlexiSpot among them, hold only about 30% of it (Global Market Insights, 2025)." },
-      { x: 790, w: 316,
+      { x: 634, w: 472,
         lead: "To grow, FlexiSpot wants new markets abroad and new categories beyond the desk.",
         body: "We saw a fit in Europe, with its focus on green, sustainable and self-sufficient living: growing plants and food at home." },
     ],
   });
 </script>
 <style>
-  /* Problem Statement as a question: the heading wraps in the left column, under a small label */
-  .case-insert #case-insert-h { width: 280px; line-height: 1.25 !important; }
-  .ps-label { display: block; margin-bottom: 10px; font: 500 13px/1 Geist, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #137E44; }
+  /* Problem Statement as a question, on one line */
+  .case-insert #case-insert-h { white-space: nowrap; }
   .rs { position: absolute; left: 0; width: 1220px; z-index: 2; font-family: Geist, sans-serif; }
   .rs-row { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 114px; list-style: none; padding: 0; }
   .rs-stat { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding: 8px 0 12px; color: #141414; border-radius: 16px; transition: background .2s; }
