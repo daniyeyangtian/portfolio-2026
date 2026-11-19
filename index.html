@@ -404,7 +404,7 @@
   <ul class="players">
     <li><a class="player" href="projects.html?p=verdure" style="--accent:#6fd197; --p:.62">
       <span class="deck-tt">
-        <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><span class="screen" data-flow="verdure" role="img" aria-label="The Verdure app on a phone, over a field of grass"><img src="assets/home3/verdure-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
+        <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><span class="screen" data-flow="verdure" role="img" aria-label="The Verdure app on a phone, over a field of grass"><img src="assets/home3/verdure-flow-1.jpg?v=3" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 01</text>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
@@ -588,7 +588,7 @@
       const tap = scr.querySelector(".tap");
       // one layer per screen: the blocks that build in, and the still parts between them
       const layers = FL.map((sc, k) => {
-        const src = `assets/home3/${name}-flow-${k + 1}.jpg?v=2`, L = document.createElement("span");
+        const src = `assets/home3/${name}-flow-${k + 1}.jpg?v=3`, L = document.createElement("span");
         L.className = "layer"; const cuts = [...sc.build].sort((a, b) => a[0] - b[0]);
         let y = 0; const moving = [];
         cuts.forEach(([a, b]) => { if (a > y) L.appendChild(band(src, y, a)); const m = band(src, a, b); moving.push(m); L.appendChild(m); y = b; });
