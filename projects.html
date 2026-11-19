@@ -345,22 +345,6 @@
         { photo: "assets/pocket/verdure-height.jpg", w: 120, ar: .475 }
       ]
     },
-    clicket: {
-      title: "Clicket",
-      blurb: "Camera accessory, app and rental service for new photographers.",
-      color: "#ff6f6f",   // the shutter-button coral
-      src: "projects/clicket.html?v=43",
-      sections: { overview: 0, "problem statement": 2232, research: 2675, development: 5522, "final product": 6188, outcomes: 12502 },
-      // like Verdure's: a sticker, the track card, a render, one app screen, one photo from testing
-      pocket: [
-        { sticker: "assets/pocket/clicket-button.svg", w: 84 },   // the device's coral shutter button
-        { photo: "assets/pocket/clicket-30218.jpg", w: 124, ar: 1.333 },
-        { track: "Physical product · App · Service", n: "02", w: 210 },
-        { photo: "assets/pocket/clicket-59d78.jpg", w: 170, ar: 1.145 },
-        { photo: "assets/pocket/clicket-ui.jpg", w: 118, ar: .462 }
-      ]
-    }
-,
     fabric: {
       title: "Microsoft Fabric",
       blurb: "How AI shapes software discovery for small businesses. In progress.",
@@ -376,13 +360,27 @@
       ],
       // its own spread: two rows of two, far enough apart that no card covers another
       slots: [[-112, -305, -4], [112, -300, 3], [-112, -132, 3], [112, -138, -3]]
+    },
+    clicket: {
+      title: "Clicket",
+      blurb: "Camera accessory, app and rental service for new photographers.",
+      color: "#ff6f6f",   // the shutter-button coral
+      src: "projects/clicket.html?v=43",
+      sections: { overview: 0, "problem statement": 2232, research: 2675, development: 5522, "final product": 6188, outcomes: 12502 },
+      // like Verdure's: a photo from testing, the track card, a render, one app screen
+      pocket: [
+        { photo: "assets/pocket/clicket-30218.jpg", w: 124, ar: 1.333 },
+        { track: "Physical product · App · Service", n: "02", w: 210 },
+        { photo: "assets/pocket/clicket-59d78.jpg", w: 170, ar: 1.145 },
+        { photo: "assets/pocket/clicket-ui.jpg", w: 118, ar: .462 }
+      ]
     }
   };
   // the overview's pockets, in order; a pocket without a project id is a placeholder
   const POCKETS = [
     { id: "verdure" },
-    { id: "clicket" },
     { id: "fabric" },
+    { id: "clicket" },
     { title: "Coming soon", pieces: [{ blank: "#eef0f3", w: 140, ar: 1.4 }, { blank: "#f3f4f6", w: 120, ar: .85 }, { blank: "#f0f1f3", w: 150, ar: 1.3 }] }
   ];
   const FIRST = POCKETS[0].id;   // scrolling down on the overview goes into this one
