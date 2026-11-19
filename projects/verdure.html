@@ -998,8 +998,8 @@
   .wf-more { position: absolute; right: 14px; bottom: 14px; z-index: 1; display: grid; place-items: center; width: 34px; height: 34px;
              border-radius: 50%; background: #e3f3e9; color: #137E44; transition: background .2s, color .2s; }
   .wf-more svg { width: 14px; height: 14px; transition: transform .3s; }
-  .wf-card:hover .wf-more { background: #d2ecdc; }
-  .wf-card[aria-expanded="true"] .wf-more { background: #137E44; color: #fff; }
+  /* as on the Research Path figures: the round button turns solid green on hover and while open */
+  .wf-card:hover .wf-more, .wf-card[aria-expanded="true"] .wf-more { background: #137E44; color: #fff; }
   .wf-card[aria-expanded="true"] .wf-more svg { transform: rotate(180deg); }
   .wf-card:focus-visible { outline: none; }
   .wf-card:focus-visible .wf-peek { box-shadow: 0 0 0 2px #137E44, 0 0 0 5px #e3f3e9; }
