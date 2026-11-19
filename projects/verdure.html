@@ -994,9 +994,10 @@
   .wf-card:hover .wf-peek { box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 8px 22px rgba(0,0,0,.06); }
   .wf-card:hover .wf-peek img { transform: scale(1.04); }
   .wf-card[aria-expanded="true"] .wf-peek { box-shadow: 0 0 0 1.5px #137E44; }
-  .wf-more { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 18px; border-radius: 999px; background: #e3f3e9; color: #137E44;
-             font: 500 15px/1 Geist, sans-serif; transition: background .2s, color .2s; }
-  .wf-more svg { width: 13px; height: 13px; transition: transform .3s; }
+  /* the open / close cue: a round green button in the card's bottom-right corner */
+  .wf-more { position: absolute; right: 14px; bottom: 14px; z-index: 1; display: grid; place-items: center; width: 34px; height: 34px;
+             border-radius: 50%; background: #e3f3e9; color: #137E44; transition: background .2s, color .2s; }
+  .wf-more svg { width: 14px; height: 14px; transition: transform .3s; }
   .wf-card:hover .wf-more { background: #d2ecdc; }
   .wf-card[aria-expanded="true"] .wf-more { background: #137E44; color: #fff; }
   .wf-card[aria-expanded="true"] .wf-more svg { transform: rotate(180deg); }
@@ -1025,9 +1026,9 @@
     const chev = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 5 4 4 4-4"/></svg>`;
     wf.innerHTML = `<div class="wf-cards">` + FLOWS.map(([k, name]) =>
         `<button type="button" class="wf-card" aria-expanded="false" aria-controls="wf-panel">` +
-        `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png" alt="" loading="lazy"></span>` +
+        `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png" alt="" loading="lazy"><span class="wf-more">${chev}</span></span>` +
         `<span class="wf-name"><span class="wf-tag">Flow ${k.toUpperCase()}</span><span class="wf-title">${name}</span></span>` +
-        `<span class="wf-more"><span class="wf-act">Expand</span>${chev}</span></button>`).join("") + `</div>` +
+        `</button>`).join("") + `</div>` +
       `<div class="wf-panel" id="wf-panel" role="region" aria-label="Workflow">` + FLOWS.map(([k, name]) =>
         `<img src="../assets/verdure/workflow-${k}.png" alt="Flow ${k.toUpperCase()}: ${name}" loading="lazy">`).join("") + `</div>`;
     old.replaceWith(wf);
@@ -1064,7 +1065,7 @@
     };
     cards.forEach((c, f) => c.addEventListener("click", () => {
       open = open === f ? -1 : f;
-      cards.forEach((o, i) => { o.setAttribute("aria-expanded", i === open); o.querySelector(".wf-act").textContent = i === open ? "Close" : "Expand"; });
+      cards.forEach((o, i) => o.setAttribute("aria-expanded", i === open));
       imgs.forEach((im, i) => im.classList.toggle("is-on", i === open));
       panel.setAttribute("aria-label", open < 0 ? "Workflow" : `Flow ${FLOWS[open][0].toUpperCase()}`);
       go(open < 0 ? 0 : full(open));
