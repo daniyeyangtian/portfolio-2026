@@ -982,7 +982,12 @@
   .wf-card { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit; }
   .wf-peek { position: relative; display: block; width: 100%; height: 260px; overflow: hidden; border-radius: 14px;
              box-shadow: 0 0 0 1px rgba(0,0,0,.06); transition: box-shadow .25s, transform .3s cubic-bezier(.3,.7,.2,1); }
-  .wf-peek img { display: block; width: 100%; height: auto; }
+  /* each flow picture starts with its own "Flow X" and title; those are text on the card now, so the
+     pictures are shown from below them (the top 160 px of the export are cut off) */
+  .wf-peek img { display: block; width: 100%; height: auto; margin-top: calc(-160 / 1047 * 100%); }
+  .wf-name { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+  .wf-tag { font: 500 12px/1 Geist, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #137E44; }
+  .wf-title { font: 500 18px/1.25 Geist, sans-serif; color: #000; }
   .wf-peek::after { content: ""; position: absolute; inset: auto 0 0 0; height: 110px; background: linear-gradient(rgba(255,255,255,0), #fff 85%); }
   .wf-card:hover .wf-peek { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(19,126,68,.25), 0 10px 24px rgba(0,0,0,.08); }
   .wf-card[aria-expanded="true"] .wf-peek { box-shadow: 0 0 0 2px #137E44; }
@@ -994,7 +999,7 @@
   .wf-card:focus-visible { outline: none; }
   .wf-card:focus-visible .wf-peek { box-shadow: 0 0 0 2px #137E44, 0 0 0 5px #e3f3e9; }
   .wf-panel { position: relative; overflow: hidden; height: 0; }
-  .wf-panel img { position: absolute; left: 50%; top: 32px; translate: -50% 0; width: 720px; height: auto; opacity: 0; transition: opacity .35s; }
+  .wf-panel img { position: absolute; left: 50%; top: var(--top); translate: -50% 0; width: 720px; height: auto; opacity: 0; transition: opacity .35s; }
   .wf-panel img.is-on { opacity: 1; }
 </style>
 <script>
@@ -1006,7 +1011,7 @@
     const old = [...frame.querySelectorAll("img")].find(i => /workflows\.png/.test(i.getAttribute("src") || ""));
     if (!old) return;
     const z = () => frame.getBoundingClientRect().width / 1220;
-    const H = parseFloat(old.style.height), OUTCOMES = 17628, W = 720, CARDS = 318, PAD = 64;
+    const H = parseFloat(old.style.height), OUTCOMES = 17628, W = 720, PAD = 48, CUT = 160;   // CUT: the title at the top of each export
     const FLOWS = [["a", "Plant care and management", 1047, 1913], ["b", "Plant selection and start growing", 1025, 2684], ["c", "Smart physical adjustment", 1044, 2354]];
     const bottom = (old.getBoundingClientRect().bottom - frame.getBoundingClientRect().top) / z();
     const room = makeCaseRoom(bottom - 1);
@@ -1017,7 +1022,8 @@
     wf.innerHTML = `<div class="wf-cards">` + FLOWS.map(([k, name]) =>
         `<button type="button" class="wf-card" aria-expanded="false" aria-controls="wf-panel">` +
         `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png" alt="" loading="lazy"></span>` +
-        `<span class="wf-more">Flow ${k.toUpperCase()}${chev}</span></button>`).join("") + `</div>` +
+        `<span class="wf-name"><span class="wf-tag">Flow ${k.toUpperCase()}</span><span class="wf-title">${name}</span></span>` +
+        `<span class="wf-more"><span class="wf-act">Expand</span>${chev}</span></button>`).join("") + `</div>` +
       `<div class="wf-panel" id="wf-panel" role="region" aria-label="Workflow">` + FLOWS.map(([k, name]) =>
         `<img src="../assets/verdure/workflow-${k}.png" alt="Flow ${k.toUpperCase()}: ${name}" loading="lazy">`).join("") + `</div>`;
     old.replaceWith(wf);
@@ -1026,15 +1032,20 @@
     follow();
     new MutationObserver(follow).observe(old, { attributes: true, attributeFilter: ["style"] });
     const cards = [...wf.querySelectorAll(".wf-card")], imgs = [...wf.querySelectorAll(".wf-panel img")], panel = wf.querySelector(".wf-panel");
-    const full = f => PAD + W * FLOWS[f][3] / FLOWS[f][2];
+    const k = f => W / FLOWS[f][2];
+    const full = f => PAD + (FLOWS[f][3] - CUT) * k(f);
+    imgs.forEach((im, f) => im.style.setProperty("--top", 24 - CUT * k(f) + "px"));
+    const cardsH = () => wf.querySelector(".wf-cards").offsetHeight;
     let ph = 0, raf = 0, open = -1;
     const set = v => {
       ph = v; panel.style.height = v + "px";
-      const total = CARDS + v;
+      const total = cardsH() + v;
       room.move(total - H);   // the page below sits right under the cards (and the open flow)
       window.caseSections = { outcomes: OUTCOMES + total - H };
     };
     set(0);
+    document.fonts?.ready.then(() => set(ph));   // the card titles' real height
+    addEventListener("load", () => set(ph));
     const still = matchMedia("(prefers-reduced-motion: reduce)");
     const go = to => {
       cancelAnimationFrame(raf);
@@ -1049,8 +1060,8 @@
     };
     cards.forEach((c, f) => c.addEventListener("click", () => {
       open = open === f ? -1 : f;
-      cards.forEach((o, k) => o.setAttribute("aria-expanded", k === open));
-      imgs.forEach((im, k) => im.classList.toggle("is-on", k === open));
+      cards.forEach((o, i) => { o.setAttribute("aria-expanded", i === open); o.querySelector(".wf-act").textContent = i === open ? "Close" : "Expand"; });
+      imgs.forEach((im, i) => im.classList.toggle("is-on", i === open));
       panel.setAttribute("aria-label", open < 0 ? "Workflow" : `Flow ${FLOWS[open][0].toUpperCase()}`);
       go(open < 0 ? 0 : full(open));
     }));
