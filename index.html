@@ -442,7 +442,7 @@
     </a></li>
     <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f; --p:.38">
       <span class="deck-tt">
-        <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
+        <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg?v=2" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-label" x="40" y="62">TRACK 03</text>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
@@ -562,11 +562,11 @@
       ],
       // Clicket · Rent: Home → Scan to log in → Rent gear → Your order → Locker B2 open
       clicket: [
-        { build: [[.155, .245], [.27, .51], [.525, .875]], taps: [[.5, .94]], next: { t: "wipe" } },
-        { build: [[.07, .235], [.27, .69]], fx: "scan", hold: 1500, taps: [], next: { t: "push" } },
+        { build: [[.133, .226], [.241, .485], [.499, .872]], taps: [[.5, .94]], next: { t: "wipe" } },
+        { build: [[.066, .216], [.235, .664]], fx: "scan", hold: 1500, taps: [], next: { t: "push" } },
         { build: [[.135, .265], [.285, .645], [.665, .82]], taps: [[.887, .84]], next: { t: "expand", r: [.813, .805, .96, .874] } },
         { build: [[.135, .265], [.285, .445], [.46, .68], [.805, .875]], taps: [[.5, .84]], next: { t: "wipe" } },
-        { build: [[.15, .265], [.295, .405], [.405, .515], [.515, .625], [.625, .735], [.805, .875]], fx: "b2", taps: [[.5, .84]], next: { t: "fade" } },
+        { build: [[.137, .237], [.256, .373], [.373, .485], [.485, .596], [.596, .713], [.806, .872]], fx: "b2", taps: [[.5, .84]], next: { t: "fade" } },
       ],
     };
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -579,8 +579,8 @@
       return b;
     };
     const FX = {
-      scan: '<span class="fx-scan" style="left:25.7%;top:33.8%;width:48.6%;height:22.8%"><i></i></span>',
-      b2: '<span class="fx-glow" style="left:50.7%;top:40.6%;width:42.6%;height:9.9%"></span>',
+      scan: '<span class="fx-scan" style="left:20.5%;top:29.5%;width:59%;height:26.5%"><i></i></span>',
+      b2: '<span class="fx-glow" style="left:51.3%;top:37.9%;width:42%;height:10%"></span>',
       fill: '<span class="fx-fill" style="left:10.1%;top:41.9%;width:34.6%;height:.85%"><i></i></span>',
     };
     document.querySelectorAll(".record .screen[data-flow]").forEach(scr => {
@@ -588,7 +588,7 @@
       const tap = scr.querySelector(".tap");
       // one layer per screen: the blocks that build in, and the still parts between them
       const layers = FL.map((sc, k) => {
-        const src = `assets/home3/${name}-flow-${k + 1}.jpg`, L = document.createElement("span");
+        const src = `assets/home3/${name}-flow-${k + 1}.jpg?v=2`, L = document.createElement("span");
         L.className = "layer"; const cuts = [...sc.build].sort((a, b) => a[0] - b[0]);
         let y = 0; const moving = [];
         cuts.forEach(([a, b]) => { if (a > y) L.appendChild(band(src, y, a)); const m = band(src, a, b); moving.push(m); L.appendChild(m); y = b; });
