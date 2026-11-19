@@ -979,13 +979,13 @@
      the whole flow below the row (one at a time), like the Research Path figures */
   .wf { position: absolute; z-index: 2; }
   .wf-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .wf-card { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit; }
+  .wf-card { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit; }
   .wf-peek { position: relative; display: block; width: 100%; height: 260px; overflow: hidden; border-radius: 14px;
              box-shadow: 0 0 0 1px rgba(0,0,0,.06); transition: box-shadow .25s, transform .3s cubic-bezier(.3,.7,.2,1); }
   /* each flow picture starts with its own "Flow X" and title; those are text on the card now, so the
      pictures are shown from below them (the top 160 px of the export are cut off) */
   .wf-peek img { display: block; width: 100%; height: auto; margin-top: calc(-160 / 1047 * 100%); }
-  .wf-name { order: -1; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }   /* on top of the card */
+  .wf-name { order: -1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: left; }   /* on top of the card */
   .wf-tag { font: 500 12px/1 Geist, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #137E44; }
   .wf-title { font: 500 18px/1.25 Geist, sans-serif; color: #000; }
   .wf-peek::after { content: ""; position: absolute; inset: auto 0 0 0; height: 110px; background: linear-gradient(rgba(255,255,255,0), #fff 85%); }
