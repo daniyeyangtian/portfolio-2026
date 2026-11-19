@@ -33,8 +33,8 @@ const PRINTS = {
            name: "D A N I   Y E Y A N G   T I A N" },
   works: { title: "PROJECTS", sub: "SIDE B · VOL.02 · NORMAL POSITION", mark: "DYT 02", num: "02", side: "B", ink: "#22262C",
            tracks: [{ code: "B1", name: "VERDURE", color: "#6fd197", at: 0.06 },
-                    { code: "B2", name: "CLICKET", color: "#ff6f6f", at: 0.4 },
-                    { code: "B3", name: "MICROSOFT FABRIC", color: "#8a6cc0", at: 0.74 }] },
+                    { code: "B2", name: "MICROSOFT FABRIC", color: "#8a6cc0", at: 0.4 },
+                    { code: "B3", name: "CLICKET", color: "#ff6f6f", at: 0.74 }] },
   other: { title: "OTHER WORK", sub: "SIDE C · VOL.03 · BONUS TRACKS", mark: "DYT 03", num: "03", side: "C", ink: "#22262C",
            name: "S I D E   P R O J E C T S" },
 };
