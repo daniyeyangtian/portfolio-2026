@@ -68,6 +68,7 @@
     const room = { to, dy: 0, els };
     rooms.push(room);
     return {
+      room,
       move(dy) {
         room.dy = dy;
         room.els.forEach(el => { const t = tracked.get(el); t.parts.set(room, dy); apply(el, t); });
@@ -77,10 +78,11 @@
     };
   };
 
-  window.addCaseSection = sec => {
+  // own: the room made for this section, which must not push the section itself down
+  window.addCaseSection = (sec, own) => {
     frame.appendChild(sec);
     const top = parseFloat(sec.style.top);
-    rooms.filter(r => top >= r.to).forEach(r => {
+    rooms.filter(r => r !== own?.room && top >= r.to).forEach(r => {
       track(sec, "top", top);
       r.els.push(sec);
       const t = tracked.get(sec); t.parts.set(r, r.dy); apply(sec, t);
@@ -104,7 +106,7 @@
         <p style="margin:16px 0 0;font:400 16px/1.5 Geist,sans-serif;color:${bodyColor}">${c.body}</p>
       </div>`).join("");
     const room = makeCaseRoom(from);   // measure before the section is there
-    addCaseSection(sec);
+    addCaseSection(sec, room);
     const layout = () => {
       // side by side: the lead lines take the same height, so the paragraphs under them line up
       const leads = [...sec.querySelectorAll(".case-insert-text > p:first-child")];

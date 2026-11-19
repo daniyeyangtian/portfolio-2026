@@ -839,7 +839,7 @@
     render(); syncDots();
   });
 </script>
-<script src="../js/case-insert.js?v=10"></script>
+<script src="../js/case-insert.js?v=16"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
@@ -1011,13 +1011,13 @@
 <script>
   // Workflows: the three user flows (assets/verdure/workflow-a|b|c.png, cut from workflows.png) as
   // three cards in a row; a card opens its flow underneath, full size, and the page below moves down
-  // (a case room). projects.html reads window.caseSections for the Outcomes anchor, which moves with it.
+  // (a case room); the section anchors for projects.html are refreshed as it moves (window.caseSectionsUpdate).
   (() => {
     const frame = document.getElementById("frame");
     const old = [...frame.querySelectorAll("img")].find(i => /workflows\.png/.test(i.getAttribute("src") || ""));
     if (!old) return;
     const z = () => frame.getBoundingClientRect().width / 1220;
-    const H = parseFloat(old.style.height), OUTCOMES = 17601, W = 720, PAD = 48, CUT = 160;   // CUT: the title at the top of each export
+    const H = parseFloat(old.style.height), W = 720, PAD = 48, CUT = 160;   // CUT: the title at the top of each export
     const FLOWS = [["a", "Plant care and management", 1047, 1913], ["b", "Plant selection and start growing", 1025, 2684], ["c", "Smart physical adjustment", 1044, 2354]];
     const bottom = (old.getBoundingClientRect().bottom - frame.getBoundingClientRect().top) / z();
     const room = makeCaseRoom(bottom - 1);
@@ -1047,7 +1047,7 @@
       ph = v; panel.style.height = v + "px";
       const total = cardsH() + v;
       room.move(total - H);   // the page below sits right under the cards (and the open flow)
-      window.caseSections = { outcomes: OUTCOMES + total - H };
+      window.caseSectionsUpdate?.();
     };
     set(0);
     document.fonts?.ready.then(() => set(ph));   // the card titles' real height
@@ -1071,6 +1071,58 @@
       panel.setAttribute("aria-label", open < 0 ? "Workflow" : `Flow ${FLOWS[open][0].toUpperCase()}`);
       go(open < 0 ? 0 : full(open));
     }));
+  })();
+</script>
+<script>
+  // Spacing: every section title gets at least 56 px before what follows it (Storyboard,
+  // Brainstorm and Outcome & Reflection sat 30–44 px above what follows). Measured once the page has laid itself out;
+  // what lies below moves down (case rooms).
+  // Section anchors: projects.html reads window.caseSections, taken from where the titles really
+  // are (20 px above each), so the side menu stays right whatever opens, closes or moves.
+  (() => {
+    const frame = document.getElementById("frame");
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = v => (v - frame.getBoundingClientRect().top) / z();
+    const shown = el => {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return false;
+      for (let a = el.parentElement; a && a !== frame; a = a.parentElement) {
+        const cs = getComputedStyle(a);
+        if (cs.visibility === "hidden" || +cs.opacity === 0) return false;
+        if (/(hidden|clip)/.test(cs.overflow + cs.overflowY)) { const q = a.getBoundingClientRect(); if (r.bottom <= q.top + 1 || r.top >= q.bottom - 1) return false; }
+      }
+      return getComputedStyle(el).visibility !== "hidden";
+    };
+    const title = text => [...frame.querySelectorAll("p, h2")].find(e => e.textContent.trim() === text && shown(e));
+    const SECTIONS = { "problem statement": "#case-insert-h", research: "Research Path", development: "Final Concept",
+                       "final product": "Final Product", outcomes: "Outcome & Reflection" };
+    const els = {};   // the titles, found once
+    window.caseSectionsUpdate = () => {
+      const out = {};
+      for (const [k, t] of Object.entries(SECTIONS)) {
+        const el = els[k] ||= (t.startsWith("#") ? document.querySelector(t) : title(t));
+        if (el) out[k] = Math.round(fy(el.getBoundingClientRect().top)) - 20;
+      }
+      window.caseSections = out;
+    };
+    const MIN = 56;
+    let done = false;
+    const space = () => {
+      if (done) return; done = true;
+      const fixes = ["Storyboard", "Brainstorm", "Outcome & Reflection"].map(t => {
+        const h = title(t); if (!h) return null;
+        const hb = fy(h.getBoundingClientRect().bottom);
+        const next = [...frame.querySelectorAll("img, p, figure, svg")].filter(e => e !== h && shown(e))
+          .map(e => fy(e.getBoundingClientRect().top)).filter(t => t >= hb - 1).sort((a, b) => a - b)[0];
+        if (next === undefined || next - hb >= MIN) return null;
+        return [makeCaseRoom(hb + (next - hb) / 2), MIN - (next - hb)];   // all rooms measured before any moves
+      }).filter(Boolean);
+      fixes.forEach(([room, dy]) => room.move(dy));
+      window.caseSectionsUpdate();
+    };
+    const go = () => (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(space, 0));
+    if (document.readyState === "complete") go(); else addEventListener("load", go);
+    window.caseSectionsUpdate();
   })();
 </script>
 </body>
