@@ -369,10 +369,13 @@
       // fallbacks: fabric.html publishes the live ones (window.caseSections); no final product yet
       sections: { overview: 0, "problem statement": 2053, research: 3301, development: 5574, "final product": null, outcomes: 6809 },
       pocket: [
-        { vs: ["PLG", "ALG"], w: 200 },
-        { track: "Client project · AI · UX research", n: "03", w: 210 },
-        { photo: "assets/pocket/fabric-logo.jpg", w: 130, ar: 1 }
-      ]
+        { vs: ["PLG", "ALG"], w: 190 },
+        { track: "Client project · AI · UX research", n: "03", w: 200 },
+        { photo: "assets/pocket/fabric-logo.jpg", w: 130, ar: 1 },
+        { photo: "assets/pocket/microsoft-logo.jpg", w: 190, ar: 2 }
+      ],
+      // its own spread: two rows of two, far enough apart that no card covers another
+      slots: [[-112, -305, -4], [112, -300, 3], [-112, -132, 3], [112, -138, -3]]
     }
   };
   // the overview's pockets, in order; a pocket without a project id is a placeholder
@@ -692,7 +695,7 @@
       grid.append(col);
       const el = col.querySelector(".pocket"), hit = col.querySelector(".pocket-hit");
       const front = col.querySelector(".pocket-front");
-      const items = proj ? proj.pocket : def.pieces, slots = SLOTS[items.length] || SLOTS[6];
+      const items = proj ? proj.pocket : def.pieces, slots = (proj && proj.slots) || SLOTS[items.length] || SLOTS[6];
       const rnd = rand(n * 7919 + 13);
       const me = { id: def.id, col, el, hit, open: false, pieces: [] };
 
