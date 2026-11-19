@@ -981,20 +981,24 @@
   .wf-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .wf-card { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit; }
   .wf-peek { position: relative; display: block; width: 100%; height: 260px; overflow: hidden; border-radius: 14px;
-             box-shadow: 0 0 0 1px rgba(0,0,0,.06); transition: box-shadow .25s, transform .3s cubic-bezier(.3,.7,.2,1); }
+             box-shadow: 0 0 0 1px rgba(0,0,0,.06); transition: box-shadow .3s; }
   /* each flow picture starts with its own "Flow X" and title; those are text on the card now, so the
      pictures are shown from below them (the top 160 px of the export are cut off) */
-  .wf-peek img { display: block; width: 100%; height: auto; margin-top: calc(-160 / 1047 * 100%); }
+  .wf-peek img { display: block; width: 100%; height: auto; margin-top: calc(-160 / 1047 * 100%);
+                 transform-origin: 50% 0; transition: transform .5s cubic-bezier(.3,.7,.2,1); }
   .wf-name { order: -1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: left; }   /* on top of the card */
   .wf-tag { font: 500 12px/1 Geist, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #137E44; }
   .wf-title { font: 500 18px/1.25 Geist, sans-serif; color: #000; }
   .wf-peek::after { content: ""; position: absolute; inset: auto 0 0 0; height: 110px; background: linear-gradient(rgba(255,255,255,0), #fff 85%); }
-  .wf-card:hover .wf-peek { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(19,126,68,.25), 0 10px 24px rgba(0,0,0,.08); }
-  .wf-card[aria-expanded="true"] .wf-peek { box-shadow: 0 0 0 2px #137E44; }
+  /* hover: the flow inside leans in a little and the card gets a soft shadow; nothing jumps */
+  .wf-card:hover .wf-peek { box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 8px 22px rgba(0,0,0,.06); }
+  .wf-card:hover .wf-peek img { transform: scale(1.04); }
+  .wf-card[aria-expanded="true"] .wf-peek { box-shadow: 0 0 0 1.5px #137E44; }
   .wf-more { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 18px; border-radius: 999px; background: #e3f3e9; color: #137E44;
              font: 500 15px/1 Geist, sans-serif; transition: background .2s, color .2s; }
   .wf-more svg { width: 13px; height: 13px; transition: transform .3s; }
-  .wf-card:hover .wf-more, .wf-card[aria-expanded="true"] .wf-more { background: #137E44; color: #fff; }
+  .wf-card:hover .wf-more { background: #d2ecdc; }
+  .wf-card[aria-expanded="true"] .wf-more { background: #137E44; color: #fff; }
   .wf-card[aria-expanded="true"] .wf-more svg { transform: rotate(180deg); }
   .wf-card:focus-visible { outline: none; }
   .wf-card:focus-visible .wf-peek { box-shadow: 0 0 0 2px #137E44, 0 0 0 5px #e3f3e9; }
