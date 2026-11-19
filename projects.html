@@ -246,6 +246,16 @@
     box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--tint, #ccc) 55%, #fff);
   }
   .pi-track i { margin-top: auto; color: var(--ink-faint); }
+  /* contrast card: two short lines, the first faded, the second in the project's colour (Fabric: PLG vs ALG) */
+  .pi-vs .pi-inner {
+    min-height: 120px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 12px;
+    padding: 14px 16px; border-radius: 14px; text-align: left; background: #fff; color: var(--ink);
+    box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.08), 0 8px 18px rgba(0,0,0,.07);
+  }
+  .pi-vs span { display: block; font: 400 15px/1.3 Geist, sans-serif; color: var(--ink-faint); }
+  .pi-vs b { display: block; margin-bottom: 3px; font: 500 13px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
+  .pi-vs span + span { color: var(--ink); }
+  .pi-vs span + span b { color: color-mix(in srgb, var(--tint, #888) 75%, #000); }
   /* blank card, for a pocket whose project isn't up yet */
   .pi-blank { cursor: default; }
   .pi-blank .pi-inner {
@@ -358,7 +368,11 @@
       src: "projects/fabric.html?v=6",
       // fallbacks: fabric.html publishes the live ones (window.caseSections); no final product yet
       sections: { overview: 0, "problem statement": 2053, research: 3301, development: 5574, "final product": null, outcomes: 6809 },
-      pocket: [{ blank: "#ece4f7", w: 150, ar: 1.35 }, { track: "Client project · AI · UX research", n: "03", w: 210 }, { blank: "#f3eefa", w: 150, ar: 1.5 }]
+      pocket: [
+        { vs: [["PLG", "People find and choose software"], ["ALG", "An AI agent does it for them"]], w: 200 },
+        { track: "Client project · AI · UX research", n: "03", w: 210 },
+        { photo: "assets/pocket/fabric-logo.jpg", w: 130, ar: 1 }
+      ]
     }
   };
   // the overview's pockets, in order; a pocket without a project id is a placeholder
@@ -686,14 +700,15 @@
         const w = Math.round(it.w * PIECE);
         const node = document.createElement(proj ? "button" : "div");
         if (proj) { node.type = "button"; node.tabIndex = -1; node.setAttribute("aria-label", `Open ${title}`); }
-        node.className = "pi " + (it.photo ? "pi-photo" : it.sticker ? "pi-sticker" : it.track ? "pi-track" : "pi-blank");
+        node.className = "pi " + (it.photo ? "pi-photo" : it.sticker ? "pi-sticker" : it.track ? "pi-track" : it.vs ? "pi-vs" : "pi-blank");
         node.style.setProperty("--w", w + "px");
         if (it.ar) node.style.setProperty("--ar", it.ar);
         if (it.blank) node.style.setProperty("--paper", it.blank);
         node.innerHTML = `<span class="pi-inner">${
           it.photo || it.sticker ? `<img src="${it.photo || it.sticker}" alt="" draggable="false">` :
-          it.track ? `<span class="chips">${it.track.split(" · ").map(t => `<small>${t}</small>`).join("")}</span><i>Track ${it.n}</i>` : ""}</span>`;
-        const h = it.photo ? w / it.ar + 10 : it.sticker ? w : it.track ? 150 : w / it.ar;
+          it.track ? `<span class="chips">${it.track.split(" · ").map(t => `<small>${t}</small>`).join("")}</span><i>Track ${it.n}</i>` :
+          it.vs ? it.vs.map(([k, v]) => `<span><b>${k}</b>${v}</span>`).join("") : ""}</span>`;
+        const h = it.photo ? w / it.ar + 10 : it.sticker ? w : it.track || it.vs ? 150 : w / it.ar;
         // Tucked: blown up to nearly fill the pocket's width and sunk deep, its bottom near
         // the pocket's floor (the front is 210 tall), but always with a strip above the edge.
         const k = it.sticker ? 1.3 : Math.min(205 / w, 215 / h), hk = h * k;   // a sticker stays sticker-sized
