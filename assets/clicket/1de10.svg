@@ -24,9 +24,6 @@
 <path id="Vector_22" d="M108.5 651.6L112 657.6L115.5 651.6H108.5Z" fill="#3BCB8A"/>
 <path id="Vector_23" d="M112 692.2V711.6" stroke="#3BCB8A"/>
 <path id="Vector_24" d="M108.5 710.6L112 716.6L115.5 710.6H108.5Z" fill="#3BCB8A"/>
-<path id="Vector_25" d="M38 218.6H34V295.6H38" stroke="#BDBDBD" stroke-width="0.6"/>
-<path id="Vector_26" d="M38 317.6H34V519H38" stroke="#BDBDBD" stroke-width="0.6"/>
-<path id="Vector_27" d="M38 541H34V699.6H38" stroke="#BDBDBD" stroke-width="0.6"/>
 <path id="Vector_28" d="M112 751.2V761.2" stroke="#3BCB8A"/>
 <path id="Vector_29" d="M108.5 760.2L112 766.2L115.5 760.2H108.5Z" fill="#3BCB8A"/>
 <path id="Vector_30" d="M112 777.2C114.761 777.2 117 774.961 117 772.2C117 769.439 114.761 767.2 112 767.2C109.239 767.2 107 769.439 107 772.2C107 774.961 109.239 777.2 112 777.2Z" fill="white" stroke="#1E1E1E"/>
@@ -42,21 +39,18 @@
 <path id="Vector_40" d="M464.5 282.2L468 288.2L471.5 282.2H464.5Z" fill="#3BCB8A"/>
 <path id="Vector_41" d="M593 268.2V278.2H468V283.2" stroke="#3BCB8A"/>
 <path id="Vector_42" d="M464.5 282.2L468 288.2L471.5 282.2H464.5Z" fill="#3BCB8A"/>
-<path id="Vector_43" d="M394 168H390V319.8H394" stroke="#BDBDBD" stroke-width="0.6"/>
 <path id="Vector_44" d="M468 322.8V347.8" stroke="#3BCB8A"/>
 <path id="Vector_45" d="M464.5 346.8L468 352.8L471.5 346.8H464.5Z" fill="#3BCB8A"/>
 <path id="Vector_46" d="M468 387.4V396.4" stroke="#3BCB8A"/>
 <path id="Vector_47" d="M464.5 395.4L468 401.4L471.5 395.4H464.5Z" fill="#3BCB8A"/>
 <path id="Vector_48" d="M468 436V445" stroke="#3BCB8A"/>
 <path id="Vector_49" d="M464.5 444L468 450L471.5 444H464.5Z" fill="#3BCB8A"/>
-<path id="Vector_50" d="M394 341.8H390V481.6H394" stroke="#BDBDBD" stroke-width="0.6"/>
 <path id="Vector_51" d="M468 484.6V531.6" stroke="#3BCB8A" stroke-dasharray="3 3"/>
 <path id="Vector_52" d="M464.5 530.6L468 536.6L471.5 530.6H464.5Z" fill="#3BCB8A"/>
 <path id="Vector_53" d="M468 571.2V580.2" stroke="#3BCB8A"/>
 <path id="Vector_54" d="M464.5 579.2L468 585.2L471.5 579.2H464.5Z" fill="#3BCB8A"/>
 <path id="Vector_55" d="M468 619.8V628.8" stroke="#3BCB8A"/>
 <path id="Vector_56" d="M464.5 627.8L468 633.8L471.5 627.8H464.5Z" fill="#3BCB8A"/>
-<path id="Vector_57" d="M394 525.6H390V665.4H394" stroke="#BDBDBD" stroke-width="0.6"/>
 <path id="Vector_58" d="M468 668.4V678.4" stroke="#3BCB8A"/>
 <path id="Vector_59" d="M464.5 677.4L468 683.4L471.5 677.4H464.5Z" fill="#3BCB8A"/>
 <path id="Vector_60" d="M468 694.4C470.761 694.4 473 692.161 473 689.4C473 686.639 470.761 684.4 468 684.4C465.239 684.4 463 686.639 463 689.4C463 692.161 465.239 694.4 468 694.4Z" fill="white" stroke="#1E1E1E"/>
