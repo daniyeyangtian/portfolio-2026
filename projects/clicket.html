@@ -354,22 +354,25 @@
   })();
 </script>
 <script>
-  // Overview: the opening question above the paragraph (20 px, the case studies' lead size); the paragraph
-  // and everything below it move down to make room.
+  // Overview: no "Overview" label; the opening question takes the title's place (28 px like the
+  // section titles, regular weight, on the title line x 112), the paragraph follows 24 px below it
+  // and everything under it moves to fit.
   (() => {
     const frame = document.getElementById("frame");
     const para = frame && frame.querySelector('[data-node-id="95:76624"]');
-    if (!para) return;
+    const title = frame && frame.querySelector('[data-node-id="95:76623"]');
+    if (!para || !title) return;
     const z = () => frame.getBoundingClientRect().width / 1220;
     const fy = v => (v - frame.getBoundingClientRect().top) / z();
-    const top = fy(para.getBoundingClientRect().top);
-    const room = makeCaseRoom(top - 1);
-    const sec = document.createElement("p");
-    sec.className = "case-insert";
-    sec.style.cssText = `position:absolute;left:190px;top:${top}px;width:816px;margin:0;z-index:2;font:400 20px/1.4 Geist,sans-serif;color:#141414`;
-    sec.textContent = "Ever wondered why your photos never look like the ones you see online, even with the exact same camera?";
-    addCaseSection(sec, room);
-    const fit = () => room.move(Math.round(sec.offsetHeight + 16));
+    const tTop = fy(title.getBoundingClientRect().top), pTop = fy(para.getBoundingClientRect().top);
+    title.style.visibility = "hidden";
+    const room = makeCaseRoom(pTop - 1);
+    const q = document.createElement("h2");
+    q.className = "case-insert";
+    q.style.cssText = `position:absolute;left:112px;top:${tTop}px;width:894px;margin:0;z-index:2;font:400 28px/1.3 Geist,sans-serif;color:#000`;
+    q.textContent = "Ever wondered why your photos never look like the ones you see online, even with the exact same camera?";
+    addCaseSection(q, room);
+    const fit = () => room.move(Math.round(tTop + q.offsetHeight + 24 - pTop));
     fit();
     document.fonts?.ready.then(fit);
     addEventListener("load", fit);
