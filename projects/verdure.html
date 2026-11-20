@@ -1270,5 +1270,35 @@
     });
   })();
 </script>
+<script>
+  // Final Screens comes before Visual Style: the two blocks (title + content) trade places. Each
+  // block keeps the room it had down to the next title, so the spacing is unchanged.
+  (() => {
+    const frame = document.getElementById("frame");
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = el => (el.getBoundingClientRect().top - frame.getBoundingClientRect().top) / z();
+    // the page holds more than one copy of each layer; the one on show is the highest
+    const pick = (sel, ok) => [...frame.querySelectorAll(sel)]
+      .filter(e => e.getBoundingClientRect().height > 0 && ok(e))
+      .sort((p, q) => fy(p) - fy(q))[0];
+    const title = t => pick("p", p => p.textContent.trim() === t);
+    const swap = () => {
+      const vsT = title("Visual Style"), fsT = title("Final Screens");
+      const vsG = pick('[data-name="Visual Style"]', () => true);
+      const fsG = pick("div", d => d.parentElement?.dataset.name === "verdure3" && d.textContent.includes("Hover a flow to see"));
+      const parts = [vsT, fsT, vsG, fsG];
+      if (parts.some(e => !e)) return;
+      parts.forEach(e => { e.style.marginTop = ""; });
+      const wfT = pick("p", p => p.textContent.trim() === "Workflows" && fy(p) > fy(fsT));
+      if (!wfT) return;
+      const A = fy(fsT) - fy(vsT), B = fy(wfT) - fy(fsT);   // each block, down to the next title
+      [vsT, vsG].forEach(e => { e.style.marginTop = B + "px"; });
+      [fsT, fsG].forEach(e => { e.style.marginTop = -A + "px"; });
+    };
+    swap();
+    document.fonts?.ready.then(swap);
+    if (document.readyState !== "complete") addEventListener("load", swap);
+  })();
+</script>
 </body>
 </html>
