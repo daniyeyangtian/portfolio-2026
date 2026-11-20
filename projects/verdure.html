@@ -1017,7 +1017,7 @@
     const old = [...frame.querySelectorAll("img")].find(i => /workflows\.png/.test(i.getAttribute("src") || ""));
     if (!old) return;
     const z = () => frame.getBoundingClientRect().width / 1220;
-    const H = parseFloat(old.style.height), W = 720, PAD = 48, CUT = 160;   // CUT: the title at the top of each export
+    const H = parseFloat(old.style.height), W = 720, PAD = 48, CUT = 160, GAP = 40;   // CUT: the title at the top of each export
     const FLOWS = [["a", "Plant care and management", 1047, 1913], ["b", "Plant selection and start growing", 1025, 2684], ["c", "Smart physical adjustment", 1044, 2354]];
     const bottom = (old.getBoundingClientRect().bottom - frame.getBoundingClientRect().top) / z();
     const room = makeCaseRoom(bottom - 1);
@@ -1045,7 +1045,10 @@
     let ph = 0, raf = 0, open = -1;
     const set = v => {
       ph = v; panel.style.height = v + "px";
-      const total = cardsH() + v;
+      // a gap between the cards and the open flow, so the flow never runs into the cards' outline
+      const gap = Math.min(v, GAP);
+      panel.style.marginTop = gap + "px";
+      const total = cardsH() + gap + v;
       room.move(total - H);   // the page below sits right under the cards (and the open flow)
       window.caseSectionsUpdate?.();
     };
