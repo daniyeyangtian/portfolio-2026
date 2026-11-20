@@ -378,5 +378,33 @@
     addEventListener("load", fit);
   })();
 </script>
+<script>
+  // Final Product System: a short bridge from the Ideation concepts to the system, between the
+  // title and the diagram (lead 20 px + body 16 px, as in the other sections); the diagram and
+  // everything below it move down to fit. The text sits in the page layer, where the diagram was,
+  // and moves with the title (the rooms above move both with `translate`).
+  (() => {
+    const frame = document.getElementById("frame");
+    const dia = frame && frame.querySelector('img[data-node-id="161:138691"]');
+    const title = frame && frame.querySelector('[data-node-id="161:138624"]');
+    if (!dia || !title) return;
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = v => (v - frame.getBoundingClientRect().top) / z();
+    const room = makeCaseRoom(fy(dia.getBoundingClientRect().top) - 1);
+    const sec = document.createElement("section");
+    sec.style.cssText = `position:absolute;left:190px;top:${dia.style.top};width:816px;z-index:2;font-family:Geist,sans-serif`;
+    sec.innerHTML =
+      '<p style="margin:0;font:400 20px/1.4 Geist,sans-serif;color:#141414">Five touchpoints, folded into one system.</p>' +
+      '<p style="margin:12px 0 0;font:400 16px/1.5 Geist,sans-serif;color:#737373">The concepts became three parts that work together: a clip-on smart device (the product), a companion app (software and app), and rental stations at scenic spots (installation and on-site activities). Around them, the newbies bring their shots and visits, the pros their knowledge, scenic spot owners the location and rental services the cameras. In return, the newbies get knowledge back and everyone else earns money.</p>';
+    dia.parentElement.insertBefore(sec, dia);
+    const follow = () => { sec.style.translate = getComputedStyle(title).translate; };
+    follow();
+    new MutationObserver(follow).observe(title, { attributes: true, attributeFilter: ["style"] });
+    const fit = () => room.move(Math.round(sec.offsetHeight + 40));
+    fit();
+    document.fonts?.ready.then(fit);
+    addEventListener("load", fit);
+  })();
+</script>
 </body>
 </html>
