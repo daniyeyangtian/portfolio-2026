@@ -1310,7 +1310,11 @@
 <style>
   /* Outcome & Reflection: what I've learned / what I'd do differently, side by side (as on Clicket) */
   .vr { position: absolute; left: 138px; width: 960px; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; font-family: Geist, sans-serif; }
-  .vr h3 { margin: 0 0 16px; font: 400 12px/normal "Geist Mono", monospace; text-transform: uppercase; color: #6fd197; }
+  .vr h3 { margin: 0 0 16px; font: 400 12px/normal "Geist Mono", monospace; text-transform: uppercase; color: #137E44; }
+  /* the Recognition label in the same darker green */
+  :is([data-node-id="35:572"], [data-copy-node-id="35:572"]) { color: #137E44 !important; }
+  /* "Not yet validated" is gone */
+  :is([data-node-id="35:577"], [data-copy-node-id="35:577"], [data-node-id="35:578"], [data-copy-node-id="35:578"]) { visibility: hidden !important; }   /* kept in place: the reflection script measures from it */
   .vr ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 20px; counter-reset: vr; }
   .vr li { counter-increment: vr; display: grid; grid-template-columns: 24px 1fr; }
   .vr li::before { content: counter(vr, decimal-leading-zero); font: 400 12px/22px "Geist Mono", monospace; color: #9a9a9a; }
@@ -1319,7 +1323,7 @@
 </style>
 <script>
   // Outcome & Reflection: the single "What I would do differently" paragraph becomes two columns,
-  // what I've learned and what I'd do differently; "Not yet validated" and below move to fit.
+  // what I've learned and what I'd do differently; what was under it ("Not yet validated", now hidden) moves to fit.
   (() => {
     const frame = document.getElementById("frame");
     const z = () => frame.getBoundingClientRect().width / 1220;
@@ -1344,7 +1348,7 @@
       </ol></div>
       <div><h3>What I'd do differently</h3><ol>
         ${item("Test the planting, not only the furniture.", "Watering, drainage and light on the real shelf, over weeks, not just how people reach and adjust it.")}
-        ${item("Put the app in front of users.", "The interface was never tested with real users; next time it gets the same 1:1 treatment as the hardware.")}
+        ${item("Pick a need people can't put off.", "We came second to a height-adjustable baby cradle built on the same kind of linear motor. Lifting a baby every night is a daily strain; tending plants is a pleasure people can skip. Next time I'd test how urgent a need is before building for it.")}
         ${item("Check that the motor pays for itself.", "Reusing FlexiSpot's linear motor should keep the cost down. I'd price the parts against a retail target before adding more features.")}
       </ol></div>`;
     label.parentElement.appendChild(sec);
