@@ -1,6 +1,7 @@
 # Verdure case study (projects/verdure.html): apply the "fewer labels" pass from Figma (page
 # "verdure ui", frames "… · fewer labels") to the app screens the page shows as live layers
-# (the phone strip at the top).
+# (the phone strip at the top, "Hero phone · …" layers included; the hero's Bring M1 down phone
+# is a picture, assets/verdure/hero-height.png, exported from the Figma copy).
 #
 # Inside every layer named like a Verdure screen ("Home · D · Light", "Care · 1 · …", …):
 #   - the tab bar's words (Today, Garden, Explore, You) go; the icons say it
@@ -35,7 +36,7 @@ def svg(name, px):
 
 def screens(s):
     out = []
-    for m in re.finditer(r'<div [^>]*data-name="(?:Home|Plant|Care|Harvest|You|Setup|Onboarding) · [^"]*"[^>]*>', s):
+    for m in re.finditer(r'<div [^>]*data-name="(?:Hero phone|Home|Plant|Care|Harvest|You|Setup|Onboarding) · [^"]*"[^>]*>', s):
         depth, i = 1, m.end()
         for t in re.finditer(r"<(/?)div\b[^>]*>", s[i:]):
             depth += -1 if t.group(1) else 1
