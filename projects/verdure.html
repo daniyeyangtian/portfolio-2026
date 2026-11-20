@@ -1027,11 +1027,11 @@
     const chev = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 5 4 4 4-4"/></svg>`;
     wf.innerHTML = `<div class="wf-cards">` + FLOWS.map(([k, name]) =>
         `<button type="button" class="wf-card" aria-expanded="false" aria-controls="wf-panel">` +
-        `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png" alt="" loading="lazy"><span class="wf-more">${chev}</span></span>` +
+        `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png?v=2" alt="" loading="lazy"><span class="wf-more">${chev}</span></span>` +
         `<span class="wf-name"><span class="wf-tag">Flow ${k.toUpperCase()}</span><span class="wf-title">${name}</span></span>` +
         `</button>`).join("") + `</div>` +
       `<div class="wf-panel" id="wf-panel" role="region" aria-label="Workflow">` + FLOWS.map(([k, name]) =>
-        `<img src="../assets/verdure/workflow-${k}.png" alt="Flow ${k.toUpperCase()}: ${name}" loading="lazy">`).join("") + `</div>`;
+        `<img src="../assets/verdure/workflow-${k}.png?v=2" alt="Flow ${k.toUpperCase()}: ${name}" loading="lazy">`).join("") + `</div>`;
     old.replaceWith(wf);
     // the rooms above move the old picture with \`translate\`; the cards take it over
     const follow = () => { const tr = old.style.translate; if (tr && tr !== "none") wf.style.translate = tr; };
