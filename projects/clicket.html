@@ -344,12 +344,12 @@
      "142:110931", "142:110927", "142:110928", "142:110929", "142:110930",
      "142:110910", "142:110909", "142:110908", "142:110905", "142:110906", "142:110907"]
       .forEach(id => frame.querySelectorAll(`[data-node-id="${id}"]`).forEach(e => { e.style.display = "none"; }));
-    const W = 1096, H = Math.round(W * 1280 / 2192), OLD = box.offsetHeight;   // same frame as the Final Product System diagram
+    const W = 1096, H = Math.round(W * 1328 / 2192), OLD = box.offsetHeight;   // same frame as the Final Product System diagram
     const room = makeCaseRoom(fy(box.getBoundingClientRect().bottom) - 1);
     box.style.left = "86px";
     box.style.width = W + "px";
     box.style.height = H + "px";
-    box.innerHTML = '<img src="../assets/clicket/design-concepts.png?v=3" alt="Design concepts: the newbies and the pros exchange at the centre; three factors surround them (learning pattern, extrinsic factors, motivation and feelings), each with its needs, answered by five touchpoints: product, software, activity, app and installation" style="display:block;width:100%;height:100%" decoding="async">';
+    box.innerHTML = '<img src="../assets/clicket/design-concepts.png?v=4" alt="Design concepts: the newbies and the pros exchange at the centre; three factors surround them (learning pattern, extrinsic factors, motivation and feelings), each with its needs, answered by five touchpoints, of which three were chosen: the product (a clip-on device), the app (a companion app) and the installation (a rental station); software and activity were explored" style="display:block;width:100%;height:100%" decoding="async">';
     room.move(H - OLD);
   })();
 </script>
