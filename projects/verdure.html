@@ -1125,5 +1125,80 @@
     window.caseSectionsUpdate();
   })();
 </script>
+<style>
+  /* Storyboard: folded away behind one line; "here" opens it */
+  .sb-cta { position: absolute; left: 114px; z-index: 2; margin: 0; font: 400 18px/1.5 Geist, sans-serif; color: #6f6f6f; }
+  .sb-cta button { padding: 0; border: 0; background: none; font: inherit; color: #137E44; cursor: pointer;
+                   text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .sb-cta button:hover { text-decoration-thickness: 2px; }
+  .sb-cta button:focus-visible { outline: 2px solid #137E44; outline-offset: 3px; border-radius: 3px; }
+  .sb-box { overflow: hidden; transition: none; }
+  .sb-box > img { height: 735px !important; inset: 0 0 auto 0 !important; }
+  .sb-cap { opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
+  .sb-cap.is-shown { opacity: 1; visibility: visible; transition: opacity .4s; }
+</style>
+<script>
+  // Storyboard: the picture is folded away; one line under the title says what it is, and "here"
+  // opens it (the page below moves down, a case room) and closes it again.
+  (() => {
+    const frame = document.getElementById("frame");
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = v => (v - frame.getBoundingClientRect().top) / z();
+    // the page holds two copies (one sits in a clipped window); the shown one is the higher up
+    const box = [...frame.querySelectorAll('[data-name="Group 3428518 1"]')]
+      .filter(e => fy(e.getBoundingClientRect().top) > 900)
+      .sort((p, q) => p.getBoundingClientRect().top - q.getBoundingClientRect().top)[0];
+    if (!box) return;
+    const H = 735, LINE = 64;   // the picture's height; the line's room above it when open
+    const room = makeCaseRoom(fy(box.getBoundingClientRect().bottom) - 1);
+    // the panel captions are their own text layers over the picture: they fold away with it
+    const br = box.getBoundingClientRect();
+    const caps = [...box.parentNode.querySelectorAll('[data-name="Caption"] p')].filter(p => {
+      const r = p.getBoundingClientRect();
+      return r.height > 0 && r.top >= br.top - 1 && r.top <= br.bottom + br.height * .2 && r.left >= br.left - 1 && r.right <= br.right + 1;
+    });
+    // the last row hangs under the picture, so the room below already moves it
+    caps.forEach(p => { p.classList.add("sb-cap"); p._sbBelow = p.getBoundingClientRect().top > br.bottom; });
+    box.classList.add("sb-box");
+    const cta = document.createElement("p");
+    cta.className = "sb-cta";
+    cta.style.top = box.style.top || getComputedStyle(box).top;
+    cta.innerHTML = 'Want to see how Verdure fits into a day at home? Take a look <button type="button" aria-expanded="false" aria-controls="sb-box">here</button>.';
+    box.id = "sb-box";
+    box.parentNode.insertBefore(cta, box);
+    // the rooms above move the picture with `translate`; the line goes with it
+    const follow = () => { cta.style.translate = getComputedStyle(box).translate; };
+    follow();
+    new MutationObserver(follow).observe(box, { attributes: true, attributeFilter: ["style"] });
+    const btn = cta.querySelector("button");
+    let h = 0, raf = 0;
+    const set = v => {
+      h = v;
+      box.style.height = v + "px";
+      box.style.marginTop = (v > 0 ? LINE : 0) + "px";
+      caps.forEach(p => { if (!p._sbBelow) p.style.marginTop = (v > 0 ? LINE : 0) + "px"; p.classList.toggle("is-shown", v > H * .9); });
+      room.move((v > 0 ? LINE + v : LINE) - H);   // closed: only the line; open: line + picture
+      window.caseSectionsUpdate?.();
+    };
+    set(0);
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    const go = to => {
+      cancelAnimationFrame(raf);
+      if (still.matches) return set(to);
+      const from = h, t0 = performance.now(), D = 600;
+      const step = now => {
+        const t = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - t, 3);
+        set(from + (to - from) * e);
+        if (t < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+    btn.addEventListener("click", () => {
+      const open = btn.getAttribute("aria-expanded") !== "true";
+      btn.setAttribute("aria-expanded", open);
+      go(open ? H : 0);
+    });
+  })();
+</script>
 </body>
 </html>
