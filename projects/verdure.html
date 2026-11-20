@@ -1126,20 +1126,59 @@
   })();
 </script>
 <style>
-  /* Storyboard: folded away behind one line; "here" opens it */
+  /* Storyboard: the page keeps one line under the title; "here" opens the hand-drawn
+     storyboard in a window over the case study, with the same back key as the projects viewer */
   .sb-cta { position: absolute; left: 114px; z-index: 2; margin: 0; font: 400 18px/1.5 Geist, sans-serif; color: #6f6f6f; }
   .sb-cta button { padding: 0; border: 0; background: none; font: inherit; color: #137E44; cursor: pointer;
                    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .sb-cta button:hover { text-decoration-thickness: 2px; }
   .sb-cta button:focus-visible { outline: 2px solid #137E44; outline-offset: 3px; border-radius: 3px; }
-  .sb-box { overflow: hidden; transition: none; }
-  .sb-box > img { height: 735px !important; inset: 0 0 auto 0 !important; }
-  .sb-cap { opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
-  .sb-cap.is-shown { opacity: 1; visibility: visible; transition: opacity .4s; }
+  .sb-gone { display: none !important; }
+
+  /* the popup is a browser window like the Other Work cards: title bar with the window buttons
+     and one tab, an address bar, then the whole storyboard on one sheet (scaled to fit, no scroll) */
+  .sb-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center;
+              background: rgba(20, 22, 21, .32); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+              opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility 0s .3s; }
+  .sb-modal.is-open { opacity: 1; visibility: visible; transition: opacity .3s ease; }
+  .sb-win { --bar: #e4e5e8; --tab: #fff; width: 1240px; border-radius: 12px; overflow: hidden; background: var(--tab);
+            box-shadow: 0 0 0 1px rgba(20,25,35,.10), 0 30px 70px -10px rgba(20,25,35,.40);
+            transform: translateY(24px) scale(.98); opacity: 0;
+            transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .35s ease; }
+  .sb-modal.is-open .sb-win { transform: none; opacity: 1; }
+  .sb-bar { display: flex; align-items: flex-end; gap: 14px; height: 38px; padding: 0 10px 0 12px; background: var(--bar); }
+  .sb-dots { display: flex; gap: 6px; align-self: center; }
+  .sb-dots i, .sb-dots button { width: 11px; height: 11px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; }
+  .sb-dots button { background: #ff5f57; cursor: pointer; }
+  .sb-dots i:nth-child(2) { background: #febc2e; } .sb-dots i:nth-child(3) { background: #28c840; }
+  .sb-dots button svg { width: 7px; height: 7px; opacity: 0; transition: opacity .15s; }
+  .sb-dots:hover button svg, .sb-dots button:focus-visible svg { opacity: 1; }
+  .sb-dots button:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+  .sb-tab { position: relative; display: flex; align-items: center; gap: 7px; height: 30px; padding: 0 8px 0 11px;
+            background: var(--tab); border-radius: 9px 9px 0 0; font: 500 12.5px/1 Geist, sans-serif; color: #1f2226; }
+  .sb-tab::before, .sb-tab::after { content: ""; position: absolute; bottom: 0; width: 9px; height: 9px; }
+  .sb-tab::before { left: -9px; background: radial-gradient(circle at 0 0, transparent 9px, var(--tab) 9.5px); }
+  .sb-tab::after { right: -9px; background: radial-gradient(circle at 100% 0, transparent 9px, var(--tab) 9.5px); }
+  .sb-fav { width: 10px; height: 10px; border-radius: 3px; background: #6fd197; }
+  .sb-tab button { margin-left: 6px; width: 18px; height: 18px; padding: 0; border: 0; border-radius: 5px; background: none;
+                   font: 14px/1 Geist, sans-serif; color: #8a8d93; cursor: pointer; }
+  .sb-tab button:hover { background: #eceef0; color: #1f2226; }
+  .sb-url { display: flex; align-items: center; margin: 6px 10px 0; height: 24px; padding: 0 10px; border-radius: 999px;
+            background: #f1f2f4; font: 11px/1 "DM Mono", "Geist Mono", monospace; color: #6a6e74; white-space: nowrap; }
+  .sb-url b { font-weight: 400; color: #2a2d31; }
+  .sb-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px 20px; margin: 0; padding: 22px 24px 24px; list-style: none; }
+  .sb-grid figure { margin: 0; }
+  .sb-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .sb-grid figcaption { display: flex; gap: 6px; margin-top: 8px; font: 400 11px/1.4 Geist, sans-serif; color: #4b4f55; }
+  .sb-grid figcaption b { flex: none; font: 500 11px/1.4 "Geist Mono", monospace; color: #1f2226; }
+  .sb-end { display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 1; padding: 0 2px; }
+  .sb-end h2 { margin: 0 0 6px; font: 600 26px/1.1 Geist, sans-serif; letter-spacing: -.01em; color: #111; }
+  .sb-end p { margin: 0; font: 400 12px/1.45 Geist, sans-serif; color: #6f6f6f; }
+  @media (prefers-reduced-motion: reduce) { .sb-modal, .sb-win { transition: none; } }
 </style>
 <script>
-  // Storyboard: the picture is folded away; one line under the title says what it is, and "here"
-  // opens it (the page below moves down, a case room) and closes it again.
+  // Storyboard: the old picture and its captions leave the page (a case room closes the gap);
+  // one line stays under the title and "here" opens the hand-drawn storyboard in a window.
   (() => {
     const frame = document.getElementById("frame");
     const z = () => frame.getBoundingClientRect().width / 1220;
@@ -1149,54 +1188,85 @@
       .filter(e => fy(e.getBoundingClientRect().top) > 900)
       .sort((p, q) => p.getBoundingClientRect().top - q.getBoundingClientRect().top)[0];
     if (!box) return;
-    const H = 735, LINE = 64;   // the picture's height; the line's room above it when open
+    const H = 735, LINE = 64;   // the picture's height; the room the line takes instead
     const room = makeCaseRoom(fy(box.getBoundingClientRect().bottom) - 1);
-    // the panel captions are their own text layers over the picture: they fold away with it
     const br = box.getBoundingClientRect();
-    const caps = [...box.parentNode.querySelectorAll('[data-name="Caption"] p')].filter(p => {
+    [...box.parentNode.querySelectorAll('[data-name="Caption"] p')].forEach(p => {
       const r = p.getBoundingClientRect();
-      return r.height > 0 && r.top >= br.top - 1 && r.top <= br.bottom + br.height * .2 && r.left >= br.left - 1 && r.right <= br.right + 1;
+      if (r.height > 0 && r.top >= br.top - 1 && r.top <= br.bottom + br.height * .2 && r.left >= br.left - 1 && r.right <= br.right + 1)
+        p.classList.add("sb-gone");
     });
-    // the last row hangs under the picture, so the room below already moves it
-    caps.forEach(p => { p.classList.add("sb-cap"); p._sbBelow = p.getBoundingClientRect().top > br.bottom; });
-    box.classList.add("sb-box");
     const cta = document.createElement("p");
     cta.className = "sb-cta";
     cta.style.top = box.style.top || getComputedStyle(box).top;
-    cta.innerHTML = 'Want to see how Verdure fits into a day at home? Take a look <button type="button" aria-expanded="false" aria-controls="sb-box">here</button>.';
-    box.id = "sb-box";
+    cta.innerHTML = 'Want to see how Verdure fits into a day at home? Take a look <button type="button" aria-haspopup="dialog" aria-controls="sb-modal">here</button>.';
     box.parentNode.insertBefore(cta, box);
-    // the rooms above move the picture with `translate`; the line goes with it
     const follow = () => { cta.style.translate = getComputedStyle(box).translate; };
     follow();
     new MutationObserver(follow).observe(box, { attributes: true, attributeFilter: ["style"] });
-    const btn = cta.querySelector("button");
-    let h = 0, raf = 0;
-    const set = v => {
-      h = v;
-      box.style.height = v + "px";
-      box.style.marginTop = (v > 0 ? LINE : 0) + "px";
-      caps.forEach(p => { if (!p._sbBelow) p.style.marginTop = (v > 0 ? LINE : 0) + "px"; p.classList.toggle("is-shown", v > H * .9); });
-      room.move((v > 0 ? LINE + v : LINE) - H);   // closed: only the line; open: line + picture
-      window.caseSectionsUpdate?.();
+    box.classList.add("sb-gone");
+    room.move(LINE - H);
+    window.caseSectionsUpdate?.();
+
+    const CAPS = [
+      "After her evening yoga session, Ning returns home, calm and energized. She slips off her sneakers, takes out her earbuds, and lets out a quiet sigh of contentment.",
+      "Her eyes are naturally drawn to the Verdure Planting unit standing gracefully between the living and dining areas — her daily green companion.",
+      "Heading into the kitchen, she starts planning her post-workout treat: a refreshing veggie smoothie and a protein-packed salad.",
+      "She opens the fridge, scanning for ingredients, but hesitates — What greens should I use today?",
+      "Just then, her phone buzzes. A notification from the Verdure app: “Your kale is ready to harvest!”",
+      "She grabs her favorite harvest bowl and walks over to the Verdure Planting unit.",
+      "She folds down the small workstation tray, placing her kitchen shears and bowl neatly on the surface.",
+      "With a tap in the app, she adjusts the height of the garden.",
+      "Soft mechanical sounds follow — the entire frame gently lowers to a comfortable working position.",
+      "Ning snips off a few lush, perfectly grown kale leaves.",
+      "Later, at the dining table beside her vertical garden, she digs into her salad and smoothie combo — fresh, colorful, and powered by her very own indoor farm.",
+    ];
+    const modal = document.createElement("div");
+    modal.className = "sb-modal"; modal.id = "sb-modal";
+    const X = '<svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1.5 1.5l5 5M6.5 1.5l-5 5" stroke="#6b1410" stroke-width="1.3" stroke-linecap="round"/></svg>';
+    modal.innerHTML = `<div class="sb-win" role="dialog" aria-modal="true" aria-labelledby="sb-title">
+      <div class="sb-bar">
+        <span class="sb-dots"><button type="button" class="sb-x" aria-label="Close the storyboard">${X}</button><i></i><i></i></span>
+        <span class="sb-tab"><span class="sb-fav"></span>Storyboard<button type="button" class="sb-x" aria-label="Close the storyboard" tabindex="-1">×</button></span>
+      </div>
+      <div class="sb-url">verdure&nbsp;/&nbsp;<b>storyboard</b></div>
+      <ol class="sb-grid">${CAPS.map((c, i) => {
+        const n = String(i + 1).padStart(2, "0");
+        return `<li><figure><img src="../assets/verdure/storyboard/sb-${n}.jpg" alt="" decoding="async">
+          <figcaption><b>${n}</b><span>${c}</span></figcaption></figure></li>`;
+      }).join("")}<li class="sb-end"><h2 id="sb-title">Storyboard</h2><p>An evening with Ning and Verdure, from the front door to the dinner table.</p></li></ol>
+    </div>`;
+    document.body.appendChild(modal);
+    const win = modal.querySelector(".sb-win"), btn = cta.querySelector("button"), shut = modal.querySelector(".sb-dots .sb-x");
+    // the whole sheet always fits the screen: scale the window down to the space there is
+    const fit = () => {
+      win.style.zoom = 1;
+      const k = Math.min(1, (innerWidth - 48) / win.offsetWidth, (innerHeight - 48) / win.offsetHeight);
+      win.style.zoom = k;
     };
-    set(0);
-    const still = matchMedia("(prefers-reduced-motion: reduce)");
-    const go = to => {
-      cancelAnimationFrame(raf);
-      if (still.matches) return set(to);
-      const from = h, t0 = performance.now(), D = 600;
-      const step = now => {
-        const t = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - t, 3);
-        set(from + (to - from) * e);
-        if (t < 1) raf = requestAnimationFrame(step);
-      };
-      raf = requestAnimationFrame(step);
+    let last = null, overflow = "";
+    const open = () => {
+      last = document.activeElement;
+      overflow = document.documentElement.style.overflow;
+      document.documentElement.style.overflow = "hidden";
+      modal.classList.add("is-open");
+      fit();
+      requestAnimationFrame(() => shut.focus({ preventScroll: true }));
     };
-    btn.addEventListener("click", () => {
-      const open = btn.getAttribute("aria-expanded") !== "true";
-      btn.setAttribute("aria-expanded", open);
-      go(open ? H : 0);
+    const close = () => {
+      if (!modal.classList.contains("is-open")) return;
+      modal.classList.remove("is-open");
+      document.documentElement.style.overflow = overflow;
+      (last || btn).focus({ preventScroll: true });
+    };
+    btn.addEventListener("click", open);
+    modal.querySelectorAll(".sb-x").forEach(b => b.addEventListener("click", close));
+    modal.addEventListener("click", e => { if (e.target === modal) close(); });
+    addEventListener("resize", () => { if (modal.classList.contains("is-open")) fit(); });
+    addEventListener("keydown", e => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") return close();
+      if (e.key === "Tab") { e.preventDefault(); shut.focus(); }   // one control inside
     });
   })();
 </script>
