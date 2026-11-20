@@ -378,5 +378,53 @@
     addEventListener("load", fit);
   })();
 </script>
+<style>
+  /* Reflection, at the end of the case study: what I learned / what can be improved, side by side */
+  .rf { position: absolute; left: 112px; width: 996px; z-index: 2; font-family: Geist, sans-serif; }
+  .rf h2 { margin: 0 0 40px; font: 500 28px/normal Geist, sans-serif; color: #000; }
+  .rf-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; padding-left: 78px; }
+  .rf h3 { margin: 0 0 20px; font: 400 12px/1 "Geist Mono", monospace; letter-spacing: .04em; text-transform: uppercase; color: #ef6f6c; }
+  .rf ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 22px; counter-reset: rf; }
+  .rf li { counter-increment: rf; display: grid; grid-template-columns: 24px 1fr; }
+  .rf li::before { content: counter(rf, decimal-leading-zero); font: 400 12px/22px "Geist Mono", monospace; color: #9a9a9a; }
+  .rf b { display: block; font: 500 16px/1.4 Geist, sans-serif; color: #141414; }
+  .rf span { display: block; margin-top: 4px; font: 400 15px/1.5 Geist, sans-serif; color: #737373; }
+</style>
+<script>
+  // Reflection: a new closing section under User Testing (the small Reflection list beside it goes).
+  (() => {
+    const frame = document.getElementById("frame");
+    const ut = frame && frame.querySelector('[data-node-id="218:47389"]');   // "User Testing" title
+    if (!ut) return;
+    ["218:47391", "218:47392", "218:47394", "218:47395", "218:47396", "218:47398", "218:47399"]
+      .forEach(id => frame.querySelectorAll(`[data-node-id="${id}"]`).forEach(e => { e.style.display = "none"; }));
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = v => (v - frame.getBoundingClientRect().top) / z();
+    const room = makeCaseRoom(fy(frame.getBoundingClientRect().bottom) - 160);   // nothing below: it only grows the page
+    const sec = document.createElement("section");
+    sec.className = "rf";
+    sec.style.top = "12370px";   // page-layer px, under the User Testing photos
+    const item = (b, t) => `<li><div><b>${b}</b><span>${t}</span></div></li>`;
+    sec.innerHTML = `<h2>Reflection</h2><div class="rf-cols">
+      <div><h3>What I've learned</h3><ol>
+        ${item("Design the practice, not the product.", "The gap between newbies and pros was never the camera. It was how often they went out and who they learned from, so the habit mattered more than any feature.")}
+        ${item("A system only works if everyone gets something back.", "Scenic spot owners and rental services only fit into the loop once it brought them money or visitors.")}
+        ${item("Hardware, app and service have to be designed together.", "Every hand-off between the clip-on device, the app and the rental station is a place where people can get lost.")}
+      </ol></div>
+      <div><h3>What can be improved</h3><ol>
+        ${item("Test the device and the app together.", "User testing covered the hardware; the full flow between the clip-on device and the app still needs testing on a real shoot.")}
+        ${item("Fewer steps before the first shot.", "Pairing, renting and navigating all come before taking a photo. The flow, and the device's ergonomics, should be simpler.")}
+        ${item("Check my assumptions with the stakeholders.", "What scenic spot owners and rental services want is my reading so far; the next step is to ask them directly.")}
+      </ol></div></div>`;
+    ut.parentElement.appendChild(sec);
+    const follow = () => { sec.style.translate = getComputedStyle(ut).translate; };
+    follow();
+    new MutationObserver(follow).observe(ut, { attributes: true, attributeFilter: ["style"] });
+    const fit = () => { const end = fy(sec.getBoundingClientRect().bottom) + 160; room.move(Math.max(0, Math.round(end - fy(frame.getBoundingClientRect().bottom) + room.room.dy))); };
+    fit();
+    document.fonts?.ready.then(fit);
+    addEventListener("load", fit);
+  })();
+</script>
 </body>
 </html>
