@@ -1137,7 +1137,7 @@
 
   /* the popup is a browser window like the Other Work cards: title bar with the window buttons
      and one tab, an address bar, then the whole storyboard on one sheet (scaled to fit, no scroll) */
-  .sb-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center;
+  .sb-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 76px 24px 24px;
               background: rgba(20, 22, 21, .32); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
               opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility 0s .3s; }
   .sb-modal.is-open { opacity: 1; visibility: visible; transition: opacity .3s ease; }
@@ -1171,7 +1171,7 @@
   .sb-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
   .sb-grid figcaption { display: flex; gap: 6px; margin-top: 8px; font: 400 11px/1.4 Geist, sans-serif; color: #4b4f55; }
   .sb-grid figcaption b { flex: none; font: 500 11px/1.4 "Geist Mono", monospace; color: #1f2226; }
-  .sb-end { display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 1; padding: 0 2px; }
+  .sb-end { display: flex; flex-direction: column; justify-content: flex-start; aspect-ratio: 1; padding: 0 2px; }
   .sb-end h2 { margin: 0 0 6px; font: 600 26px/1.1 Geist, sans-serif; letter-spacing: -.01em; color: #111; }
   .sb-end p { margin: 0; font: 400 12px/1.45 Geist, sans-serif; color: #6f6f6f; }
   @media (prefers-reduced-motion: reduce) { .sb-modal, .sb-win { transition: none; } }
@@ -1230,18 +1230,18 @@
         <span class="sb-tab"><span class="sb-fav"></span>Storyboard<button type="button" class="sb-x" aria-label="Close the storyboard" tabindex="-1">×</button></span>
       </div>
       <div class="sb-url">verdure&nbsp;/&nbsp;<b>storyboard</b></div>
-      <ol class="sb-grid">${CAPS.map((c, i) => {
+      <ol class="sb-grid"><li class="sb-end"><h2 id="sb-title">Storyboard</h2><p>An evening with Ning and Verdure, from the front door to the dinner table.</p></li>${CAPS.map((c, i) => {
         const n = String(i + 1).padStart(2, "0");
         return `<li><figure><img src="../assets/verdure/storyboard/sb-${n}.jpg" alt="" decoding="async">
           <figcaption><b>${n}</b><span>${c}</span></figcaption></figure></li>`;
-      }).join("")}<li class="sb-end"><h2 id="sb-title">Storyboard</h2><p>An evening with Ning and Verdure, from the front door to the dinner table.</p></li></ol>
+      }).join("")}</ol>
     </div>`;
     document.body.appendChild(modal);
     const win = modal.querySelector(".sb-win"), btn = cta.querySelector("button"), shut = modal.querySelector(".sb-dots .sb-x");
     // the whole sheet always fits the screen: scale the window down to the space there is
     const fit = () => {
       win.style.zoom = 1;
-      const k = Math.min(1, (innerWidth - 48) / win.offsetWidth, (innerHeight - 48) / win.offsetHeight);
+      const k = Math.min(1, (innerWidth - 48) / win.offsetWidth, (innerHeight - 100) / win.offsetHeight);
       win.style.zoom = k;
     };
     let last = null, overflow = "";
