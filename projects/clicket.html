@@ -330,7 +330,8 @@
   });
 </script>
 <script>
-  // Ideation: the original "Design Concepts" diagram (from the Figma portfolio page, frame 10) in
+  // Ideation: the "Design Concepts" diagram (frame 10 of the Figma portfolio), redrawn in the Final
+  // Product System's style (Figma: "Design Concepts · system style"), in
   // place of the flattened list and the sketch board; the page below moves down to make room.
   (() => {
     const frame = document.getElementById("frame");
@@ -343,12 +344,12 @@
      "142:110931", "142:110927", "142:110928", "142:110929", "142:110930",
      "142:110910", "142:110909", "142:110908", "142:110905", "142:110906", "142:110907"]
       .forEach(id => frame.querySelectorAll(`[data-node-id="${id}"]`).forEach(e => { e.style.display = "none"; }));
-    const W = 620, H = Math.round(W * 1094 / 1234), OLD = box.offsetHeight;
+    const W = 1096, H = Math.round(W * 1280 / 2192), OLD = box.offsetHeight;   // same frame as the Final Product System diagram
     const room = makeCaseRoom(fy(box.getBoundingClientRect().bottom) - 1);
-    box.style.left = (1220 - W) / 2 + "px";
+    box.style.left = "86px";
     box.style.width = W + "px";
     box.style.height = H + "px";
-    box.innerHTML = '<img src="../assets/clicket/design-concepts.png?v=2" alt="Design concepts: the pros and the newbies at the centre, three factors around them (learning pattern, extrinsic factors, motivation and feelings) and the touchpoints that answer them: software, product, activity, app and installation" style="display:block;width:100%;height:100%" decoding="async">';
+    box.innerHTML = '<img src="../assets/clicket/design-concepts.png?v=3" alt="Design concepts: the newbies and the pros exchange at the centre; three factors surround them (learning pattern, extrinsic factors, motivation and feelings), each with its needs, answered by five touchpoints: product, software, activity, app and installation" style="display:block;width:100%;height:100%" decoding="async">';
     room.move(H - OLD);
   })();
 </script>
