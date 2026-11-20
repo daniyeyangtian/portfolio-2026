@@ -1027,11 +1027,11 @@
     const chev = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 5 4 4 4-4"/></svg>`;
     wf.innerHTML = `<div class="wf-cards">` + FLOWS.map(([k, name]) =>
         `<button type="button" class="wf-card" aria-expanded="false" aria-controls="wf-panel">` +
-        `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png?v=3" alt="" loading="lazy"><span class="wf-more">${chev}</span></span>` +
+        `<span class="wf-peek"><img src="../assets/verdure/workflow-${k}.png?v=4" alt="" loading="lazy"><span class="wf-more">${chev}</span></span>` +
         `<span class="wf-name"><span class="wf-tag">Flow ${k.toUpperCase()}</span><span class="wf-title">${name}</span></span>` +
         `</button>`).join("") + `</div>` +
       `<div class="wf-panel" id="wf-panel" role="region" aria-label="Workflow">` + FLOWS.map(([k, name]) =>
-        `<img src="../assets/verdure/workflow-${k}.png?v=3" alt="Flow ${k.toUpperCase()}: ${name}" loading="lazy">`).join("") + `</div>`;
+        `<img src="../assets/verdure/workflow-${k}.png?v=4" alt="Flow ${k.toUpperCase()}: ${name}" loading="lazy">`).join("") + `</div>`;
     old.replaceWith(wf);
     // the rooms above move the old picture with \`translate\`; the cards take it over
     const follow = () => { const tr = old.style.translate; if (tr && tr !== "none") wf.style.translate = tr; };
@@ -1040,7 +1040,11 @@
     const cards = [...wf.querySelectorAll(".wf-card")], imgs = [...wf.querySelectorAll(".wf-panel img")], panel = wf.querySelector(".wf-panel");
     const k = f => W / FLOWS[f][2];
     const full = f => PAD + (FLOWS[f][3] - CUT) * k(f);
-    imgs.forEach((im, f) => im.style.setProperty("--top", 24 - CUT * k(f) + "px"));
+    imgs.forEach((im, f) => {
+      im.style.setProperty("--top", 24 - CUT * k(f) + "px");
+      // the picture is shown from below its title, so round the grey card's new top corners too
+      im.style.clipPath = `inset(${CUT * k(f)}px 0 0 0 round 14px)`;
+    });
     const cardsH = () => wf.querySelector(".wf-cards").offsetHeight;
     let ph = 0, raf = 0, open = -1;
     const set = v => {
