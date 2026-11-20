@@ -329,5 +329,28 @@
     body: "Beginners like Xiaoqi spend most of their budget on a capable camera, then get lost in its settings: they take shot after shot, are let down by the results and come home frustrated. The pros we interviewed improved another way, by going out often, keeping count of their practice and learning from people who had been there. Nothing connects a beginner&rsquo;s camera to that kind of practice, so the gap between simple tools and advanced cameras stays invisible.",
   });
 </script>
+<script>
+  // Ideation: the original "Design Concepts" diagram (from the Figma portfolio page, frame 10) in
+  // place of the flattened list and the sketch board; the page below moves down to make room.
+  (() => {
+    const frame = document.getElementById("frame");
+    const box = frame && frame.querySelector('[data-node-id="228:48033"]');   // the sketch board ("ideation 1")
+    if (!box) return;
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = v => (v - frame.getBoundingClientRect().top) / z();
+    // the list on the left: three dots, three headings, their lines
+    ["161:138614", "161:138616", "161:138617", "142:110912", "142:110918", "142:110919",
+     "142:110931", "142:110927", "142:110928", "142:110929", "142:110930",
+     "142:110910", "142:110909", "142:110908", "142:110905", "142:110906", "142:110907"]
+      .forEach(id => frame.querySelectorAll(`[data-node-id="${id}"]`).forEach(e => { e.style.display = "none"; }));
+    const W = 620, H = Math.round(W * 1094 / 1234), OLD = box.offsetHeight;
+    const room = makeCaseRoom(fy(box.getBoundingClientRect().bottom) - 1);
+    box.style.left = (1220 - W) / 2 + "px";
+    box.style.width = W + "px";
+    box.style.height = H + "px";
+    box.innerHTML = '<img src="../assets/clicket/design-concepts.png?v=2" alt="Design concepts: the pros and the newbies at the centre, three factors around them (learning pattern, extrinsic factors, motivation and feelings) and the touchpoints that answer them: software, product, activity, app and installation" style="display:block;width:100%;height:100%" decoding="async">';
+    room.move(H - OLD);
+  })();
+</script>
 </body>
 </html>
