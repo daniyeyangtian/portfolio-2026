@@ -855,7 +855,7 @@
     render(); syncDots();
   });
 </script>
-<script src="../js/case-insert.js?v=17"></script>
+<script src="../js/case-insert.js?v=24"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
@@ -1377,6 +1377,11 @@
     document.fonts?.ready.then(fit);
     addEventListener("load", fit);
   })();
+</script>
+<script>
+  // one vertical rhythm (js/case-insert.js): 48px from each section title to its content, 160px
+  // between sections. Runs last, once the fonts are in and the page's own scripts have laid it out.
+  addEventListener("load", () => setTimeout(async () => { await window.caseRhythm?.(); window.caseSectionsUpdate?.(); }, 300));
 </script>
 </body>
 </html>

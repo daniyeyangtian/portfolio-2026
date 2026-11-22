@@ -123,4 +123,60 @@
     document.fonts?.ready.then(layout);
     addEventListener("load", layout);
   };
+
+  // caseRhythm({ titleGap, sectionGap }) – one vertical rhythm for the page: each section title
+  //   (28px text starting on the left margin, x 114) sits `titleGap` above the first thing in its
+  //   section, and `sectionGap` below the last thing of the section before. Works down the page one
+  //   gap at a time, measuring after every move; resolves to the moves it made.
+  window.caseRhythm = async ({ titleGap = 48, sectionGap = 160, L = 114 } = {}) => {
+    if (!frame) return [];
+    const shown = e => { for (let a = e; a && a !== frame; a = a.parentElement) { const st = getComputedStyle(a); if (st.display === "none" || st.visibility === "hidden" || st.opacity === "0") return false; } return true; };
+    const xOf = el => (el.getBoundingClientRect().left - frame.getBoundingClientRect().left) / z();
+    const titles = () => [...frame.querySelectorAll("p, h2")].filter(t => {
+      const fs = parseFloat(getComputedStyle(t).fontSize), r = t.getBoundingClientRect();
+      return fs >= 26 && fs < 40 && r.width && Math.abs(xOf(t) - L) < 3 && shown(t) && !t.closest('[data-name*=" · "]');
+    }).sort((a, b) => yOf(a) - yOf(b));
+    // what a section holds: text, pictures, and anything with a fill (cards, panels)
+    const things = () => [...frame.querySelectorAll("p, h3, li, img, svg, video, canvas, button, div, span")].filter(e => {
+      if (e.tagName === "svg" && e.parentElement.closest("svg, p")) return false;
+      const r = e.getBoundingClientRect();
+      if (r.width < 4 || r.height < 4 || r.height / z() > 2000) return false;   // not the page-long layers
+      if (e.tagName === "DIV" || e.tagName === "SPAN" || e.tagName === "BUTTON") {
+        const st = getComputedStyle(e);
+        if (st.backgroundColor === "rgba(0, 0, 0, 0)" && st.backgroundImage === "none") return false;
+      }
+      return shown(e);
+    });
+    // blocks that follow a layer through a MutationObserver catch up before the next measurement
+    const settle = async () => { await Promise.resolve(); await Promise.resolve(); };   // observers deliver as microtasks
+    const moves = [];
+    let ts = titles();
+    const holdsTitle = e => ts.some(t => e.contains(t));
+    for (let i = 0; i < ts.length; i++) {
+      const t = ts[i];
+      // 1) title → content
+      const tb = bottomOf(t);
+      const next = ts[i + 1] ? yOf(ts[i + 1]) : Infinity;
+      let inside = things().filter(e => e !== t && !t.contains(e) && !holdsTitle(e) && yOf(e) >= tb - 2 && yOf(e) < next - 2);
+      if (inside.length) {
+        const first = Math.min(...inside.map(yOf));
+        const d = Math.round(tb + titleGap - first);
+        if (Math.abs(d) >= 2) { makeCaseRoom(first - 0.5).move(d); moves.push([t.textContent.trim().slice(0, 24), "title", d]); await settle(); }
+      }
+      // 2) end of this section → next title
+      ts = titles();
+      if (!ts[i + 1]) break;
+      const nTop = yOf(ts[i + 1]);
+      // (a picture that runs on past the next title belongs to that section, even if it starts a little above it)
+      inside = things().filter(e => e !== ts[i] && !holdsTitle(e) && yOf(e) >= yOf(ts[i]) - 80 && yOf(e) < nTop - 2 && bottomOf(e) <= nTop + 40);   // a picture may start a little above its title
+      const last = Math.max(bottomOf(ts[i]), ...inside.map(bottomOf));
+      const d2 = Math.round(last + sectionGap - nTop);
+      // a picture that starts above the next title but runs on into its section moves with that title
+      const lead = things().filter(e => !holdsTitle(e) && yOf(e) >= yOf(ts[i]) - 80 && yOf(e) < nTop && bottomOf(e) > nTop + 40).map(yOf);
+      const cut = Math.min(nTop, ...lead);
+      if (Math.abs(d2) >= 2) { makeCaseRoom(cut - 0.5).move(d2); moves.push([ts[i + 1].textContent.trim().slice(0, 24), "section", d2]); await settle(); }
+      ts = titles();
+    }
+    return moves;
+  };
 })();

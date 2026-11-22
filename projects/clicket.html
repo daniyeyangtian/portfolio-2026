@@ -327,7 +327,7 @@
   });
 })();
 </script>
-<script src="../js/case-insert.js?v=17"></script>
+<script src="../js/case-insert.js?v=24"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 2232, everything after it moved down by the returned shift)
@@ -474,7 +474,25 @@
         picked.forEach(e => shift(e, o.dx + (e === o.t ? 0 : extra)));
       });
     };
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(run));
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(run);
+  })();
+</script>
+<script>
+  // one vertical rhythm (js/case-insert.js): 48px from each section title to its content, 160px between
+  // sections; then the section anchors for projects.html are read from where the titles end up
+  (() => {
+    const frame = document.getElementById("frame");
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = el => (el.getBoundingClientRect().top - frame.getBoundingClientRect().top) / z();
+    const title = t => [...frame.querySelectorAll("p, h2")].find(e => e.textContent.trim() === t && e.getBoundingClientRect().width && getComputedStyle(e).visibility !== "hidden");
+    const SECTIONS = { "problem statement": "Problem Statement", research: "Deck Research", development: "Ideation",
+                       "final product": "Final Product System", outcomes: "User Testing" };
+    const publish = () => {
+      const out = { overview: 0 };
+      for (const [k, t] of Object.entries(SECTIONS)) { const el = title(t); if (el) out[k] = Math.round(fy(el)) - 20; }
+      window.caseSections = out;
+    };
+    addEventListener("load", () => setTimeout(async () => { await window.caseRhythm?.(); publish(); }, 300));
   })();
 </script>
 </body>

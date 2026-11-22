@@ -23,7 +23,7 @@
   * { box-sizing: border-box; }
   p, h1, h2, h3, ul, ol, figure, blockquote { margin: 0; }
   .wrap { padding: 0 114px; }
-  .section { padding-top: 150px; }
+  .section { padding-top: 160px; }   /* one rhythm across the case studies: 160 between sections */
   .h2 { font: 500 28px/1.2 'Instrument Sans', sans-serif; color: #000; }
   .q { font: 500 28px/1.25 'Instrument Sans', sans-serif; color: #000; max-width: 900px; }
   .label { font: 500 14px/1 'Instrument Sans', sans-serif; color: var(--accent-ink); }
@@ -73,14 +73,14 @@
   .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 32px; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); }
   .meta dt { font: 500 14px/1 'Instrument Sans', sans-serif; color: var(--soft); }
   .meta dd { margin: 12px 0 0; font: 400 16px/1.5 'Instrument Sans', sans-serif; color: var(--ink); }
-  .overview { display: grid; grid-template-columns: 300px 1fr; gap: 0 80px; margin-top: 56px; }
+  .overview { display: grid; grid-template-columns: 300px 1fr; gap: 0 80px; margin-top: 48px; }
   .overview .body + .body { margin-top: 16px; }
   .role { list-style: none; padding: 0; display: grid; gap: 10px; margin-top: 18px; }
   .role li { position: relative; padding-left: 20px; font: 400 16px/1.5 'Instrument Sans', sans-serif; color: var(--muted); }
   .role li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
 
   /* ---------- research ---------- */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 56px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 48px; }   /* 48 from a title to its content */
   .stat { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
   .stat b { font: 300 64px/1 'Instrument Sans', sans-serif; color: var(--accent-ink); letter-spacing: -.01em; }
   .stat span { font: 400 18px/1.3 'Instrument Sans', sans-serif; }
@@ -96,7 +96,7 @@
   .bar.is-low .fill { background: #cdbfe6; }
   .in .bar .fill { transform: none; }
   .bar .n { font: 500 14px/1 'Instrument Sans', sans-serif; color: var(--soft); text-align: right; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
   .card { padding: 30px 30px 28px; border-radius: 20px; background: #faf8fd; box-shadow: 0 0 0 1px var(--line); }
   .card b { display: block; font: 300 52px/1 'Instrument Sans', sans-serif; color: var(--accent-ink); }
   .card b small { font-size: 22px; color: var(--soft); }
