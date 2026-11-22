@@ -62,12 +62,8 @@
 :is([data-node-id="80:72437"], [data-copy-node-id="80:72437"]), :is([data-node-id="80:72437"], [data-copy-node-id="80:72437"]) span { color: #141414 !important; }
 /* the three insight titles set like the Problem Statement's green lines: Geist 20 px, sentence case */
 :is([data-node-id="80:72404"], [data-copy-node-id="80:72404"], [data-node-id="80:72405"], [data-copy-node-id="80:72405"], [data-node-id="80:72407"], [data-copy-node-id="80:72407"]) { font-family: 'Instrument Sans', sans-serif !important; font-weight: 400 !important; line-height: 1.4 !important; text-transform: none !important; letter-spacing: 0 !important; text-align: left !important; }
-/* …starting on the same line as the text under them */
-:is([data-node-id="80:72404"], [data-copy-node-id="80:72404"]) { margin-left: 6px !important; }
-:is([data-node-id="80:72405"], [data-copy-node-id="80:72405"]) { margin-left: -37px !important; }
-/* the research label, now a black section heading like the others (Geist 500 28px), its left edge
-   in line with the three insights under it */
-:is([data-node-id="80:72406"], [data-copy-node-id="80:72406"]) { left: 46px !important; transform: none !important;
+/* the research label, now a black section heading like the others (500 28px); placed by the page grid below */
+:is([data-node-id="80:72406"], [data-copy-node-id="80:72406"]) { transform: none !important;
   font: 500 28px/normal 'Instrument Sans', sans-serif !important; color: #000 !important; text-transform: none !important; letter-spacing: normal !important; }
 
 /* ---- Frame 6 phones (inserted above Overview), animated by tools/verdure_anim.js ---- */
@@ -149,6 +145,18 @@
   .flexi-link { text-decoration: underline; text-underline-offset: 3px; pointer-events: auto; }
   /* Home phone: no unit name, planter count or frame height */
   [data-node-id="234:54298"], [data-node-id="234:54299"], [data-node-id="234:54335"], [data-node-id="234:54336"] { visibility: hidden !important; }
+</style>
+<style>
+  /* ---------- page grid: 114px margins, 12 columns of 60.67px with 24px gutters (content 992px) ----------
+     Section titles start at the left margin, 48px above their content. */
+  /* What we found from research: three equal columns, 4 grid columns each (x 114 / 452.67 / 791.33, 314.67 wide) */
+  :is([data-node-id="80:72406"], [data-copy-node-id="80:72406"]) { left: 114px !important; top: 5825px !important; transform: none !important; }
+  :is([data-node-id="80:72404"], [data-copy-node-id="80:72404"], [data-node-id="80:72408"], [data-copy-node-id="80:72408"]) { left: 114px !important; width: 314.67px !important; transform: none !important; }
+  :is([data-node-id="80:72405"], [data-copy-node-id="80:72405"], [data-node-id="80:72409"], [data-copy-node-id="80:72409"]) { left: 452.67px !important; width: 314.67px !important; transform: none !important; }
+  :is([data-node-id="80:72407"], [data-copy-node-id="80:72407"], [data-node-id="80:72410"], [data-copy-node-id="80:72410"]) { left: 791.33px !important; width: 314.67px !important; transform: none !important; }
+  /* Persona: the photo starts on the left margin, under the title; the text keeps its line breaks */
+  :is([data-node-id="80:72411"], [data-copy-node-id="80:72411"]) { top: 6594px !important; }
+  :is([data-node-id="80:72412"], [data-copy-node-id="80:72412"]) > * { margin-left: -56px !important; }   /* the group is display: contents: move its pieces */
 </style>
 </head>
 <body>
