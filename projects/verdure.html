@@ -157,6 +157,14 @@
   /* Persona: the photo starts on the left margin, under the title; the text keeps its line breaks */
   :is([data-node-id="80:72411"], [data-copy-node-id="80:72411"]) { top: 6594px !important; }
   :is([data-node-id="80:72412"], [data-copy-node-id="80:72412"]) > * { margin-left: -56px !important; }   /* the group is display: contents: move its pieces */
+  /* Overview: the partner logos start on the left margin; Overview's and My Role's text at x 494, as on Fabric */
+  :is([data-node-id="80:70657"], [data-copy-node-id="80:70657"], [data-node-id="80:70658"], [data-copy-node-id="80:70658"], [data-node-id="80:70659"], [data-copy-node-id="80:70659"]) { margin-left: -15px !important; }
+  :is([data-node-id="80:70654"], [data-copy-node-id="80:70654"], [data-node-id="80:70655"], [data-copy-node-id="80:70655"]) { margin-left: -60px !important; }
+  :is([data-node-id="80:70656"], [data-copy-node-id="80:70656"]) { margin-left: -48px !important; }
+  /* Visual Style: the grey card stays full width; what is on it starts on the left margin */
+  :is([data-node-id="34:7238"], [data-copy-node-id="34:7238"]) > * { margin-left: 30px !important; }
+  /* Recognition: on the left margin, like the reflection under it */
+  :is([data-node-id="35:572"], [data-copy-node-id="35:572"], [data-node-id="85:76606"], [data-copy-node-id="85:76606"], [data-node-id="95:76607"], [data-copy-node-id="95:76607"]) { margin-left: -24px !important; }
 </style>
 </head>
 <body>
@@ -497,7 +505,7 @@
     const T = FLOWS_UI.top - shiftAt(FLOWS_UI.top - .5) + moveAt(FLOWS_UI.top), H = FLOWS_UI.height;
     const FL = FLOWS_UI.flows, TOP = 148;
     // closed: four cards
-    const CW = 228, CG = 24, cx0 = (1220 - (4 * CW + 3 * CG)) / 2, CTOP = 180, CH = 410, D = 228;   // D: a screen's width on the card
+    const CW = 230, CG = 24, cx0 = (1220 - (4 * CW + 3 * CG)) / 2,   /* 3 grid columns each: 114 → 1106 */ CTOP = 180, CH = 410, D = 228;   // D: a screen's width on the card
     // open: the playing phone (BIG) and the four screens (SW), centred on it
     const BIG = 240, BIGH = 521, SW = 180, SH = Math.round(SW * 434 / 200), SG = 20, GAP = 40;
     const xBig = (1220 - (BIG + GAP + 4 * SW + 3 * SG)) / 2, xs = k => xBig + BIG + GAP + k * (SW + SG), sTop = TOP + (BIGH - SH) / 2;
@@ -544,7 +552,7 @@
     const statics = [0, 1, 2, 3].map(k =>
       `<span class="fl-static" style="left:${xs(k)}px;top:${sTop}px;width:${SW}px;height:${SH}px;transition-delay:${k * 60}ms"><img alt=""></span>`).join("");
     box.innerHTML = `<div class="fl-bg"></div><div class="fl-inner" style="position:absolute;left:168px;top:0;width:1220px;height:${H}px">` +
-      `<div class="fl-head" style="left:117px;top:48px"><p class="fl-title"></p><p class="fl-desc"><svg class="fl-hint-ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3.5 2.2v10.6l2.9-2.7 1.9 4.2 1.9-.9-1.9-4.1h3.9z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Hover a flow to see it play, screen by screen.</p></div>` +
+      `<div class="fl-head" style="left:114px;top:48px"><p class="fl-title"></p><p class="fl-desc"><svg class="fl-hint-ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3.5 2.2v10.6l2.9-2.7 1.9 4.2 1.9-.9-1.9-4.1h3.9z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Hover a flow to see it play, screen by screen.</p></div>` +
       cards + phones + statics + `</div>`;
     root.appendChild(box);
 
@@ -1317,7 +1325,7 @@
 </script>
 <style>
   /* Outcome & Reflection: what I've learned / what I'd do differently, side by side (as on Clicket) */
-  .vr { position: absolute; left: 138px; width: 960px; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; font-family: 'Instrument Sans', sans-serif; }
+  .vr { position: absolute; left: 114px; width: 992px; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; font-family: 'Instrument Sans', sans-serif; }
   .vr h3 { margin: 0 0 16px; font: 400 14px/normal 'Instrument Sans', sans-serif; color: #137E44; }
   /* the Recognition label in the same darker green */
   :is([data-node-id="35:572"], [data-copy-node-id="35:572"]) { color: #137E44 !important; }
