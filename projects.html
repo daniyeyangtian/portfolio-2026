@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=45">
+<link rel="stylesheet" href="css/site.css?v=47">
 <style>
   /* secondary gray on this page */
   html, body { height: 100%; overflow: hidden; }
@@ -74,8 +74,8 @@
   .sections button:disabled { color: var(--ink-faint); opacity: .5; cursor: default; }
 
   /* where you are, in the top nav: "02 projects / verdure" while a case study is open */
-  .nav-crumb { display: inline-flex; gap: 6px; margin-left: 6px; font-size: 13px; line-height: 1; color: var(--ink); white-space: nowrap; }
-  .nav-crumb::before { content: "/"; color: #a9a9ae; }
+  .nav-crumb { display: inline-flex; gap: 6px; margin-left: 6px; font-size: 14px; line-height: 1; color: var(--ink); white-space: nowrap; }
+  .nav-crumb::before { content: "/"; color: #727178; }
   .nav-crumb:empty { display: none; }
   /* the project's colour as a small dot before its name (the name stays ink, for contrast) */
   .nav-crumb i { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); align-self: center; margin-right: -1px; }
@@ -573,20 +573,20 @@
     el.id = "next-project"; el.href = `?p=${k}`;
     el.style.cssText = "display:block;background:#fafafa;padding:40px 32px 96px;color:#141414;text-decoration:none;font-family:'Instrument Sans',system-ui,sans-serif;";
     el.innerHTML = `<span style="display:block;max-width:1000px;margin:0 auto">
-      <span style="display:block;border-top:1px solid #dcdcdf;padding-top:20px;font-size:13px;color:#8b8b91">next project</span>
+      <span style="display:block;border-top:1px solid #dcdcdf;padding-top:20px;font-size:13px;color:#727178">next project</span>
       <span style="display:flex;align-items:baseline;gap:14px;margin-top:18px">
-        <span style="font-size:13px;color:#D2412F;font-variant-numeric:tabular-nums">${n}</span>
+        <span style="font-size:13px;color:#CC3E2C;font-variant-numeric:tabular-nums">${n}</span>
         <span class="np-title" style="font-size:44px;font-weight:500;letter-spacing:-.02em;line-height:1">${p.title.toLowerCase()}</span>
-        <span class="np-arrow" style="font-size:32px;line-height:1;color:#8b8b91;transition:transform .25s,color .25s">→</span>
+        <span class="np-arrow" style="font-size:32px;line-height:1;color:#727178;transition:transform .25s,color .25s">→</span>
       </span>
       <span style="display:block;margin-top:14px;font-size:16px;line-height:1.5;color:#6E6879">${p.blurb}</span>
-      <span style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:14px;font-size:13px;color:#8b8b91;text-transform:lowercase"><i style="width:8px;height:8px;border-radius:50%;background:${p.color};margin-right:-6px"></i>${p.tags.map(t => `<span style="white-space:nowrap">${t}</span>`).join("")}</span></span>`;
+      <span style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:14px;font-size:13px;color:#727178;text-transform:lowercase"><i style="width:8px;height:8px;border-radius:50%;background:${p.color};margin-right:-6px"></i>${p.tags.map(t => `<span style="white-space:nowrap">${t}</span>`).join("")}</span></span>`;
     // the same ground as the case study above it, so the page simply continues
     const f = doc.getElementById("frame");
     el.style.background = f ? doc.defaultView.getComputedStyle(f).backgroundColor : "#fafafa";
     const arrow = el.querySelector(".np-arrow");
     el.addEventListener("mouseenter", () => { arrow.style.transform = "translateX(6px)"; arrow.style.color = "#141414"; });
-    el.addEventListener("mouseleave", () => { arrow.style.transform = ""; arrow.style.color = "#8b8b91"; });
+    el.addEventListener("mouseleave", () => { arrow.style.transform = ""; arrow.style.color = "#727178"; });
     el.addEventListener("click", e => { e.preventDefault(); openProject(k); });
     doc.body.appendChild(el);
   }

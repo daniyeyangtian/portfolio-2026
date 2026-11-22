@@ -26,23 +26,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   min-height: var(--nav-h);
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 32px;
   padding: 0 32px;
-  font-size: 13px; line-height: 1;
+  font-size: 14px; line-height: 1;
 }
 .nav-brand { display: flex; align-items: baseline; gap: 12px; white-space: nowrap; }
 .nav-brand .nb-name { font-weight: 600; color: var(--ink); letter-spacing: -.01em; }
-.nav-brand .nb-role { color: #8b8b91; }
+.nav-brand .nb-role { color: #727178; }   /* 4.6:1 on the page (WCAG AA) */
 .site-nav ul { display: flex; gap: 28px; list-style: none; padding: 0; }
-.site-nav ul a { display: flex; align-items: flex-start; gap: 5px; white-space: nowrap; color: #77767c; transition: color .2s; }
-.site-nav .ni { font-size: 9px; line-height: 1; color: #a9a9ae; font-variant-numeric: tabular-nums; transition: color .2s; }
+.site-nav ul a { display: flex; align-items: flex-start; gap: 5px; white-space: nowrap; color: #727178; transition: color .2s; }   /* 4.6:1 */
+.site-nav .ni { font-size: 10px; line-height: 1; color: #727178; font-variant-numeric: tabular-nums; transition: color .2s; }
 .site-nav ul a:not([aria-disabled="true"]):hover { color: var(--ink); }
 .site-nav ul a[aria-current="page"] { color: var(--ink); }
-.site-nav ul a[aria-current="page"] .ni { color: #D2412F; }
+.site-nav ul a[aria-current="page"] .ni { color: #CC3E2C; }   /* the tape's red, a shade deeper for 4.7:1 */
 .site-nav a[aria-disabled="true"] { cursor: default; }
 .site-nav a:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 2px; }
 @media (max-width: 640px) {
   .site-nav { padding: 18px 16px; justify-content: flex-start; }
   .nav-brand .nb-role { display: none; }
-  .site-nav ul { gap: 18px; }
+  .site-nav ul { gap: 10px 18px; flex-wrap: wrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
