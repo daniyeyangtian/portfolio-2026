@@ -1,42 +1,24 @@
-// Top nav: a pill sits behind the current page's link; hovering another link darkens it.
-// Going to another page, the pill doesn't slide (it would sweep across the dial): it
-// reappears under the new link.
+// Top nav: the current page's link is set in Instrument Serif italic (like the name on the
+// home page); the others are Instrument Sans, and hovering one only darkens it. Each link
+// holds both versions stacked in one grid cell, so it is always as wide as the wider one and
+// switching cross-fades the two in place without moving anything.
 (() => {
   const list = document.querySelector(".site-nav ul");
   if (!list) return;
   const links = [...list.querySelectorAll("a")];
   const current = links.find(a => a.getAttribute("aria-current") === "page") || links[0];
-  const bar = document.createElement("span");
-  bar.className = "nav-indicator no-anim";
-  list.appendChild(bar);
+  links.forEach(a => {
+    const t = a.textContent.trim();
+    a.innerHTML = `<span class="nl-sans">${t}</span><span class="nl-serif" aria-hidden="true">${t}</span>`;
+  });
 
   let spinTo = null;   // spinTo is set once the dial exists
-  // The indicator is a pill pressed into the page behind the link, a little larger than it.
-  const PX = 14, PY = 7;
-  let at = null;
-  const moveTo = a => {
-    const jump = at && at !== a; at = a;
-    bar.style.width = a.offsetWidth + 2 * PX + "px";
-    bar.style.height = a.offsetHeight + 2 * PY + "px";
-    bar.style.transform = `translate(${a.offsetLeft - PX}px, ${a.offsetTop - PY}px)`;
-    if (jump) { bar.classList.remove("pop"); bar.offsetWidth; bar.classList.add("pop"); }
-  };
-
-  // Place under the current page without animating, then enable transitions.
-  const place = () => {
-    bar.classList.add("no-anim");
-    moveTo(current);
-    bar.offsetWidth; // flush so the next change animates
-    bar.classList.remove("no-anim");
-  };
-  document.fonts.ready.then(place);
-  place();
-  addEventListener("resize", place);
-  addEventListener("pageshow", place); // back/forward cache
+  const moveTo = a => links.forEach(l => l.classList.toggle("is-on", l === a));
+  moveTo(current);
+  addEventListener("pageshow", () => moveTo(current)); // back/forward cache
 
   links.forEach(a => {
-    // hover / focus: the link only darkens (site.css); the pill stays on the current page and
-    // moves when you actually go somewhere
+    // hover / focus: the link only darkens (site.css); the serif moves when you actually go somewhere
     a.addEventListener("click", e => {
       if (a.getAttribute("aria-disabled") === "true" || a === current) { e.preventDefault(); return; }
       if (e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -103,7 +85,6 @@
     const d2 = dial.getBoundingClientRect();
     const dy = split ? (d2.top + d2.height / 2) - (a2.top + a2.height / 2) : 0;
     list.style.transform = `translate(${mid - (a2.right + b2.left) / 2}px, ${dy}px)`;
-    place();   // the links after the split moved: put the pill back behind the current one
   };
   document.fonts.ready.then(centre);
   centre();
@@ -127,7 +108,7 @@
     links[i] ? links[i].click() : bump(dir);
   }));
   // Click the bar → nearest page. Press and drag → the whole bar rolls with the
-  // pointer (beads, red light and knurling together) and the nav pill follows;
+  // pointer (beads, red light and knurling together) and the serif follows;
   // on release it clicks into the nearest step and goes to that page. Rolling onto a
   // "coming soon" page, or past either end, springs back.
   const nearestTo = x => links.reduce((best, a, i) => Math.abs(xOf(i) - x) < Math.abs(xOf(links.indexOf(best)) - x) ? a : best, links[0]);
