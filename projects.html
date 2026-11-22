@@ -26,14 +26,15 @@
 
   .sections {
     position: relative;
-    padding: 10px 0 12px 32px;   /* names start at 32px, under the name in the top nav */
+    padding: 10px 0 12px 48px;
     list-style: none;
   }
 
   /* Fader: a volume-style slider beside the section names. The grey fill and the knob show
      how far through the case study you are (the knob reaches a name as that section
      starts); drag the knob to scrub, or tap a tick to spring to that section. */
-  .fader { position: absolute; left: 4px; top: 0; bottom: 0; width: 22px; touch-action: none; cursor: pointer; }
+  /* its track runs straight down from the start of the name in the top nav (x 32) */
+  .fader { position: absolute; left: 19px; top: 0; bottom: 0; width: 22px; touch-action: none; cursor: pointer; }
   .fader-ticks i {
     position: absolute; left: 0; width: 5px; height: 1.5px; border-radius: 1px;
     background: #c9c7cf; transition: background .25s;
