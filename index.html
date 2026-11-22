@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=44">
+<link rel="stylesheet" href="css/site.css?v=45">
 <style>
   /* Home 3 · cassette (Figma: 2026 babies › home3 › "v3 · cassette · about").
      Three transport keys sit above a cassette; each key loads a different tape (About,
@@ -219,8 +219,8 @@
   /* ---------- featured projects: below the first screen ----------
      The cassette deck fills the first screen; scrolling down shows the case studies as large
      cards (cover, number, title, one line, keywords, a link), then what's coming up. */
-  /* the deck still fills the first screen (less the nav, ~112px, and the cue under it) */
-  .deck { min-height: calc(100svh - 112px - 52px); }
+  /* the deck still fills the first screen (less the nav and the cue under it) */
+  .deck { min-height: calc(100svh - var(--nav-h) - 52px); }
   .scroll-cue {
     display: flex; justify-content: center; margin: -8px 0 28px;
   }
@@ -530,7 +530,7 @@
   <span class="year">© 2026</span>
 </footer>
 
-<script src="js/nav.js?v=26"></script>
+<script src="js/nav.js?v=27"></script>
 <script src="js/track-sound.js?v=6"></script>
 <script>
   // the previous-work key: hold it down for a beat so the press reads, then go
