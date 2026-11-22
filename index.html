@@ -245,17 +245,18 @@
   .players { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; list-style: none; padding: 0; }
   .player { --accent: #6E6879; display: flex; flex-direction: column; color: var(--ink); }
   a.player:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 28px; }
+  /* a flat anodised plate, like a piece of lab gear: thin rings, a tick scale, small lowercase labels */
   .deck-tt {
-    position: relative; display: block; aspect-ratio: 650 / 560; border-radius: 26px;
-    background: radial-gradient(120% 90% at 30% 20%, #fbfbfc, #e2e3e7 75%);
-    box-shadow: inset 0 1px 0 #fff, inset 0 -2px 5px rgba(0,0,0,.08), 0 0 0 1px rgba(20,20,30,.06), 0 14px 30px -14px rgba(20,20,40,.30), 0 2px 4px rgba(20,20,40,.08);
+    position: relative; display: block; aspect-ratio: 650 / 560; border-radius: 18px;
+    background: #ebebed;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 0 0 1px rgba(20,20,30,.09), 0 12px 26px -16px rgba(20,20,40,.28);
     transition: transform .35s var(--ease), box-shadow .35s var(--ease);
   }
-  a.player:hover .deck-tt { transform: translateY(-4px); box-shadow: inset 0 1px 0 #fff, inset 0 -2px 5px rgba(0,0,0,.08), 0 0 0 1px rgba(20,20,30,.07), 0 22px 40px -16px rgba(20,20,40,.36), 0 2px 4px rgba(20,20,40,.08); }
+  a.player:hover .deck-tt { transform: translateY(-4px); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 0 0 1px rgba(20,20,30,.1), 0 20px 34px -18px rgba(20,20,40,.34); }
   /* the record: 490 of the deck's 650 units, centred at (280, 282) */
   .record {
     position: absolute; left: 5.385%; top: 6.607%; width: 75.385%; aspect-ratio: 1; border-radius: 50%;
-    box-shadow: 0 10px 22px -8px rgba(20,20,40,.35);   /* no vinyl rim: the progress ring frames the picture */
+    box-shadow: 0 6px 14px -8px rgba(20,20,40,.3);   /* no vinyl rim: the progress ring frames the picture */
   }
   .record .scene, .record .art { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; display: block; }
   /* the app's screen on its photo, as on the PROJECTS tape: the screen centred, 78% of the circle's height */
@@ -288,18 +289,29 @@
   .deck-tt svg.chrome { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   /* the ring is the flow's progress bar: empty at rest, it fills as the app plays through its
      screens (js below) and runs back to empty when the arm lifts */
-  .ring-bg { fill: none; stroke: rgba(20,20,30,.13); stroke-width: 10; }
-  .ring { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 280px 282px;
+  .ring-bg { fill: none; stroke: rgba(20,20,30,.1); stroke-width: 4; }
+  .ring { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 280px 282px;
     stroke-dasharray: 1571; stroke-dashoffset: 1571; transition: stroke-dashoffset .6s cubic-bezier(.3, 0, .2, 1); }
   .ring.is-playing { transition: none; }
   .arm { transform-origin: 596px 96px; transform: rotate(0deg); transition: transform .9s cubic-bezier(.4, 0, .2, 1); }
   .player.is-on .arm { transform: rotate(-30deg); }
   .btn-play .ic-pause { opacity: 0; } .player.is-on .btn-play .ic-play { opacity: 0; } .player.is-on .btn-play .ic-pause { opacity: 1; }
   .btn-play path { transition: opacity .2s; }
-  .deck-label { font: 500 15px 'Instrument Sans', sans-serif; fill: #77767f; }
+  .deck-label { font: 500 22px 'Instrument Sans', sans-serif; fill: #2b2b2e; letter-spacing: -.01em; }
+  .deck-cap { font: 500 14px 'Instrument Sans', sans-serif; fill: #8b8b93; }
+  .deck-ticks { fill: none; stroke: #b9bac0; stroke-width: 1.5; }
+  .deck-ticks.is-major { stroke: #6d6e76; stroke-width: 2; }
+  .deck-knob { fill: #f7f7f8; stroke: #c9cad0; stroke-width: 1.5; }
+  .deck-mark { stroke: #2b2b2e; stroke-width: 3; stroke-linecap: round; }
+  .deck-pivot { fill: #f7f7f8; stroke: #c9cad0; stroke-width: 1.5; }
+  .deck-key { fill: #f7f7f8; stroke: #c9cad0; stroke-width: 1.5; }
+  .deck-grille circle { fill: #2b2b2e; opacity: .75; }
+  .deck-led { fill: #c9cad0; transition: fill .3s; }
+  .player.is-on .deck-led { fill: #e5484d; }
   .player.is-soon .deck-tt { filter: saturate(.7); }
   .player-text { display: block; padding: 16px 6px 0; }
   .player-title { display: flex; align-items: baseline; gap: 10px; font: 500 20px/1.2 'Instrument Sans', sans-serif; }
+  .player-no { font-size: 13px; font-weight: 500; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
   .player-artist { display: block; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
   /* tags side by side with space between them, no dots; each tag stays on one line */
   .track-sub > span, .player-tags > span { white-space: nowrap; }
@@ -339,12 +351,12 @@
 <main class="deck">
   <div class="tape-col">
     <div class="keys" role="group" aria-label="Tapes">
-      <button type="button" class="key" aria-pressed="true" aria-label="About"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2 0v9l8-4.5z"/></svg>About</span></button>
-      <button type="button" class="key" aria-pressed="false" aria-label="Projects"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M0 0v9l6-4.5zM6 0v9l6-4.5z"/></svg>Projects</span></button>
-      <button type="button" class="key" aria-pressed="false" aria-label="Other work"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M1 6h10v2H1zM6 0l5 5H1z"/></svg>Other</span></button>
+      <button type="button" class="key" aria-pressed="true" aria-label="About"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2 0v9l8-4.5z"/></svg>about</span></button>
+      <button type="button" class="key" aria-pressed="false" aria-label="Projects"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M0 0v9l6-4.5zM6 0v9l6-4.5z"/></svg>projects</span></button>
+      <button type="button" class="key" aria-pressed="false" aria-label="Other work"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M1 6h10v2H1zM6 0l5 5H1z"/></svg>other</span></button>
     </div>
     <div class="tape" id="tape">
-      <img class="tape-fallback" draggable="false" src="assets/home3/cassette-about.svg" alt="A clear cassette labelled About me, side A, vol. 01">
+      <img class="tape-fallback" draggable="false" src="assets/home3/cassette-about.svg?v=2" alt="A clear cassette labelled About me, side A, vol. 01">
       <canvas aria-hidden="true"></canvas>
     </div>
   </div>
@@ -413,17 +425,23 @@
       <span class="deck-tt">
         <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><span class="screen" data-flow="verdure" role="img" aria-label="The Verdure app on a phone, over a field of grass"><img src="assets/home3/verdure-flow-1.jpg?v=3" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
-          <text class="deck-label" x="40" y="62">Track 01</text>
+          <text class="deck-cap" x="34" y="40">track</text><text class="deck-label" x="34" y="66">01</text>
+          <text class="deck-label" x="622" y="36" text-anchor="end">tt–01</text>
+          <path class="deck-ticks" d="M306.8 27.4L307.3 22.4 M333.2 31.6L334.3 26.7 M359.1 38.5L360.7 33.8 M384.1 48.1L386.2 43.6 M430.5 74.9L433.4 70.8 M451.3 91.8L454.6 88.0 M470.2 110.7L474.0 107.4 M487.1 131.5L491.2 128.6 M513.9 177.9L518.4 175.8 M523.5 202.9L528.2 201.3 M530.4 228.8L535.3 227.7 M534.6 255.2L539.6 254.7 M534.6 308.8L539.6 309.3 M530.4 335.2L535.3 336.3 M523.5 361.1L528.2 362.7 M513.9 386.1L518.4 388.2 M487.1 432.5L491.2 435.4 M470.2 453.3L474.0 456.6 M451.3 472.2L454.6 476.0 M430.5 489.1L433.4 493.2 M384.1 515.9L386.2 520.4 M359.1 525.5L360.7 530.2 M333.2 532.4L334.3 537.3 M306.8 536.6L307.3 541.6 M253.2 536.6L252.7 541.6 M226.8 532.4L225.7 537.3 M200.9 525.5L199.3 530.2 M175.9 515.9L173.8 520.4 M129.5 489.1L126.6 493.2 M108.7 472.2L105.4 476.0 M89.8 453.3L86.0 456.6 M72.9 432.5L68.8 435.4 M46.1 386.1L41.6 388.2 M36.5 361.1L31.8 362.7 M29.6 335.2L24.7 336.3 M25.4 308.8L20.4 309.3 M25.4 255.2L20.4 254.7 M29.6 228.8L24.7 227.7 M36.5 202.9L31.8 201.3 M46.1 177.9L41.6 175.8 M72.9 131.5L68.8 128.6 M89.8 110.7L86.0 107.4 M108.7 91.8L105.4 88.0 M129.5 74.9L126.6 70.8 M175.9 48.1L173.8 43.6 M200.9 38.5L199.3 33.8 M226.8 31.6L225.7 26.7 M253.2 27.4L252.7 22.4"/><path class="deck-ticks is-major" d="M280.0 28.0L280.0 18.0 M407.0 62.0L412.0 53.4 M500.0 155.0L508.6 150.0 M534.0 282.0L544.0 282.0 M500.0 409.0L508.6 414.0 M407.0 502.0L412.0 510.6 M280.0 536.0L280.0 546.0 M153.0 502.0L148.0 510.6 M60.0 409.0L51.4 414.0 M26.0 282.0L16.0 282.0 M60.0 155.0L51.4 150.0 M153.0 62.0L148.0 53.4"/>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
-          <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
-          <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
-          <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
-          <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
-          <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
+          <circle cx="556" cy="236" r="5" class="deck-led"/><text class="deck-cap" x="556" y="276" text-anchor="middle">on</text>
+          <circle cx="604" cy="236" r="20" class="deck-knob"/><path d="M604 236V220" class="deck-mark"/><text class="deck-cap" x="604" y="276" text-anchor="middle">vol</text>
+          <g class="deck-grille"><circle cx="568" cy="330" r="2"/><circle cx="580" cy="330" r="2"/><circle cx="592" cy="330" r="2"/><circle cx="604" cy="330" r="2"/><circle cx="616" cy="330" r="2"/><circle cx="568" cy="342" r="2"/><circle cx="580" cy="342" r="2"/><circle cx="592" cy="342" r="2"/><circle cx="604" cy="342" r="2"/><circle cx="616" cy="342" r="2"/><circle cx="568" cy="354" r="2"/><circle cx="580" cy="354" r="2"/><circle cx="592" cy="354" r="2"/><circle cx="604" cy="354" r="2"/><circle cx="616" cy="354" r="2"/><circle cx="568" cy="366" r="2"/><circle cx="580" cy="366" r="2"/><circle cx="592" cy="366" r="2"/><circle cx="604" cy="366" r="2"/><circle cx="616" cy="366" r="2"/></g>
+          <circle cx="596" cy="96" r="34" class="deck-pivot"/><circle cx="596" cy="96" r="14" fill="#2b2b2e"/>
+          <g class="arm"><rect x="614" y="89" width="24" height="14" rx="3" fill="#9a9ba2"/><path d="M596 96 L500 96 L474 112" fill="none" stroke="#2b2b2e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="446" y="102" width="30" height="16" rx="3" fill="#2b2b2e" transform="rotate(-12 461 110)"/></g>
+          <g class="btn-play"><circle cx="72" cy="486" r="28" fill="#2b2b2e"/><path class="ic-play" d="M65 474 L85 486 L65 498 Z" fill="#fff"/><path class="ic-pause" d="M62 474 h7 v24 h-7 z M75 474 h7 v24 h-7 z" fill="#fff"/></g>
+          <text class="deck-cap" x="72" y="540" text-anchor="middle">play</text>
+          <rect x="468" y="470" width="62" height="32" rx="8" class="deck-key"/><path d="M490 486 l10 -7 v14 z M500 486 l10 -7 v14 z" fill="#2b2b2e"/><text class="deck-cap" x="499" y="540" text-anchor="middle">prev</text>
+          <rect x="546" y="470" width="62" height="32" rx="8" class="deck-key"/><path d="M586 486 l-10 -7 v14 z M576 486 l-10 -7 v14 z" fill="#2b2b2e"/><text class="deck-cap" x="577" y="540" text-anchor="middle">next</text>
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title">Verdure</span>
+        <span class="player-title"><span class="player-no">01</span>Verdure</span>
         <span class="player-artist">Modular indoor-planting system with FlexiSpot.</span>
         <span class="player-tags"><span>Client project</span><span>UX/UI</span><span>Complex system</span></span>
       </span>
@@ -432,17 +450,23 @@
       <span class="deck-tt">
         <span class="record"><span class="art">Fabric</span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
-          <text class="deck-label" x="40" y="62">Track 02</text>
+          <text class="deck-cap" x="34" y="40">track</text><text class="deck-label" x="34" y="66">02</text>
+          <text class="deck-label" x="622" y="36" text-anchor="end">tt–02</text>
+          <path class="deck-ticks" d="M306.8 27.4L307.3 22.4 M333.2 31.6L334.3 26.7 M359.1 38.5L360.7 33.8 M384.1 48.1L386.2 43.6 M430.5 74.9L433.4 70.8 M451.3 91.8L454.6 88.0 M470.2 110.7L474.0 107.4 M487.1 131.5L491.2 128.6 M513.9 177.9L518.4 175.8 M523.5 202.9L528.2 201.3 M530.4 228.8L535.3 227.7 M534.6 255.2L539.6 254.7 M534.6 308.8L539.6 309.3 M530.4 335.2L535.3 336.3 M523.5 361.1L528.2 362.7 M513.9 386.1L518.4 388.2 M487.1 432.5L491.2 435.4 M470.2 453.3L474.0 456.6 M451.3 472.2L454.6 476.0 M430.5 489.1L433.4 493.2 M384.1 515.9L386.2 520.4 M359.1 525.5L360.7 530.2 M333.2 532.4L334.3 537.3 M306.8 536.6L307.3 541.6 M253.2 536.6L252.7 541.6 M226.8 532.4L225.7 537.3 M200.9 525.5L199.3 530.2 M175.9 515.9L173.8 520.4 M129.5 489.1L126.6 493.2 M108.7 472.2L105.4 476.0 M89.8 453.3L86.0 456.6 M72.9 432.5L68.8 435.4 M46.1 386.1L41.6 388.2 M36.5 361.1L31.8 362.7 M29.6 335.2L24.7 336.3 M25.4 308.8L20.4 309.3 M25.4 255.2L20.4 254.7 M29.6 228.8L24.7 227.7 M36.5 202.9L31.8 201.3 M46.1 177.9L41.6 175.8 M72.9 131.5L68.8 128.6 M89.8 110.7L86.0 107.4 M108.7 91.8L105.4 88.0 M129.5 74.9L126.6 70.8 M175.9 48.1L173.8 43.6 M200.9 38.5L199.3 33.8 M226.8 31.6L225.7 26.7 M253.2 27.4L252.7 22.4"/><path class="deck-ticks is-major" d="M280.0 28.0L280.0 18.0 M407.0 62.0L412.0 53.4 M500.0 155.0L508.6 150.0 M534.0 282.0L544.0 282.0 M500.0 409.0L508.6 414.0 M407.0 502.0L412.0 510.6 M280.0 536.0L280.0 546.0 M153.0 502.0L148.0 510.6 M60.0 409.0L51.4 414.0 M26.0 282.0L16.0 282.0 M60.0 155.0L51.4 150.0 M153.0 62.0L148.0 53.4"/>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
-          <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
-          <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
-          <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
-          <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
-          <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
+          <circle cx="556" cy="236" r="5" class="deck-led"/><text class="deck-cap" x="556" y="276" text-anchor="middle">on</text>
+          <circle cx="604" cy="236" r="20" class="deck-knob"/><path d="M604 236V220" class="deck-mark"/><text class="deck-cap" x="604" y="276" text-anchor="middle">vol</text>
+          <g class="deck-grille"><circle cx="568" cy="330" r="2"/><circle cx="580" cy="330" r="2"/><circle cx="592" cy="330" r="2"/><circle cx="604" cy="330" r="2"/><circle cx="616" cy="330" r="2"/><circle cx="568" cy="342" r="2"/><circle cx="580" cy="342" r="2"/><circle cx="592" cy="342" r="2"/><circle cx="604" cy="342" r="2"/><circle cx="616" cy="342" r="2"/><circle cx="568" cy="354" r="2"/><circle cx="580" cy="354" r="2"/><circle cx="592" cy="354" r="2"/><circle cx="604" cy="354" r="2"/><circle cx="616" cy="354" r="2"/><circle cx="568" cy="366" r="2"/><circle cx="580" cy="366" r="2"/><circle cx="592" cy="366" r="2"/><circle cx="604" cy="366" r="2"/><circle cx="616" cy="366" r="2"/></g>
+          <circle cx="596" cy="96" r="34" class="deck-pivot"/><circle cx="596" cy="96" r="14" fill="#2b2b2e"/>
+          <g class="arm"><rect x="614" y="89" width="24" height="14" rx="3" fill="#9a9ba2"/><path d="M596 96 L500 96 L474 112" fill="none" stroke="#2b2b2e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="446" y="102" width="30" height="16" rx="3" fill="#2b2b2e" transform="rotate(-12 461 110)"/></g>
+          <g class="btn-play"><circle cx="72" cy="486" r="28" fill="#2b2b2e"/><path class="ic-play" d="M65 474 L85 486 L65 498 Z" fill="#fff"/><path class="ic-pause" d="M62 474 h7 v24 h-7 z M75 474 h7 v24 h-7 z" fill="#fff"/></g>
+          <text class="deck-cap" x="72" y="540" text-anchor="middle">play</text>
+          <rect x="468" y="470" width="62" height="32" rx="8" class="deck-key"/><path d="M490 486 l10 -7 v14 z M500 486 l10 -7 v14 z" fill="#2b2b2e"/><text class="deck-cap" x="499" y="540" text-anchor="middle">prev</text>
+          <rect x="546" y="470" width="62" height="32" rx="8" class="deck-key"/><path d="M586 486 l-10 -7 v14 z M576 486 l-10 -7 v14 z" fill="#2b2b2e"/><text class="deck-cap" x="577" y="540" text-anchor="middle">next</text>
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title">Microsoft Fabric</span>
+        <span class="player-title"><span class="player-no">02</span>Microsoft Fabric</span>
         <span class="player-artist">How AI shapes software discovery for small businesses. In progress.</span>
         <span class="player-tags"><span>Client project</span><span>AI</span><span>UX research</span></span>
       </span>
@@ -451,17 +475,23 @@
       <span class="deck-tt">
         <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg?v=2" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
-          <text class="deck-label" x="40" y="62">Track 03</text>
+          <text class="deck-cap" x="34" y="40">track</text><text class="deck-label" x="34" y="66">03</text>
+          <text class="deck-label" x="622" y="36" text-anchor="end">tt–03</text>
+          <path class="deck-ticks" d="M306.8 27.4L307.3 22.4 M333.2 31.6L334.3 26.7 M359.1 38.5L360.7 33.8 M384.1 48.1L386.2 43.6 M430.5 74.9L433.4 70.8 M451.3 91.8L454.6 88.0 M470.2 110.7L474.0 107.4 M487.1 131.5L491.2 128.6 M513.9 177.9L518.4 175.8 M523.5 202.9L528.2 201.3 M530.4 228.8L535.3 227.7 M534.6 255.2L539.6 254.7 M534.6 308.8L539.6 309.3 M530.4 335.2L535.3 336.3 M523.5 361.1L528.2 362.7 M513.9 386.1L518.4 388.2 M487.1 432.5L491.2 435.4 M470.2 453.3L474.0 456.6 M451.3 472.2L454.6 476.0 M430.5 489.1L433.4 493.2 M384.1 515.9L386.2 520.4 M359.1 525.5L360.7 530.2 M333.2 532.4L334.3 537.3 M306.8 536.6L307.3 541.6 M253.2 536.6L252.7 541.6 M226.8 532.4L225.7 537.3 M200.9 525.5L199.3 530.2 M175.9 515.9L173.8 520.4 M129.5 489.1L126.6 493.2 M108.7 472.2L105.4 476.0 M89.8 453.3L86.0 456.6 M72.9 432.5L68.8 435.4 M46.1 386.1L41.6 388.2 M36.5 361.1L31.8 362.7 M29.6 335.2L24.7 336.3 M25.4 308.8L20.4 309.3 M25.4 255.2L20.4 254.7 M29.6 228.8L24.7 227.7 M36.5 202.9L31.8 201.3 M46.1 177.9L41.6 175.8 M72.9 131.5L68.8 128.6 M89.8 110.7L86.0 107.4 M108.7 91.8L105.4 88.0 M129.5 74.9L126.6 70.8 M175.9 48.1L173.8 43.6 M200.9 38.5L199.3 33.8 M226.8 31.6L225.7 26.7 M253.2 27.4L252.7 22.4"/><path class="deck-ticks is-major" d="M280.0 28.0L280.0 18.0 M407.0 62.0L412.0 53.4 M500.0 155.0L508.6 150.0 M534.0 282.0L544.0 282.0 M500.0 409.0L508.6 414.0 M407.0 502.0L412.0 510.6 M280.0 536.0L280.0 546.0 M153.0 502.0L148.0 510.6 M60.0 409.0L51.4 414.0 M26.0 282.0L16.0 282.0 M60.0 155.0L51.4 150.0 M153.0 62.0L148.0 53.4"/>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
-          <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
-          <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
-          <g class="arm"><rect x="612" y="90" width="26" height="12" rx="6" fill="#77767f"/><path d="M596 96 L496 96 L470 108" fill="none" stroke="#8b8b93" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M478 92 l-28 6 l6 30 l28 -6 z" fill="#3a3a40"/></g>
-          <g class="btn-play"><circle cx="72" cy="492" r="30" fill="#fff" stroke="#d6d7dc" stroke-width="2"/><path class="ic-play" d="M64 478 L86 492 L64 506 Z" fill="#1f1f24"/><path class="ic-pause" d="M61 479 h8 v26 h-8 z M75 479 h8 v26 h-8 z" fill="#1f1f24"/></g>
-          <g fill="#4a4a52"><path d="M470 492 l14 -9 v18 z M484 492 l14 -9 v18 z" transform="translate(-14 0)"/><path d="M590 492 l-14 -9 v18 z M576 492 l-14 -9 v18 z" transform="translate(14 0)"/></g>
+          <circle cx="556" cy="236" r="5" class="deck-led"/><text class="deck-cap" x="556" y="276" text-anchor="middle">on</text>
+          <circle cx="604" cy="236" r="20" class="deck-knob"/><path d="M604 236V220" class="deck-mark"/><text class="deck-cap" x="604" y="276" text-anchor="middle">vol</text>
+          <g class="deck-grille"><circle cx="568" cy="330" r="2"/><circle cx="580" cy="330" r="2"/><circle cx="592" cy="330" r="2"/><circle cx="604" cy="330" r="2"/><circle cx="616" cy="330" r="2"/><circle cx="568" cy="342" r="2"/><circle cx="580" cy="342" r="2"/><circle cx="592" cy="342" r="2"/><circle cx="604" cy="342" r="2"/><circle cx="616" cy="342" r="2"/><circle cx="568" cy="354" r="2"/><circle cx="580" cy="354" r="2"/><circle cx="592" cy="354" r="2"/><circle cx="604" cy="354" r="2"/><circle cx="616" cy="354" r="2"/><circle cx="568" cy="366" r="2"/><circle cx="580" cy="366" r="2"/><circle cx="592" cy="366" r="2"/><circle cx="604" cy="366" r="2"/><circle cx="616" cy="366" r="2"/></g>
+          <circle cx="596" cy="96" r="34" class="deck-pivot"/><circle cx="596" cy="96" r="14" fill="#2b2b2e"/>
+          <g class="arm"><rect x="614" y="89" width="24" height="14" rx="3" fill="#9a9ba2"/><path d="M596 96 L500 96 L474 112" fill="none" stroke="#2b2b2e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="446" y="102" width="30" height="16" rx="3" fill="#2b2b2e" transform="rotate(-12 461 110)"/></g>
+          <g class="btn-play"><circle cx="72" cy="486" r="28" fill="#2b2b2e"/><path class="ic-play" d="M65 474 L85 486 L65 498 Z" fill="#fff"/><path class="ic-pause" d="M62 474 h7 v24 h-7 z M75 474 h7 v24 h-7 z" fill="#fff"/></g>
+          <text class="deck-cap" x="72" y="540" text-anchor="middle">play</text>
+          <rect x="468" y="470" width="62" height="32" rx="8" class="deck-key"/><path d="M490 486 l10 -7 v14 z M500 486 l10 -7 v14 z" fill="#2b2b2e"/><text class="deck-cap" x="499" y="540" text-anchor="middle">prev</text>
+          <rect x="546" y="470" width="62" height="32" rx="8" class="deck-key"/><path d="M586 486 l-10 -7 v14 z M576 486 l-10 -7 v14 z" fill="#2b2b2e"/><text class="deck-cap" x="577" y="540" text-anchor="middle">next</text>
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title">Clicket</span>
+        <span class="player-title"><span class="player-no">03</span>Clicket</span>
         <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
         <span class="player-tags"><span>Physical product</span><span>App</span><span>Service</span></span>
       </span>
@@ -680,6 +710,6 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
-<script type="module" src="js/home3-cassette.js?v=74"></script>
+<script type="module" src="js/home3-cassette.js?v=75"></script>
 </body>
 </html>

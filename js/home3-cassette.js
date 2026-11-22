@@ -28,15 +28,20 @@ const fx = x => x - W / 2, fy = y => H / 2 - y;   // drawing → world
 // tracklist on the print; Other is solid white. Hovering a project card on the page sends a
 // "track" event: the tape winds to that track, its row lights up and the big number shows it.
 const RED = "#D2412F";
+// Printed like a piece of lab gear: lowercase, one large model code, the rest one small size
+// set on a grid as caption over value; hairlines, a counter scale and a dot grille.
 const PRINTS = {
-  about: { title: "ABOUT ME", sub: "Side A · Vol.01 · Normal position", mark: "DYT 01", num: "01", side: "A", ink: "#2B2B2E",
-           name: "D A N I   Y E Y A N G   T I A N" },
-  works: { title: "PROJECTS", sub: "Side B · Vol.02 · Normal position", mark: "DYT 02", num: "02", side: "B", ink: "#22262C",
-           tracks: [{ code: "B1", name: "Verdure", color: "#6fd197", at: 0.06 },
-                    { code: "B2", name: "Microsoft Fabric", color: "#8a6cc0", at: 0.4 },
-                    { code: "B3", name: "Clicket", color: "#ff6f6f", at: 0.74 }] },
-  other: { title: "OTHER WORK", sub: "Side C · Vol.03 · Bonus tracks", mark: "DYT 03", num: "03", side: "C", ink: "#22262C",
-           name: "S I D E   P R O J E C T S" },
+  about: { title: "about me", mark: "dyt–01", num: "01", side: "a", ink: "#2B2B2E",
+           spec: [["side", "a"], ["vol", "01"], ["type", "normal"], ["time", "60 min"]],
+           name: "dani yeyang tian" },
+  works: { title: "projects", mark: "dyt–02", num: "02", side: "b", ink: "#22262C",
+           spec: [["side", "b"], ["vol", "02"], ["type", "normal"], ["tracks", "3"]],
+           tracks: [{ code: "b1", name: "verdure", color: "#6fd197", at: 0.06 },
+                    { code: "b2", name: "microsoft fabric", color: "#8a6cc0", at: 0.4 },
+                    { code: "b3", name: "clicket", color: "#ff6f6f", at: 0.74 }] },
+  other: { title: "other work", mark: "dyt–03", num: "03", side: "c", ink: "#22262C",
+           spec: [["side", "c"], ["vol", "03"], ["type", "bonus"], ["time", "∞"]],
+           name: "side projects" },
 };
 // All three shells are frosted (a matte, grainy finish: soft highlights, a fine speckle in
 // colour and opacity) and step from see-through grey (About) through misty grey-white (Works)
@@ -82,9 +87,9 @@ const circlePts = (x, y, r, n = 120) => Array.from({ length: n }, (_, i) => v(x 
 async function printTexture(PRINT, active = -1) {
   const INK = PRINT.ink;
   await Promise.all([
-    document.fonts.load('600 44px "Instrument Sans"'),
-    document.fonts.load('italic 600 30px "Instrument Sans"'),
+    document.fonts.load('400 30px "Instrument Sans"'),
     document.fonts.load('500 12px "Instrument Sans"'),
+    document.fonts.load('600 12px "Instrument Sans"'),
   ]).catch(() => {});
   const s = 4, c = document.createElement("canvas");
   c.width = W * s; c.height = H * s;
@@ -95,34 +100,55 @@ async function printTexture(PRINT, active = -1) {
     if ("letterSpacing" in g) g.letterSpacing = spacing + "px";
     g.fillText(str, x, y);
   };
-  text(PRINT.title, 44, 64, '600 30px "Instrument Sans", system-ui, sans-serif', INK, -0.3);
-  // the small spec line follows the top of the pack, like the reference's; a long title pushes it right
-  const subX = Math.max(200, 44 + g.measureText(PRINT.title).width + 10);
-  g.save(); g.translate(subX + 100, 52); g.rotate(0.04);
-  text(PRINT.sub, -100, 0, '500 11px "Instrument Sans", sans-serif', INK, 0);
-  g.restore();
-  // (the egg mark beside the model name is its own animated piece; see eggMark)
-  text(PRINT.mark, 400, 86, 'italic 600 30px "Instrument Sans", system-ui, sans-serif', INK, 0.5);
-  text(active >= 0 ? PRINT.tracks[active].code : PRINT.num, 44, 178, 'italic 600 26px "Instrument Sans", system-ui, sans-serif', RED);
-  g.strokeStyle = INK; g.lineWidth = 1.2;
-  g.beginPath(); g.moveTo(86, 140); g.lineTo(86, 202); g.stroke();
-  // side badge
-  g.strokeStyle = RED; g.lineWidth = 2;
-  g.beginPath(); g.arc(512, 168, 13, 0, Math.PI * 2); g.stroke();
-  text(PRINT.side, 512, 175, '600 18px "Instrument Sans", system-ui, sans-serif', RED, 0, "center");
-  // tape counter ticks in the window between the hubs
-  g.strokeStyle = INK; g.lineWidth = 1.2;
-  for (let i = 0; i < 6; i++) { const x = 232 + i * 12; g.beginPath(); g.moveTo(x, 160); g.lineTo(x, 174); g.stroke(); }
-  if (PRINT.name) text(PRINT.name, 86, 248, 'italic 600 15px "Instrument Sans", system-ui, sans-serif', INK, 0.5);
-  // tracklist: a coloured dot per project; the track the tape is on is bright, with a ▶
+  const F = w => `${w} "Instrument Sans", system-ui, sans-serif`;
+  const GREY = "rgba(40,42,48,.5)";
+  const hair = (x1, y1, x2, y2, color = INK, w = 0.8) => { g.strokeStyle = color; g.lineWidth = w; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); };
+  // title, lowercase, and a hairline under it running to the model code
+  text(PRINT.title, 44, 62, F("500 26px"), INK, -0.4);
+  hair(44, 74, 318, 74);
+  // spec grid: grey caption over the value, one column each
+  PRINT.spec.forEach(([k, val], i) => {
+    const x = 44 + i * 58;
+    text(k, x, 88, F("500 9px"), GREY);
+    text(val, x, 101, F("500 11px"), INK);
+  });
+  // model code: the one large thing, light (the egg mark sits just left of it; see eggMark)
+  text(PRINT.mark, 520, 86, F("400 30px"), INK, -0.6, "right");
+  hair(400, 96, 520, 96);
+  text("compact cassette", 400, 108, F("500 9px"), GREY);
+  text("type i", 520, 108, F("500 9px"), GREY, 0, "right");
+  // track number at the left of the window: red, a caption over it
+  text("track", 44, 150, F("500 9px"), GREY);
+  text(active >= 0 ? PRINT.tracks[active].code : PRINT.num, 44, 180, F("400 28px"), RED, -0.5);
+  hair(86, 140, 86, 202);
+  // side: a thin ring with the letter
+  g.strokeStyle = RED; g.lineWidth = 1.4;
+  g.beginPath(); g.arc(512, 166, 12, 0, Math.PI * 2); g.stroke();
+  text(PRINT.side, 512, 171, F("500 14px"), RED, 0, "center");
+  text("side", 512, 196, F("500 9px"), GREY, 0, "center");
+  // counter scale in the window between the hubs: short ticks, long every fifth, numbers under
+  for (let i = 0; i <= 10; i++) {
+    const x = 232 + i * 7, long = i % 5 === 0;
+    hair(x, long ? 156 : 160, x, 170, INK, long ? 1 : 0.7);
+  }
+  [["0", 232], ["30", 267], ["60", 302]].forEach(([n, x]) => text(n, x, 182, F("500 8px"), GREY, 0, "center"));
+  // name (About, Other) or the tracklist (Projects), under the window
+  if (PRINT.name) {
+    text("by", 98, 238, F("500 9px"), GREY);
+    text(PRINT.name, 98, 252, F("500 13px"), INK, -0.1);
+  }
   (PRINT.tracks || []).forEach((tr, i) => {
-    const y = 232 + i * 15, on = i === active;
-    g.globalAlpha = active < 0 || on ? 1 : 0.5;
-    g.fillStyle = tr.color; g.beginPath(); g.arc(90, y - 4, 3.6, 0, Math.PI * 2); g.fill();
-    text(`${on ? "▶ " : ""}${tr.code}  ${tr.name}`, 100, y, `${on ? 600 : 500} 12px "Instrument Sans", sans-serif`, INK, 0);
+    const y = 236 + i * 15, on = i === active;
+    g.globalAlpha = active < 0 || on ? 1 : 0.45;
+    g.fillStyle = tr.color; g.beginPath(); g.arc(102, y - 4, 3.4, 0, Math.PI * 2); g.fill();
+    text(tr.code, 112, y, F("500 10px"), GREY);
+    text(tr.name, 132, y, F(on ? "600 12px" : "500 12px"), INK);
+    if (on) text("▶", 94 - 10, y, F("500 8px"), RED);
     g.globalAlpha = 1;
   });
-  g.beginPath(); g.moveTo(452, 246); g.lineTo(486, 236); g.lineTo(476, 244); g.lineTo(498, 238); g.stroke();
+  // speaker-style dot grille, bottom right
+  g.fillStyle = INK;
+  for (let r = 0; r < 3; r++) for (let q = 0; q < 6; q++) { g.beginPath(); g.arc(462 + q * 8, 230 + r * 8, 1.4, 0, Math.PI * 2); g.fill(); }
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   t.anisotropy = 8;
