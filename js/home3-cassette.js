@@ -29,13 +29,13 @@ const fx = x => x - W / 2, fy = y => H / 2 - y;   // drawing → world
 // "track" event: the tape winds to that track, its row lights up and the big number shows it.
 const RED = "#D2412F";
 const PRINTS = {
-  about: { title: "ABOUT ME", sub: "SIDE A · VOL.01 · NORMAL POSITION", mark: "DYT 01", num: "01", side: "A", ink: "#2B2B2E",
+  about: { title: "ABOUT ME", sub: "Side A · Vol.01 · Normal position", mark: "DYT 01", num: "01", side: "A", ink: "#2B2B2E",
            name: "D A N I   Y E Y A N G   T I A N" },
-  works: { title: "PROJECTS", sub: "SIDE B · VOL.02 · NORMAL POSITION", mark: "DYT 02", num: "02", side: "B", ink: "#22262C",
-           tracks: [{ code: "B1", name: "VERDURE", color: "#6fd197", at: 0.06 },
-                    { code: "B2", name: "MICROSOFT FABRIC", color: "#8a6cc0", at: 0.4 },
-                    { code: "B3", name: "CLICKET", color: "#ff6f6f", at: 0.74 }] },
-  other: { title: "OTHER WORK", sub: "SIDE C · VOL.03 · BONUS TRACKS", mark: "DYT 03", num: "03", side: "C", ink: "#22262C",
+  works: { title: "PROJECTS", sub: "Side B · Vol.02 · Normal position", mark: "DYT 02", num: "02", side: "B", ink: "#22262C",
+           tracks: [{ code: "B1", name: "Verdure", color: "#6fd197", at: 0.06 },
+                    { code: "B2", name: "Microsoft Fabric", color: "#8a6cc0", at: 0.4 },
+                    { code: "B3", name: "Clicket", color: "#ff6f6f", at: 0.74 }] },
+  other: { title: "OTHER WORK", sub: "Side C · Vol.03 · Bonus tracks", mark: "DYT 03", num: "03", side: "C", ink: "#22262C",
            name: "S I D E   P R O J E C T S" },
 };
 // All three shells are frosted (a matte, grainy finish: soft highlights, a fine speckle in
@@ -84,7 +84,7 @@ async function printTexture(PRINT, active = -1) {
   await Promise.all([
     document.fonts.load('600 44px "Instrument Sans"'),
     document.fonts.load('italic 600 30px "Instrument Sans"'),
-    document.fonts.load('500 12px "Geist Mono"'),
+    document.fonts.load('500 12px "Instrument Sans"'),
   ]).catch(() => {});
   const s = 4, c = document.createElement("canvas");
   c.width = W * s; c.height = H * s;
@@ -99,7 +99,7 @@ async function printTexture(PRINT, active = -1) {
   // the small spec line follows the top of the pack, like the reference's; a long title pushes it right
   const subX = Math.max(200, 44 + g.measureText(PRINT.title).width + 10);
   g.save(); g.translate(subX + 100, 52); g.rotate(0.04);
-  text(PRINT.sub, -100, 0, '500 10px "Geist Mono", ui-monospace, monospace', INK, 1);
+  text(PRINT.sub, -100, 0, '500 11px "Instrument Sans", sans-serif', INK, 0);
   g.restore();
   // (the egg mark beside the model name is its own animated piece; see eggMark)
   text(PRINT.mark, 400, 86, 'italic 600 30px "Instrument Sans", system-ui, sans-serif', INK, 0.5);
@@ -119,7 +119,7 @@ async function printTexture(PRINT, active = -1) {
     const y = 232 + i * 15, on = i === active;
     g.globalAlpha = active < 0 || on ? 1 : 0.5;
     g.fillStyle = tr.color; g.beginPath(); g.arc(90, y - 4, 3.6, 0, Math.PI * 2); g.fill();
-    text(`${on ? "▶ " : ""}${tr.code}  ${tr.name}`, 100, y, `${on ? 600 : 500} 11px "Geist Mono", ui-monospace, monospace`, INK, 1.2);
+    text(`${on ? "▶ " : ""}${tr.code}  ${tr.name}`, 100, y, `${on ? 600 : 500} 12px "Instrument Sans", sans-serif`, INK, 0);
     g.globalAlpha = 1;
   });
   g.beginPath(); g.moveTo(452, 246); g.lineTo(486, 236); g.lineTo(476, 244); g.lineTo(498, 238); g.stroke();

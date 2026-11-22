@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/site.css?v=42">
 <style>
   /* Home 3 · cassette (Figma: 2026 babies › home3 › "v3 · cassette · about").
@@ -62,7 +62,7 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
     background: linear-gradient(#eceef1, #d7dade);
     box-shadow: inset 0 1px 0 rgba(255,255,255,.7);   /* runs straight into the front face, no seam line */
-    font: 500 8.5px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .1em; color: #666a72;
+    font: 500 10px/1 'Instrument Sans', sans-serif; color: #666a72;
     transition: bottom .3s cubic-bezier(.3, 1.6, .5, 1), color .2s, background .2s;
   }
   .key-cap svg { width: 12px; height: 9px; fill: currentColor; }
@@ -136,7 +136,7 @@
     box-shadow: inset 0 2px 3px rgba(20,28,40,.35), inset 0 -1px 0 rgba(255,255,255,.5); }
   .vk-cap {
     display: flex; align-items: center; gap: 4px; padding: 7px 13px; border-radius: 8px;
-    font: 500 13px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase;
+    font: 500 15px/1 'Instrument Sans', sans-serif;
     color: var(--ink-k); text-shadow: 0 1px 0 rgba(255,255,255,.55);
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(var(--cap-1), var(--cap-2));
     box-shadow: 0 3px 0 var(--side), 0 4px 3px rgba(20,28,40,.28), inset 0 0 0 1px color-mix(in srgb, var(--edge) 45%, transparent), inset 0 1px 0 rgba(255,255,255,.75), inset 0 -2px 1px rgba(0,0,0,.05);
@@ -181,17 +181,17 @@
   .track-cover.is-art { display: grid; place-items: center; background: linear-gradient(135deg, #b9a5e6, var(--accent)); color: #fff; font: italic 400 30px/1 "Instrument Serif", Georgia, serif; }
   .track-info { display: flex; flex-direction: column; flex: 1; min-width: 0; padding: 0 2px; }
   .track-title { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; line-height: 1.2; }
-  .track-sub { display: flex; flex-wrap: wrap; column-gap: 1.2em; margin-top: 2px; font: 500 8.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
+  .track-sub { display: flex; flex-wrap: wrap; column-gap: 1.2em; margin-top: 2px; font: 500 10px/1.4 'Instrument Sans', sans-serif; color: var(--ink-muted); margin-bottom: 8px; }
   .track-bar { display: block; position: relative; height: 3px; margin-top: auto; border-radius: 2px; background: #ecebef; overflow: hidden; }
   .track-bar i { position: absolute; inset: 0 auto 0 0; width: calc(var(--p) * 100%); border-radius: 2px; background: var(--accent); transition: width 1.6s cubic-bezier(.3, 0, .2, 1); }
   a.track:hover .track-bar i { width: 100%; }
-  .track-time { display: flex; justify-content: space-between; margin-top: 5px; font: 500 8.5px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); }
+  .track-time { display: flex; justify-content: space-between; margin-top: 5px; font: 500 10px/1 'Instrument Sans', sans-serif; color: var(--ink-faint); }
   .track.is-playing .track-bar i { width: 100%; transition-duration: .9s; }
   .track.is-playing .eq { opacity: 1; }
   .track.is-playing .eq i { animation: eq .5s ease-in-out infinite; }
   .track.is-playing .eq i:nth-child(2) { animation-delay: -.2s; }
   .track.is-playing .eq i:nth-child(3) { animation-delay: -.35s; }
-  .soon { position: absolute; left: 8px; top: 8px; font: 500 9px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: #fff; background: rgba(30,20,50,.35); border-radius: 99px; padding: 4px 7px; }
+  .soon { position: absolute; left: 8px; top: 8px; font: 500 10.5px/1 'Instrument Sans', sans-serif; color: #fff; background: rgba(30,20,50,.35); border-radius: 99px; padding: 4px 7px; }
   /* equaliser next to the title while hovered */
   .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 9px; opacity: 0; transition: opacity .2s; }
   .eq i { width: 2px; height: 100%; border-radius: 1px; background: var(--accent); transform-origin: bottom; transform: scaleY(.3); }
@@ -220,7 +220,7 @@
   }
   .scroll-cue a {
     display: inline-flex; align-items: center; gap: 8px;
-    font: 500 11px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase;
+    font: 500 12.5px/1 'Instrument Sans', sans-serif;
     color: var(--ink-muted); transition: color .2s;
   }
   .scroll-cue a:hover { color: var(--ink); }
@@ -290,14 +290,14 @@
   .player.is-on .arm { transform: rotate(-30deg); }
   .btn-play .ic-pause { opacity: 0; } .player.is-on .btn-play .ic-play { opacity: 0; } .player.is-on .btn-play .ic-pause { opacity: 1; }
   .btn-play path { transition: opacity .2s; }
-  .deck-label { font: 500 13px "Geist Mono", ui-monospace, monospace; letter-spacing: .12em; fill: #77767f; }
+  .deck-label { font: 500 15px 'Instrument Sans', sans-serif; fill: #77767f; }
   .player.is-soon .deck-tt { filter: saturate(.7); }
   .player-text { display: block; padding: 16px 6px 0; }
   .player-title { display: flex; align-items: baseline; gap: 10px; font: 500 20px/1.2 'Instrument Sans', sans-serif; }
   .player-artist { display: block; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
   /* tags side by side with space between them, no dots; each tag stays on one line */
   .track-sub > span, .player-tags > span { white-space: nowrap; }
-  .player-tags { display: flex; flex-wrap: wrap; column-gap: 1.4em; margin-top: 10px; font: 500 9.5px/1.4 "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .player-tags { display: flex; flex-wrap: wrap; column-gap: 1.4em; margin-top: 10px; font: 500 11px/1.4 'Instrument Sans', sans-serif; color: var(--ink-faint); }
   @media (max-width: 960px) { .players { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 600px) {
     .players { grid-template-columns: 1fr; }
@@ -332,9 +332,9 @@
 <main class="deck">
   <div class="tape-col">
     <div class="keys" role="group" aria-label="Tapes">
-      <button type="button" class="key" aria-pressed="true" aria-label="About"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2 0v9l8-4.5z"/></svg>ABOUT</span></button>
-      <button type="button" class="key" aria-pressed="false" aria-label="Projects"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M0 0v9l6-4.5zM6 0v9l6-4.5z"/></svg>PROJECTS</span></button>
-      <button type="button" class="key" aria-pressed="false" aria-label="Other work"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M1 6h10v2H1zM6 0l5 5H1z"/></svg>OTHER</span></button>
+      <button type="button" class="key" aria-pressed="true" aria-label="About"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2 0v9l8-4.5z"/></svg>About</span></button>
+      <button type="button" class="key" aria-pressed="false" aria-label="Projects"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M0 0v9l6-4.5zM6 0v9l6-4.5z"/></svg>Projects</span></button>
+      <button type="button" class="key" aria-pressed="false" aria-label="Other work"><span class="key-side"></span><span class="key-cap"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M1 6h10v2H1zM6 0l5 5H1z"/></svg>Other</span></button>
     </div>
     <div class="tape" id="tape">
       <img class="tape-fallback" draggable="false" src="assets/home3/cassette-about.svg" alt="A clear cassette labelled About me, side A, vol. 01">
@@ -406,7 +406,7 @@
       <span class="deck-tt">
         <span class="record"><span class="scene" style="--scene: #5d7a2a url(assets/home3/verdure-grass.jpg)"><span class="screen" data-flow="verdure" role="img" aria-label="The Verdure app on a phone, over a field of grass"><img src="assets/home3/verdure-flow-1.jpg?v=3" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
-          <text class="deck-label" x="40" y="62">TRACK 01</text>
+          <text class="deck-label" x="40" y="62">Track 01</text>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
           <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
@@ -425,7 +425,7 @@
       <span class="deck-tt">
         <span class="record"><span class="art">Fabric</span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
-          <text class="deck-label" x="40" y="62">TRACK 02</text>
+          <text class="deck-label" x="40" y="62">Track 02</text>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
           <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
@@ -444,7 +444,7 @@
       <span class="deck-tt">
         <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg?v=2" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
-          <text class="deck-label" x="40" y="62">TRACK 03</text>
+          <text class="deck-label" x="40" y="62">Track 03</text>
           <circle class="ring-bg" cx="280" cy="282" r="250"/><circle class="ring" cx="280" cy="282" r="250"/>
           <circle cx="566" cy="236" r="15" fill="#d3d4d9"/><circle cx="566" cy="236" r="5" fill="#8b8b93"/><circle cx="610" cy="236" r="20" fill="#f6f6f8" stroke="#cfd0d5" stroke-width="2"/><circle cx="610" cy="236" r="7" fill="#e5484d"/>
           <circle cx="596" cy="96" r="44" fill="#d6d7dc"/><circle cx="596" cy="96" r="30" fill="#c4c5cb"/><circle cx="596" cy="96" r="16" fill="#9fa0a8"/>
@@ -673,6 +673,6 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
-<script type="module" src="js/home3-cassette.js?v=73"></script>
+<script type="module" src="js/home3-cassette.js?v=74"></script>
 </body>
 </html>
