@@ -22,8 +22,7 @@
   }
 
   /* ---------- left column ---------- */
-  /* Section nav and project list share one type size (--side-size). */
-  .side { --side-size: 14px; display: flex; flex-direction: column; gap: 48px; min-height: 0; overflow-y: auto; padding-bottom: 32px; }
+  .side { --side-size: 14px; display: flex; flex-direction: column; gap: 14px; min-height: 0; overflow-y: auto; padding-bottom: 32px; }
 
   .sections {
     position: relative;
@@ -73,27 +72,14 @@
   .sections button[aria-current="true"] { color: var(--ink); }
   .sections button:disabled { color: var(--ink-faint); opacity: .5; cursor: default; }
 
-  .project-list {
-    list-style: none; padding: 14px 10px 16px 20px; display: flex; flex-direction: column; gap: 18px;
-    background: var(--panel); border-radius: 0 12px 12px 0;
-  }
-  .project-list button { display: block; text-align: left; width: 100%; }
-  .project-list strong {
-    display: block; font-weight: 400; font-size: var(--side-size); line-height: 1.35;
-    color: var(--ink-muted); transition: color .3s;
-  }
-  .project-list span {
-    display: block; margin-top: 3px; font-size: 12px; line-height: 1.45;
-    color: var(--ink-faint); transition: color .3s;
-  }
-  /* under each name, its tags (as on Home's cards) instead of a sentence */
-  .project-list .pl-tags { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 6px;
-    font: 500 12px/1.4 'Instrument Sans', sans-serif; }
-  .project-list .pl-tags i { font-style: normal; white-space: nowrap; }
-  .project-list button:hover strong,
-  .project-list button[aria-current="true"] strong { color: var(--ink); }
-  .project-list button:hover span,
-  .project-list button[aria-current="true"] span { color: var(--ink-muted); }
+  /* where you are: "projects / verdure" over the section list; "projects" goes back to the pockets */
+  .crumb { display: flex; flex-wrap: wrap; gap: 2px 6px; align-items: baseline; padding: 0 0 0 40px; font-size: 13px; line-height: 1.3; color: #8b8b91; }
+  .crumb b { white-space: nowrap; }
+  .crumb button { color: #8b8b91; transition: color .2s; }
+  .crumb button:hover { color: var(--ink); }
+  .crumb b { font-weight: 500; color: var(--ink); }
+  .crumb button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+  .is-pocket .crumb { visibility: hidden; }
 
   /* ---------- right: project viewer ---------- */
   .viewer { position: relative; min-height: 0; background: var(--placeholder); }
@@ -106,55 +92,6 @@
   .viewer iframe.is-loading { opacity: 0; transform: translateY(32px); }
   .is-pocket .viewer iframe { opacity: 0; transform: translateY(32px); pointer-events: none; }
   .fader { transition: opacity .3s; }
-  /* Back to the pockets: a physical key floating over the case study's top-left corner,
-     sat in a light metal bezel like the exposure dial's. The cap stands proud of the
-     well (its side shows as a hard shadow), lifts a touch on hover, sinks flush when
-     pressed and springs back up on release. */
-  .viewer-back {
-    position: absolute; top: 16px; left: 16px; z-index: 3;
-    display: block; padding: 3px; border-radius: 13px;
-    background: linear-gradient(#fdfdfc, #e4e3e0 45%, #c9c8c4);
-    box-shadow:
-      0 0 0 1px rgba(0,0,0,.14),
-      0 2px 5px rgba(0,0,0,.22),
-      0 8px 18px rgba(0,0,0,.12),
-      inset 0 1px 0 #fff,
-      inset 0 -1px 0 rgba(0,0,0,.12);
-    transition: opacity .35s var(--ease), transform .35s var(--ease);
-    -webkit-tap-highlight-color: transparent;
-  }
-  /* the well the key sits in */
-  .vb-well {
-    display: block; padding: 2px 2px 3px; border-radius: 10px;
-    background: linear-gradient(#a9a8a4, #c7c6c2);
-    box-shadow: inset 0 2px 3px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.5);
-  }
-  .vb-cap {
-    display: flex; align-items: center; gap: 3px;
-    padding: 6px 12px 6px 8px; border-radius: 8px;
-    font: 500 13px/1 'Instrument Sans', sans-serif;
-    color: #3b3a3f; text-shadow: 0 1px 0 rgba(255,255,255,.9);   /* engraved */
-    background: linear-gradient(#ffffff, #f1f0ed 55%, #e5e4e0);
-    box-shadow:
-      0 3px 0 #9d9c98,                      /* the cap's side */
-      0 4px 3px rgba(0,0,0,.28),
-      inset 0 1px 0 #fff,
-      inset 0 -2px 1px rgba(0,0,0,.05);
-    transform: translateY(-3px);
-    transition: transform .28s cubic-bezier(.3, 1.8, .5, 1), box-shadow .28s cubic-bezier(.3, 1.8, .5, 1);
-  }
-  .vb-cap svg { width: 14px; height: 14px; filter: drop-shadow(0 1px 0 rgba(255,255,255,.9)); }
-  .viewer-back:hover .vb-cap {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 0 #9d9c98, 0 5px 4px rgba(0,0,0,.26), inset 0 1px 0 #fff, inset 0 -2px 1px rgba(0,0,0,.05);
-  }
-  .viewer-back:active .vb-cap, .viewer-back.is-pressed .vb-cap {
-    transform: translateY(0);
-    box-shadow: 0 0 0 #9d9c98, 0 1px 1px rgba(0,0,0,.2), inset 0 1px 2px rgba(0,0,0,.1), inset 0 -1px 0 rgba(255,255,255,.6);
-    transition-duration: .06s; transition-timing-function: ease-out;
-  }
-  .viewer-back:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .is-pocket .viewer-back { opacity: 0; transform: translateY(-6px); pointer-events: none; }
   .is-pocket .fader { opacity: .45; pointer-events: none; }   /* resting: knob parked at the top, nothing to scrub */
 
   /* ---------- pockets: the projects landing view ----------
@@ -282,7 +219,7 @@
     .sections { display: flex; flex-wrap: wrap; gap: 0 20px; padding: 8px 16px; border-radius: 12px; }
     .fader { display: none; }
     .sections button { padding: 6px 0; }
-    .project-list { flex-direction: row; gap: 20px; padding: 10px 16px; border-radius: 12px; }
+    .crumb { padding-left: 16px; }
     .viewer { height: 80vh; }
   }
 </style>
@@ -309,18 +246,12 @@
 
 <div class="layout">
   <aside class="side">
+    <p class="crumb" id="crumb"><button type="button" id="crumb-back">projects</button><span aria-hidden="true">/</span><b id="crumb-name"></b></p>
     <ul class="sections" id="sections" aria-label="Sections"></ul>
-    <ul class="project-list" id="project-list" aria-label="Projects"></ul>
   </aside>
 
   <main class="viewer">
     <iframe id="viewer" title="Project case study"></iframe>
-    <button type="button" class="viewer-back" id="viewer-back" aria-label="Back to all projects">
-      <span class="vb-well"><span class="vb-cap">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg>
-        Projects
-      </span></span>
-    </button>
     <section class="pocket-stage" id="pocket-stage" aria-label="Projects">
       <div class="pocket-grid" id="pocket-grid"></div>
     </section>
@@ -395,7 +326,7 @@
 
   const iframe = document.getElementById("viewer");
   const sectionList = document.getElementById("sections");
-  const projectList = document.getElementById("project-list");
+  const crumbName = document.getElementById("crumb-name");
   let active, detachScroll = null;   // active: project id, null = pocket overview
 
   const sectionNames = Object.keys(PROJECTS.verdure.sections);
@@ -406,10 +337,6 @@
   const fader = sectionList.querySelector(".fader");
   const fTicks = fader.querySelector(".fader-ticks"), fTrack = fader.querySelector(".fader-track");
   const fFill = fader.querySelector(".fader-fill"), fKnob = fader.querySelector(".fader-knob");
-  projectList.innerHTML = Object.entries(PROJECTS).map(([id, p]) => `
-    <li><button type="button" data-project="${id}">
-      <strong>${p.title}</strong><span class="pl-tags">${p.tags.map(t => `<i>${t}</i>`).join("")}</span>
-    </button></li>`).join("");
 
   const zoomOf = win => {
     const f = win.document.getElementById("frame");
@@ -562,7 +489,7 @@
     if (!PROJECTS[id]) id = null;
     if (id === active) return;
     active = id;
-    projectList.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", b.dataset.project === (id || "")));
+    crumbName.textContent = id ? PROJECTS[id].title.toLowerCase() : "";
     document.body.classList.toggle("is-pocket", !id);
     if (!id) {
       clearInterval(poll); detachScroll?.(); detachScroll = null; attachedDoc = null;
@@ -626,10 +553,40 @@
       win.removeEventListener("wheel", onWheel);
       win.removeEventListener("keydown", onKey);
     };
+    addNext(doc, active);
     spy();
     iframe.classList.remove("is-loading");
     return true;
   }
+  // At the end of each case study: the next project (the last one leads back to the first),
+  // a quiet block in the nav's style, so a reader who finishes one goes straight on.
+  const ORDER = Object.keys(PROJECTS);
+  function addNext(doc, id) {
+    if (doc.getElementById("next-project")) return;
+    const k = ORDER[(ORDER.indexOf(id) + 1) % ORDER.length], p = PROJECTS[k];
+    const n = String(ORDER.indexOf(k) + 1).padStart(2, "0");
+    const el = doc.createElement("a");
+    el.id = "next-project"; el.href = `?p=${k}`;
+    el.style.cssText = "display:block;background:#fafafa;padding:40px 32px 96px;color:#141414;text-decoration:none;font-family:'Instrument Sans',system-ui,sans-serif;";
+    el.innerHTML = `<span style="display:block;max-width:1000px;margin:0 auto">
+      <span style="display:block;border-top:1px solid #dcdcdf;padding-top:20px;font-size:13px;color:#8b8b91">next project</span>
+      <span style="display:flex;align-items:baseline;gap:14px;margin-top:18px">
+        <span style="font-size:13px;color:#D2412F;font-variant-numeric:tabular-nums">${n}</span>
+        <span class="np-title" style="font-size:44px;font-weight:500;letter-spacing:-.02em;line-height:1">${p.title.toLowerCase()}</span>
+        <span class="np-arrow" style="font-size:32px;line-height:1;color:#8b8b91;transition:transform .25s,color .25s">→</span>
+      </span>
+      <span style="display:block;margin-top:14px;font-size:16px;line-height:1.5;color:#6E6879">${p.blurb}</span>
+      <span style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:#8b8b91"><i style="width:8px;height:8px;border-radius:50%;background:${p.color}"></i>${p.tags.join(" · ")}</span></span>`;
+    // the same ground as the case study above it, so the page simply continues
+    const f = doc.getElementById("frame");
+    el.style.background = f ? doc.defaultView.getComputedStyle(f).backgroundColor : "#fafafa";
+    const arrow = el.querySelector(".np-arrow");
+    el.addEventListener("mouseenter", () => { arrow.style.transform = "translateX(6px)"; arrow.style.color = "#141414"; });
+    el.addEventListener("mouseleave", () => { arrow.style.transform = ""; arrow.style.color = "#8b8b91"; });
+    el.addEventListener("click", e => { e.preventDefault(); openProject(k); });
+    doc.body.appendChild(el);
+  }
+
   let poll = null;
   function waitForProject() {
     clearInterval(poll);
@@ -648,10 +605,6 @@
     win.scrollTo({ top: secY(win, b.dataset.section) * zoomOf(win), behavior: smooth ? "smooth" : "auto" });
   });
 
-  projectList.addEventListener("click", e => {
-    const b = e.target.closest("button[data-project]");
-    if (b) openProject(b.dataset.project);
-  });
   // ---------- pockets ----------
   const pocket = (() => {
     const stage = document.getElementById("pocket-stage"), grid = document.getElementById("pocket-grid");
@@ -862,12 +815,7 @@
   })();
 
   addEventListener("popstate", () => openProject(new URLSearchParams(location.search).get("p"), { push: false }));
-  // hold the key down for a beat so the press reads, then go
-  const backKey = document.getElementById("viewer-back");
-  backKey.addEventListener("click", () => {
-    backKey.classList.add("is-pressed");
-    setTimeout(() => { backKey.classList.remove("is-pressed"); openProject(null); }, 140);
-  });
+  document.getElementById("crumb-back").addEventListener("click", () => openProject(null));
 
   // A refresh always lands on the pockets; a link with ?p= (e.g. from Home) opens that project.
   const reloaded = performance.getEntriesByType("navigation")[0]?.type === "reload";
