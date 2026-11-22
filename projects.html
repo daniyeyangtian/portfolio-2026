@@ -576,7 +576,7 @@
         <span class="np-arrow" style="font-size:32px;line-height:1;color:#8b8b91;transition:transform .25s,color .25s">→</span>
       </span>
       <span style="display:block;margin-top:14px;font-size:16px;line-height:1.5;color:#6E6879">${p.blurb}</span>
-      <span style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:#8b8b91"><i style="width:8px;height:8px;border-radius:50%;background:${p.color}"></i>${p.tags.join(" · ")}</span></span>`;
+      <span style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:14px;font-size:13px;color:#8b8b91"><i style="width:8px;height:8px;border-radius:50%;background:${p.color};margin-right:-6px"></i>${p.tags.map(t => `<span style="white-space:nowrap">${t}</span>`).join("")}</span></span>`;
     // the same ground as the case study above it, so the page simply continues
     const f = doc.getElementById("frame");
     el.style.background = f ? doc.defaultView.getComputedStyle(f).backgroundColor : "#fafafa";
