@@ -246,12 +246,12 @@
   .scroll-cue a:hover .cue-cap { transform: translateY(-3.5px); box-shadow: 0 3.5px 0 #b3b9c0, 0 4px 4px rgba(20,28,40,.24), inset 0 0 0 1px rgba(185,191,198,.5), inset 0 1px 0 rgba(255,255,255,.9); }
   .scroll-cue a:active .cue-cap { transform: translateY(0); box-shadow: 0 0 0 #b3b9c0, 0 1px 1px rgba(20,28,40,.2), inset 0 1px 2px rgba(0,0,0,.12); transition-duration: .06s; }
   /* once you are down in Featured projects the arrow turns to point up, and the key takes you back to the top */
-  /* the arrow turns and the two labels cross-fade together: same length, same easing. Both labels
+  /* the arrow turns and the two labels cross-fade together, unhurried: same length, same easing. Both labels
      share one grid cell, so the key never shifts sideways when the words change. */
-  .scroll-cue svg { width: 10px; height: 10px; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+  .scroll-cue svg { width: 10px; height: 10px; transition: transform .7s cubic-bezier(.45, 0, .2, 1); }
   .scroll-cue.is-up svg { transform: rotate(180deg); }
   .cue-label { display: grid; justify-items: end; }
-  .cue-label > span { grid-area: 1 / 1; transition: opacity .4s cubic-bezier(.2, .7, .2, 1); }
+  .cue-label > span { grid-area: 1 / 1; transition: opacity .7s cubic-bezier(.45, 0, .2, 1); }
   .cue-label .cl-up { opacity: 0; }
   .scroll-cue.is-up .cl-down { opacity: 0; }
   .scroll-cue.is-up .cl-up { opacity: 1; }
@@ -568,7 +568,10 @@
       cue.querySelector(".cl-up").setAttribute("aria-hidden", !up);
       link.setAttribute("aria-label", up ? "Back to the top of the page" : "Go to featured projects");
     };
-    addEventListener("scroll", check, { passive: true }); addEventListener("resize", check); check();
+    // change only once the page has come to rest, so the turn is seen, not caught mid-scroll
+    let rest = 0;
+    addEventListener("scroll", () => { clearTimeout(rest); rest = setTimeout(check, 160); }, { passive: true });
+    addEventListener("resize", check); check();
     link.addEventListener("click", e => {
       if (!cue.classList.contains("is-up")) return;
       e.preventDefault();
