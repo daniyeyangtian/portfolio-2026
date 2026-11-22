@@ -8,8 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=40">
-<script src="js/theme.js?v=3"></script>
+<link rel="stylesheet" href="css/site.css?v=32">
 <style>
   /* One Other Work project (work.html?p=1…5), shown in a browser window like the cards on
      other-work.html: a title bar whose five tabs are the five projects (the open one is white),
@@ -83,20 +82,6 @@
     .b-nav { width: 24px; }
   }
   @media (prefers-reduced-motion: reduce) { .b-view iframe, .b-tab, .b-close::after { transition: none; } }
-
-  /* dark theme: dark browser chrome around the project page */
-  :root[data-theme="dark"] .browser { --bar: #2a2b2f; --tab: #1d1e21; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 10px 30px -12px rgba(0,0,0,.7); }
-  :root[data-theme="dark"] .b-tab { color: #a9acb2; }
-  :root[data-theme="dark"] .b-tab:hover { background: rgba(255,255,255,.06); color: #e6e7ea; }
-  :root[data-theme="dark"] .b-tab[aria-current] { color: #e6e7ea; }
-  :root[data-theme="dark"] .b-tab:not([aria-current]) + .b-tab:not([aria-current])::before { background: #45464b; }
-  :root[data-theme="dark"] .b-toolbar { border-bottom-color: #2c2d31; }
-  :root[data-theme="dark"] .b-nav { color: #a9acb2; }
-  :root[data-theme="dark"] .b-nav:hover { background: #2a2b2f; color: #e6e7ea; }
-  :root[data-theme="dark"] .b-url { background: #2a2b2f; color: #9a9ea5; }
-  :root[data-theme="dark"] .b-url b { color: #e2e3e6; }
-  :root[data-theme="dark"] .pager { border-top-color: #2c2d31; }
-  :root[data-theme="dark"] .pager span { color: #8f9399; }
 </style>
 </head>
 <body>

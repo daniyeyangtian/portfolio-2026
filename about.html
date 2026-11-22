@@ -8,8 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Grape+Nuts&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=40">
-<script src="js/theme.js?v=3"></script>
+<link rel="stylesheet" href="css/site.css?v=32">
 <style>
   /* The collage is laid out on Figma's 1420-wide "Aboutme" frame (272:59591), cropped
      to y 130–1580, and scaled to the window width by the script at the bottom. */
@@ -74,12 +73,6 @@
   .tl-item { position: absolute; width: 230px; animation: tl-in .6s ease backwards; }
   .tl-when { display: block; font: 500 11px/1.2 "Geist", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #6E6879; }
   .tl-item.is-now .tl-when { color: #d2412f; }
-  /* dark theme: the timeline and the handwritten notes sit on the page, so they turn light */
-  :root[data-theme="dark"] .tl-when, :root[data-theme="dark"] .tl-note { color: #a8a3b0; }
-  :root[data-theme="dark"] .note { color: #c2bdca; }
-  :root[data-theme="dark"] .tl-item.is-now .tl-when { color: #ff6a55; }
-  :root[data-theme="dark"] .tl-what { color: #ececec; }
-  :root[data-theme="dark"] .tl-more { color: #b9b4c0; }
   .tl-what { display: block; margin-top: 6px; font: 500 16px/1.3 "Geist", sans-serif; color: #141414; }
   .tl-more { display: block; margin-top: 3px; white-space: nowrap; font: 300 13.5px/1.4 "Geist", sans-serif; color: #4f4b57; }
   .tl-note { display: block; margin-top: 6px; font: 15px/1.2 "Grape Nuts", cursive; color: #6E6879; }
