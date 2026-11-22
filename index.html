@@ -410,21 +410,21 @@
           <span class="track-time"><span>Track 01</span></span>
         </span>
       </a></li>
-      <li><a class="track" href="projects.html?p=fabric" style="--accent:#8a6cc0">
-        <span class="track-art"><span class="track-cover is-art" aria-hidden="true">Fabric</span></span>
-        <span class="track-info">
-          <span class="track-title">Microsoft Fabric <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
-          <span class="track-sub"><span>Client project</span><span>AI</span><span>UX research</span></span>
-          <span class="track-bar" style="--p:0"><i></i></span>
-          <span class="track-time"><span>Track 02</span></span>
-        </span>
-      </a></li>
       <li><a class="track" href="projects.html?p=clicket" style="--accent:#ff6f6f">
         <span class="track-art"><span class="track-cover is-scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)" aria-hidden="true"><img src="assets/home3/clicket-screen.png?v=2" alt=""></span></span>
         <span class="track-info">
           <span class="track-title">Clicket <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
           <span class="track-sub"><span>Physical product</span><span>App</span><span>Service</span></span>
           <span class="track-bar" style="--p:.38"><i></i></span>
+          <span class="track-time"><span>Track 02</span></span>
+        </span>
+      </a></li>
+      <li><a class="track" href="projects.html?p=fabric" style="--accent:#8a6cc0">
+        <span class="track-art"><span class="track-cover is-art" aria-hidden="true">Fabric</span></span>
+        <span class="track-info">
+          <span class="track-title">Microsoft Fabric <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
+          <span class="track-sub"><span>Client project</span><span>AI</span><span>UX research</span></span>
+          <span class="track-bar" style="--p:0"><i></i></span>
           <span class="track-time"><span>Track 03</span></span>
         </span>
       </a></li>
@@ -472,9 +472,9 @@
         <span class="player-tags"><span>Client project</span><span>UX/UI</span><span>Complex system</span></span>
       </span>
     </a></li>
-    <li><a class="player" href="projects.html?p=fabric" style="--accent:#8a6cc0; --p:0">
+    <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f; --p:.38">
       <span class="deck-tt">
-        <span class="record"><span class="art">Fabric</span></span>
+        <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg?v=2" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-cap" x="34" y="40">track</text><text class="deck-label" x="34" y="66">02</text>
           <text class="deck-label" x="622" y="36" text-anchor="end">tt–02</text>
@@ -492,14 +492,14 @@
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title"><span class="player-no">02</span>Microsoft Fabric</span>
-        <span class="player-artist">How AI shapes software discovery for small businesses. In progress.</span>
-        <span class="player-tags"><span>Client project</span><span>AI</span><span>UX research</span></span>
+        <span class="player-title"><span class="player-no">02</span>Clicket</span>
+        <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
+        <span class="player-tags"><span>Physical product</span><span>App</span><span>Service</span></span>
       </span>
     </a></li>
-    <li><a class="player" href="projects.html?p=clicket" style="--accent:#ff6f6f; --p:.38">
+    <li><a class="player" href="projects.html?p=fabric" style="--accent:#8a6cc0; --p:0">
       <span class="deck-tt">
-        <span class="record"><span class="scene" style="--scene: #eee url(assets/home3/clicket-cameras.jpg)"><span class="screen" data-flow="clicket" role="img" aria-label="The Clicket app on a phone, over a table of old cameras"><img src="assets/home3/clicket-flow-1.jpg?v=2" alt="" decoding="async"><img alt="" decoding="async"><span class="tap"></span></span></span></span>
+        <span class="record"><span class="art">Fabric</span></span>
         <svg class="chrome" viewBox="0 0 650 560" aria-hidden="true">
           <text class="deck-cap" x="34" y="40">track</text><text class="deck-label" x="34" y="66">03</text>
           <text class="deck-label" x="622" y="36" text-anchor="end">tt–03</text>
@@ -517,9 +517,9 @@
         </svg>
       </span>
       <span class="player-text">
-        <span class="player-title"><span class="player-no">03</span>Clicket</span>
-        <span class="player-artist">Camera accessory, app and rental service for new photographers.</span>
-        <span class="player-tags"><span>Physical product</span><span>App</span><span>Service</span></span>
+        <span class="player-title"><span class="player-no">03</span>Microsoft Fabric</span>
+        <span class="player-artist">How AI shapes software discovery for small businesses. In progress.</span>
+        <span class="player-tags"><span>Client project</span><span>AI</span><span>UX research</span></span>
       </span>
     </a></li>
   </ul>
@@ -531,7 +531,7 @@
 </footer>
 
 <script src="js/nav.js?v=24"></script>
-<script src="js/track-sound.js?v=5"></script>
+<script src="js/track-sound.js?v=6"></script>
 <script>
   // the previous-work key: hold it down for a beat so the press reads, then go
   document.querySelectorAll(".vkey").forEach(k => k.addEventListener("click", e => {
@@ -736,6 +736,6 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
-<script type="module" src="js/home3-cassette.js?v=75"></script>
+<script type="module" src="js/home3-cassette.js?v=76"></script>
 </body>
 </html>

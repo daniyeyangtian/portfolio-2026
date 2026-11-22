@@ -1,10 +1,10 @@
 // Home, PROJECTS tape and the Featured projects players below it: pointing at a card plays a short sound, a soft two-note
-// electric-piano chime, low and rounded, pitched per track (Verdure lowest, Clicket highest), with a little
+// electric-piano chime, low and rounded, pitched per track (Verdure lowest, Fabric highest), with a little
 // tape wobble. Made on the fly with Web Audio, no audio files. Browsers only allow sound
 // after a click or key press on the page, which pressing the PROJECTS key already is.
 (() => {
   const AC = window.AudioContext || window.webkitAudioContext;
-  // each set counts from its first card, so Verdure, Fabric and Clicket keep their own chime
+  // each set counts from its first card, so Verdure, Clicket and Fabric keep their own chime
   const sets = ['[data-tape="works"] .track', ".featured .player"].map(q => [...document.querySelectorAll(q)]);
   if (!AC || !sets.some(s => s.length)) return;
   const CHIMES = [[60, 67], [64, 71], [67, 74]];   // C4–G4, E4–B4, G4–D5: an octave lower, softer
