@@ -42,7 +42,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .site-nav a { position: relative; z-index: 1; display: grid; align-items: baseline; justify-items: center; white-space: nowrap; transition: color .3s; }
 .site-nav a > span { grid-area: 1 / 1; transition: opacity .28s var(--ease); }
 .site-nav .nl-serif { font: italic 400 1.22em/1 "Instrument Serif", Georgia, serif; letter-spacing: .005em; opacity: 0; }
-.site-nav a.is-on { color: var(--ink); }
+.site-nav a.is-on { color: #D2412F; }   /* the dial light's red: the same "you are here" */
 .site-nav a.is-on .nl-sans { opacity: 0; }
 .site-nav a.is-on .nl-serif { opacity: 1; }
 .site-nav a:not(.is-on):not([aria-disabled="true"]):hover { color: #3b3742; }
