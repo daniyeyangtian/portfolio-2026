@@ -1,4 +1,4 @@
-// WebGL cassette for home3.html (three.js). It fades in over the flat SVG fallback once the
+// WebGL cassette for the home page, index.html (three.js). It fades in over the flat SVG (inline in the page) once the
 // first frame is drawn; if WebGL or the module fails, the SVG stays.
 //
 // Modelled 1:1 on a tinted see-through cassette (the reference is a blue FUJI CDFAN1), in
