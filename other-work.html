@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=32">
+<link rel="stylesheet" href="css/site.css?v=40">
+<script src="js/theme.js?v=3"></script>
 <style>
   /* Other Work: each project is a small browser window: a title bar with the three window
      buttons and one open tab (the project's name, its colour as the tab icon), an address bar,
@@ -65,6 +66,17 @@
   @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 24px 20px; } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .win, .win-dots i { transition: none; } .win:hover, .win:focus-visible { transform: none; } }
+
+  /* dark theme: the windows get dark browser chrome */
+  :root[data-theme="dark"] .win { --bar: #2a2b2f; --tab: #1d1e21; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 6px 16px -6px rgba(0,0,0,.6); }
+  :root[data-theme="dark"] .win:hover, :root[data-theme="dark"] .win:focus-visible { box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 16px 28px -10px rgba(0,0,0,.7); }
+  :root[data-theme="dark"] .win-dots i { background: #4a4b50; }
+  :root[data-theme="dark"] .win-tab { color: #e6e7ea; }
+  :root[data-theme="dark"] .win-url { background: #2a2b2f; color: #9a9ea5; }
+  :root[data-theme="dark"] .win-url b { color: #e2e3e6; }
+  :root[data-theme="dark"] .thumb-img { background-color: #2a2b2f; color: #9a9ea5; }
+  :root[data-theme="dark"] .win-sub { color: #b9bcc2; }
+  :root[data-theme="dark"] .win-meta { color: #8f9399; }
 </style>
 </head>
 <body>

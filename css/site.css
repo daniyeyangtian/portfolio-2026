@@ -151,3 +151,50 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- dark theme (js/theme.js sets <html data-theme>) ---------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141414;
+  --ink: #ececec;
+  --ink-muted: #a8a3b0;
+  --ink-faint: #9c9c9c;
+  --placeholder: #2b2b2b;
+  --panel: #1f1f1f;
+}
+html { transition: background-color .35s; }
+:root[data-theme="dark"] .site-nav ul { color: var(--ink-muted); }
+:root[data-theme="dark"] .nav-indicator {
+  background: #262626;
+  box-shadow: inset 0 1.5px 3px rgba(0,0,0,.7), inset 0 -1px 1px rgba(255,255,255,.06), 0 1px 0 rgba(255,255,255,.05);
+}
+:root[data-theme="dark"] .dial-step { color: var(--ink); }
+
+/* the switch: a small key, like the projects page's back key, at the nav's top right */
+.site-nav { position: relative; }
+.theme-key {
+  position: absolute; top: 24px; right: 24px; z-index: 5;
+  display: block; padding: 3px; border-radius: 12px;
+  background: linear-gradient(#fdfdfc, #e4e3e0 45%, #c9c8c4);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.14), 0 2px 5px rgba(0,0,0,.22), inset 0 1px 0 #fff, inset 0 -1px 0 rgba(0,0,0,.12);
+  -webkit-tap-highlight-color: transparent;
+}
+.site-nav.is-split .theme-key { top: 44px; }
+.tk-well { display: block; padding: 2px 2px 3px; border-radius: 9px; background: linear-gradient(#a9a8a4, #c7c6c2);
+  box-shadow: inset 0 2px 3px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.5); }
+.tk-cap { display: grid; place-items: center; width: 30px; height: 26px; border-radius: 7px; color: #3b3a3f;
+  background: linear-gradient(#ffffff, #f1f0ed 55%, #e5e4e0);
+  box-shadow: 0 3px 0 #9d9c98, 0 4px 3px rgba(0,0,0,.28), inset 0 1px 0 #fff, inset 0 -2px 1px rgba(0,0,0,.05);
+  transform: translateY(-3px);
+  transition: transform .28s cubic-bezier(.3,1.8,.5,1), box-shadow .28s cubic-bezier(.3,1.8,.5,1); }
+.tk-cap svg { width: 15px; height: 15px; }
+.theme-key:hover .tk-cap { transform: translateY(-4px); box-shadow: 0 4px 0 #9d9c98, 0 5px 4px rgba(0,0,0,.26), inset 0 1px 0 #fff, inset 0 -2px 1px rgba(0,0,0,.05); }
+.theme-key:active .tk-cap { transform: translateY(0); transition-duration: .06s;
+  box-shadow: 0 0 0 #9d9c98, 0 1px 1px rgba(0,0,0,.2), inset 0 1px 2px rgba(0,0,0,.1), inset 0 -1px 0 rgba(255,255,255,.6); }
+.theme-key:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/* in the dark the key's metal is darker, its symbol lit */
+:root[data-theme="dark"] .theme-key { background: linear-gradient(#5a5955, #3a3936 45%, #2a2927); box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 2px 5px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.18); }
+:root[data-theme="dark"] .tk-well { background: linear-gradient(#1c1c1b, #2a2a28); }
+:root[data-theme="dark"] .tk-cap { color: #ffd27a; background: linear-gradient(#4a4946, #3a3936 55%, #312f2d);
+  box-shadow: 0 3px 0 #1b1a19, 0 4px 3px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.14); }
+@media (max-width: 640px) { .theme-key { top: 12px; right: 12px; } }
