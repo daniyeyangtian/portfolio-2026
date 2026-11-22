@@ -76,6 +76,8 @@
   .nav-crumb { display: inline-flex; gap: 6px; margin-left: 6px; font-size: 13px; line-height: 1; color: var(--ink); white-space: nowrap; }
   .nav-crumb::before { content: "/"; color: #a9a9ae; }
   .nav-crumb:empty { display: none; }
+  /* the project's colour as a small dot before its name (the name stays ink, for contrast) */
+  .nav-crumb i { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); align-self: center; margin-right: -1px; }
   .site-nav li:has(.nav-crumb) { display: flex; align-items: flex-start; }
 
 
@@ -489,7 +491,8 @@
     if (!PROJECTS[id]) id = null;
     if (id === active) return;
     active = id;
-    crumbName.textContent = id ? PROJECTS[id].title.toLowerCase() : "";
+    crumbName.innerHTML = id ? `<i aria-hidden="true"></i>${PROJECTS[id].title.toLowerCase()}` : "";
+    if (id) crumbName.style.setProperty("--dot", PROJECTS[id].color);
     document.body.classList.toggle("is-pocket", !id);
     if (!id) {
       clearInterval(poll); detachScroll?.(); detachScroll = null; attachedDoc = null;
