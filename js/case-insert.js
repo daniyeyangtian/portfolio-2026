@@ -97,13 +97,13 @@
     const sec = document.createElement("section");
     sec.className = "case-insert";
     sec.setAttribute("aria-labelledby", "case-insert-h");
-    sec.style.cssText = `position:absolute;left:0;top:${top}px;width:1220px;z-index:2;font-family:Geist,sans-serif`;
+    sec.style.cssText = `position:absolute;left:0;top:${top}px;width:1220px;z-index:2;font-family:'Instrument Sans',sans-serif`;
     sec.innerHTML = `
-      <h2 id="case-insert-h" style="position:absolute;left:${headX}px;top:0;margin:0;font:500 28px/normal Geist,sans-serif;color:#000">${heading}</h2>` +
+      <h2 id="case-insert-h" style="position:absolute;left:${headX}px;top:0;margin:0;font:500 28px/normal 'Instrument Sans',sans-serif;color:#000">${heading}</h2>` +
       blocks.map(c => `
       <div class="case-insert-text" style="position:absolute;left:${c.x}px;top:${textTop}px;width:${c.w}px">
-        <p style="margin:0;font:400 20px/1.4 Geist,sans-serif;color:${leadColor}">${c.lead}</p>
-        <p style="margin:16px 0 0;font:400 16px/1.5 Geist,sans-serif;color:${bodyColor}">${c.body}</p>
+        <p style="margin:0;font:400 20px/1.4 'Instrument Sans',sans-serif;color:${leadColor}">${c.lead}</p>
+        <p style="margin:16px 0 0;font:400 16px/1.5 'Instrument Sans',sans-serif;color:${bodyColor}">${c.body}</p>
       </div>`).join("");
     const room = makeCaseRoom(from);   // measure before the section is there
     addCaseSection(sec, room);
