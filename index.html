@@ -569,10 +569,12 @@
       link.setAttribute("aria-label", up ? "Back to the top of the page" : "Go to featured projects");
     };
     addEventListener("scroll", check, { passive: true }); addEventListener("resize", check); check();
+    // both ways glide the same: down to the projects, or back up to the top
     link.addEventListener("click", e => {
-      if (!cue.classList.contains("is-up")) return;
       e.preventDefault();
-      scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      const behavior = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+      if (cue.classList.contains("is-up")) scrollTo({ top: 0, behavior });
+      else featured.scrollIntoView({ behavior, block: "start" });
     });
   })();
 </script>
