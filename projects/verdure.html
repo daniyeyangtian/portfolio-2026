@@ -856,7 +856,7 @@
     render(); syncDots();
   });
 </script>
-<script src="../js/case-insert.js?v=25"></script>
+<script src="../js/case-insert.js?v=27"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
@@ -1135,7 +1135,7 @@
         </div>
       </div>`;
     const room = makeCaseRoom(FROM - 1, TO);   // the old findings go
-    addCaseSectionAt(sec, FROM, room);
+    addCaseSectionAt(sec, FROM, room, title);
     const items = [...sec.querySelectorAll(".fp-item")], panels = [...sec.querySelectorAll(".fp-panel")], ev = sec.querySelector(".fp-ev");
     let open = 0;
     // each principle starts level with the bottom evidence of its panel (the line under the quote).

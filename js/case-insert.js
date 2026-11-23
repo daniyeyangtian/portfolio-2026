@@ -54,7 +54,7 @@
     };
     [...frame.children].forEach(w => {
       if (w.classList.contains("case-insert")) {
-        if (parseFloat(w.style.top) >= to) els.push(track(w, "top", parseFloat(w.style.top)));
+        if (yOf(w) >= to - 0.5) els.push(track(w, "top", parseFloat(w.style.top)));   // where it shows now
         return;
       }
       const cs = getComputedStyle(w), wTop = parseFloat(cs.top) || 0, wH = parseFloat(cs.height) || 0;
@@ -89,15 +89,22 @@
     });
   };
 
-  // addCaseSectionAt(sec, y, own) – the same, for a section that has to show at frame-y `y` as the
-  // page is now (after earlier rooms moved things): its base top is `y` less the moves of the rooms
-  // above it, so those rooms keep moving it as they open and close
-  window.addCaseSectionAt = (sec, y, own) => {
-    let base = y;
-    for (let k = 0; k < 6; k++) base = y - rooms.filter(r => r !== own?.room && base >= r.to).reduce((a, r) => a + r.dy, 0);
+  // addCaseSectionAt(sec, y, own, like) – the same, for a section that takes the place of a layer
+  // already on the page (`like`) and shows at frame-y `y` as the page is now: it joins exactly the
+  // rooms that move that layer (so it follows them as they open and close, e.g. the Research Path
+  // figures), and its base top is `y` less their moves
+  window.addCaseSectionAt = (sec, y, own, like) => {
+    const moves = el => { const t = tracked.get(el); return t && t.kind !== "height"; };
+    const mine = rooms.filter(r => r !== own?.room && r.els.some(e => (e === like || e.contains(like)) && moves(e)));
+    const base = y - mine.reduce((a, r) => a + r.dy, 0);
     sec.style.top = base + "px";
-    addCaseSection(sec, own);
+    frame.appendChild(sec);
+    track(sec, "top", base);
+    const t = tracked.get(sec);
+    mine.forEach(r => { r.els.push(sec); t.parts.set(r, r.dy); });
+    apply(sec, t);
   };
+
 
   window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX, textW, textTop = 0, bodyColor, leadColor = "#141414", columns }) => {
     if (!frame) return;
