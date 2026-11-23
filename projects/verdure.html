@@ -1399,5 +1399,13 @@
   // between sections. Runs last, once the fonts are in and the page's own scripts have laid it out.
   addEventListener("load", () => setTimeout(async () => { await window.caseRhythm?.(); window.caseSectionsUpdate?.(); }, 300));
 </script>
+<script src="../js/headings.js?v=1"></script>
+<script>
+  // headings (js/headings.js): the project name, the section titles, and the findings' and persona's subheads
+  addEventListener("load", () => markHeadings({
+    h1: [...document.querySelectorAll("#frame p")].find(p => p.textContent.trim() === "Verdure" && parseFloat(getComputedStyle(p).fontSize) > 100 && p.getBoundingClientRect().width && getComputedStyle(p).visibility !== "hidden"),
+    h3: ':is([data-copy-node-id="80:72404"], [data-copy-node-id="80:72405"], [data-copy-node-id="80:72407"], [data-copy-node-id="80:72414"])',
+  }));
+</script>
 </body>
 </html>
