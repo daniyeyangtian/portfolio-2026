@@ -89,6 +89,16 @@
     });
   };
 
+  // addCaseSectionAt(sec, y, own) – the same, for a section that has to show at frame-y `y` as the
+  // page is now (after earlier rooms moved things): its base top is `y` less the moves of the rooms
+  // above it, so those rooms keep moving it as they open and close
+  window.addCaseSectionAt = (sec, y, own) => {
+    let base = y;
+    for (let k = 0; k < 6; k++) base = y - rooms.filter(r => r !== own?.room && base >= r.to).reduce((a, r) => a + r.dy, 0);
+    sec.style.top = base + "px";
+    addCaseSection(sec, own);
+  };
+
   window.insertCaseSection = ({ top, from, gap, heading, lead, body, headX, textX, textW, textTop = 0, bodyColor, leadColor = "#141414", columns }) => {
     if (!frame) return;
     // the new section, as its own layer on the frame. Its text is one block, or `columns`:

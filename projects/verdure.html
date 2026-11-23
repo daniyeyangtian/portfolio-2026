@@ -862,7 +862,7 @@
     render(); syncDots();
   });
 </script>
-<script src="../js/case-insert.js?v=24"></script>
+<script src="../js/case-insert.js?v=25"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
@@ -1006,6 +1006,186 @@
       go(open ? document.getElementById(open.getAttribute("aria-controls")).offsetHeight : 0);
     };
     buttons.forEach(b => b.addEventListener("click", () => show(b)));
+  })();
+</script>
+<style>
+  /* What we found, and what it asks of the design: the three findings on the left, one open at a
+     time with the design principle it led to; the evidence for the open one on the right */
+  .fp { position: absolute; left: 0; width: 1220px; z-index: 2; font-family: 'Instrument Sans', sans-serif; color: #141414; }
+  .fp-title { margin: 0 0 0 114px; font: 500 28px/normal 'Instrument Sans', sans-serif; color: #000; }
+  .fp-grid { display: grid; grid-template-columns: 440px 454px; column-gap: 98px; margin: 48px 114px 0; align-items: start; }
+  .fp-list { margin: 0; padding: 0; list-style: none; }
+  .fp-item + .fp-item { margin-top: 16px; }
+  .fp-item.is-open { margin-bottom: 28px; }
+  .fp-item.is-open + .fp-item, .fp-item + .fp-item.is-open { margin-top: 28px; }
+  .fp-head { display: grid; grid-template-columns: 36px 1fr; width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+  .fp-num { padding-top: 4px; font: 400 14px/1.4 'Instrument Sans', sans-serif; color: #727178; }
+  .fp-name { font: 400 20px/1.4 'Instrument Sans', sans-serif; color: #9e9ea1; transition: color .2s; }
+  .fp-head:hover .fp-name { color: #141414; }
+  .fp-item.is-open .fp-num { color: #137E44; font-weight: 500; }
+  .fp-item.is-open .fp-name { color: #141414; }
+  .fp-item.is-open .fp-head { cursor: default; }
+  .fp-head:focus-visible { outline: 2px solid #137E44; outline-offset: 4px; border-radius: 4px; }
+  .fp-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.3,.7,.2,1); }
+  .fp-item.is-open .fp-body { grid-template-rows: 1fr; }
+  .fp-inner { overflow: hidden; padding-left: 36px; }
+  .fp-finding { margin: 12px 0 0; font: 400 16px/1.5 'Instrument Sans', sans-serif; color: #6f6f6f; }
+  .fp-principle { margin-top: 48px; }   /* set by the script so it starts level with its bottom evidence */
+  .fp-label { margin: 0; font: 400 14px/1.4 'Instrument Sans', sans-serif; color: #137E44; }
+  .fp-rule { margin: 8px 0 0; font: 400 20px/1.4 'Instrument Sans', sans-serif; color: #137E44; }
+  .fp-why { margin: 8px 0 0; font: 400 16px/1.5 'Instrument Sans', sans-serif; color: #6f6f6f; }
+  .fp-ev { position: relative; transition: height .4s cubic-bezier(.3,.7,.2,1); }
+  .fp-panel { position: absolute; left: 0; top: 0; width: 454px; opacity: 0; visibility: hidden; transition: opacity .25s, visibility 0s .25s; }
+  .fp-panel.is-on { opacity: 1; visibility: visible; transition: opacity .35s .1s, visibility 0s; }
+  .fp-stat { margin: 0; font: 400 64px/1 'Instrument Sans', sans-serif; color: #137E44; letter-spacing: -.01em; }
+  .fp-stat-label { margin: 10px 0 0; font: 400 16px/1.5 'Instrument Sans', sans-serif; color: #6f6f6f; }
+  .fp-src { margin: 4px 0 0; font: 400 14px/1.4 'Instrument Sans', sans-serif; color: #727178; }
+  .fp-hr { height: 1px; margin: 32px 0; border: 0; background: #e0e3e0; }
+  .fp-quote { margin: 0; }
+  .fp-quote p { margin: 0; font: 400 20px/1.4 'Instrument Sans', sans-serif; color: #141414; }
+  .fp-quote cite { display: block; margin-top: 12px; font: normal 400 14px/1.4 'Instrument Sans', sans-serif; color: #727178; }
+  .fp-vis-title { margin: 0; font: 500 16px/1.5 'Instrument Sans', sans-serif; color: #141414; }
+  .fp-vis-note { margin: 4px 0 20px; font: 400 14px/1.4 'Instrument Sans', sans-serif; color: #727178; }
+  .fp-panel img { display: block; height: auto; }
+  .fp-mood { width: 512px; }          /* the moodboard runs a little past the column, as in the design */
+  .fp-body-img { width: 454px; }
+  .fp-cite { margin: 16px 0 0; font: 400 12px/1.4 'Instrument Sans', sans-serif; color: #727178; }
+  .fp-lights { display: grid; grid-template-columns: repeat(4, 100px); justify-content: space-between; margin: 0; padding: 0; list-style: none; }
+  .fp-thumb { display: grid; place-items: center; height: 72px; border-radius: 8px; background: #f4f4f4; }
+  .fp-thumb img { max-width: 88px; max-height: 60px; width: auto; }
+  .fp-lights li:last-child .fp-thumb { box-shadow: inset 0 0 0 1.5px #137E44; }
+  .fp-lights b { display: block; margin-top: 10px; font: 400 14px/1.4 'Instrument Sans', sans-serif; color: #141414; }
+  .fp-lights li:last-child b { font-weight: 500; color: #137E44; }
+  .fp-lights span { display: block; margin-top: 4px; font: 400 12px/1.4 'Instrument Sans', sans-serif; color: #6f6f6f; }
+  .fp-take { margin: 16px 0 0; font: 400 14px/1.4 'Instrument Sans', sans-serif; color: #137E44; }
+  .fp .sb-cta.fp-cta { position: static; margin: 32px 0 0 114px; }
+  @media (prefers-reduced-motion: reduce) { .fp-body, .fp-ev, .fp-panel, .fp-panel.is-on { transition: none; } }
+</style>
+<script>
+  // What we found, and what it asks of the design: the old findings (title, three green lines and
+  // their paragraphs) leave the page and this section takes their place. Opening a finding shows
+  // its principle and swaps the evidence; the page below follows the section's height.
+  (() => {
+    const frame = document.getElementById("frame");
+    if (!frame || !window.makeCaseRoom) return;
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = v => (v - frame.getBoundingClientRect().top) / z();
+    const shown = e => { const r = e.getBoundingClientRect(); if (!r.height) return false;
+      for (let a = e; a && a !== frame; a = a.parentElement) { const st = getComputedStyle(a); if (st.display === "none" || st.visibility === "hidden") return false; } return true; };
+    const pick = id => [...frame.querySelectorAll(`[data-node-id="${id}"], [data-copy-node-id="${id}"]`)]
+      .filter(e => shown(e) && fy(e.getBoundingClientRect().top) > 900)
+      .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
+    const title = pick("80:72406");
+    const parts = ["80:72404", "80:72405", "80:72407", "80:72408", "80:72409", "80:72410"].map(pick).filter(Boolean);
+    if (!title || parts.length < 6) return;
+    const FROM = fy(title.getBoundingClientRect().top);
+    const TO = Math.max(...parts.map(e => fy(e.getBoundingClientRect().bottom))) + 2;
+    const A = "../assets/verdure/principles/";
+    const D = [
+      { finding: "Plants bring a sense of belonging to home",
+        body: "People grow plants to decorate their homes, get closer to nature and feel calmer. In compact homes, greenery can also divide living, dining and work areas.",
+        rule: "Look like furniture, not gear.",
+        why: "Plants are how people make a home feel like theirs. Whatever we make has to belong in the living room.",
+        stat: "34.5%", statLabel: "keep plants as decoration, the most common reason",
+        quote: "Having plants and pots is very personal. They make the place I live so special.", by: "P1, Corporate worker",
+        visTitle: "Moodboard: warm, woody, geometric", visNote: "Furniture and planters people already live with",
+        visual: `<img class="fp-mood" src="${A}mood.jpg" alt="Moodboard of wooden shelves, planters and furniture">` },
+      { finding: "Care is easy to forget",
+        body: "Heavy pots on low shelves mean bending and lifting, tiring for older people and for office workers who sit all day. Each plant needs something different, and people forget.",
+        rule: "Minimize physical and mental effort.",
+        why: "Care breaks down in two places: heavy pots on low shelves, and plants that each need something different on a different day. The design should take both off people.",
+        stat: "22.7%", statLabel: "forget to water, the top problem in daily care",
+        quote: "Sometimes I’m too busy to remember taking care of my plants. By the time I check, something already looks wrong.", by: "Interview participant",
+        visTitle: "Low plants ask a lot of the body",
+        visNote: "Standing upright versus bending at the waist to reach low, from Adultdata (DTI). Pots on the floor and low shelves put people in the second posture for every watering and repotting.",
+        visual: `<img class="fp-body-img" src="${A}body.png" alt="Anthropometric drawings: a person standing, a person bent at the waist reaching low, and hand measurements">
+          <p class="fp-cite">Source: Peebles &amp; Norris, ADULTDATA: The Handbook of Adult Anthropometric and Strength Measurements, DTI, 1998. Standing: anthropometric diagrams, p. 21. Stooping: pull strength datasheet 272 (Garg et al., 1988). Hand: anthropometric diagrams, p. 26.</p>` },
+      { finding: "Space and light limit where plants can go",
+        body: "Window direction and balcony size decide where plants can grow in an apartment. Most homes don’t have enough light in the places people want plants.",
+        rule: "Make planting possible everywhere.",
+        why: "Light shouldn’t decide where plants go. Whatever we make has to give plants enough light in any corner of a small home, without heat or glare in a living space.",
+        stat: "18.2%", statLabel: "name poor lighting as a problem in daily care",
+        quote: "I want to grow more plants, but I’m not sure which ones can actually survive in my apartment.", by: "Interview participant",
+        visTitle: "Technical research: which grow light suits a home?", visNote: "From our initial research on greenhouse grow lights",
+        visual: `<ul class="fp-lights">${[
+            ["fluorescent", "Fluorescent", "Efficient now, but bulky. Full spectrum costs the most."],
+            ["incandescent", "Incandescent", "Hot and inefficient. Can scorch leaves up close."],
+            ["hid", "HID", "Very bright, but so hot it needs exhaust cooling."],
+            ["led", "LED", "Low heat, efficient, spectrum adjusts to each growth stage."],
+          ].map(([f, n, t]) => `<li><div class="fp-thumb"><img src="${A}light-${f}.png" alt=""></div><b>${n}</b><span>${t}</span></li>`).join("")}</ul>
+          <p class="fp-take">Only LED works in a living room: no heat to manage, low energy, and light tuned to each plant.</p>` },
+    ];
+    const sec = document.createElement("section");
+    sec.className = "case-insert fp";
+    sec.setAttribute("aria-labelledby", "fp-title");
+    sec.innerHTML = `<h2 class="fp-title" id="fp-title">What we found, and what it asks of the design</h2>
+      <div class="fp-grid">
+        <ol class="fp-list">${D.map((d, i) => `
+          <li class="fp-item${i ? "" : " is-open"}">
+            <button type="button" class="fp-head" aria-expanded="${!i}" aria-controls="fp-b${i} fp-p${i}"><span class="fp-num">0${i + 1}</span><span class="fp-name">${d.finding}</span></button>
+            <div class="fp-body" id="fp-b${i}"><div class="fp-inner">
+              <p class="fp-finding">${d.body}</p>
+              <div class="fp-principle"><p class="fp-label">Principle 0${i + 1}</p><p class="fp-rule">${d.rule}</p><p class="fp-why">${d.why}</p></div>
+            </div></div>
+          </li>`).join("")}
+        </ol>
+        <div class="fp-ev">${D.map((d, i) => `
+          <div class="fp-panel${i ? "" : " is-on"}" id="fp-p${i}" role="region" aria-label="Evidence for finding 0${i + 1}">
+            <p class="fp-stat">${d.stat}</p><p class="fp-stat-label">${d.statLabel}</p><p class="fp-src">Survey, 106 people</p>
+            <hr class="fp-hr">
+            <blockquote class="fp-quote"><p>“${d.quote}”</p><cite>${d.by}</cite></blockquote>
+            <hr class="fp-hr">
+            <p class="fp-vis-title">${d.visTitle}</p><p class="fp-vis-note">${d.visNote}</p>
+            ${d.visual}
+          </div>`).join("")}
+        </div>
+      </div>`;
+    const room = makeCaseRoom(FROM - 1, TO);   // the old findings go
+    addCaseSectionAt(sec, FROM, room);
+    const items = [...sec.querySelectorAll(".fp-item")], panels = [...sec.querySelectorAll(".fp-panel")], ev = sec.querySelector(".fp-ev");
+    let open = 0;
+    // each principle starts level with the bottom evidence of its panel (the line under the quote).
+    // Worked out for the finished layout, so it holds while the items are still opening and closing:
+    // the items above the open one are closed heads, 16 px apart, and 28 px above the open one.
+    const align = i => {
+      const it = items[i], pr = it.querySelector(".fp-principle"), vt = panels[i].querySelector(".fp-vis-title");
+      pr.style.marginTop = "48px";
+      const headH = it.querySelector(".fp-head").offsetHeight;
+      const itemTop = i ? i * headH + (i - 1) * 16 + 28 : 0;
+      const prIn = (pr.getBoundingClientRect().top - it.getBoundingClientRect().top) / z();
+      const want = (vt.getBoundingClientRect().top - panels[i].getBoundingClientRect().top) / z();
+      pr.style.marginTop = Math.max(48, 48 + want - (itemTop + prIn)) + "px";
+    };
+    // the page under the section follows its height. Once the How might we title is found it keeps it
+    // exactly GAP under the section, whatever later rooms (the persona, the rhythm pass) did before
+    const GAP = 160;
+    let dy = 0, hmw = null;
+    const relayout = () => {
+      ev.style.height = panels[open].offsetHeight + "px";
+      // (only after the persona has left the page: until then its layers sit between the two)
+      if (window.personaGone) hmw = (hmw && hmw.isConnected) ? hmw : pick("80:72436");
+      if (hmw) dy += Math.round(fy(sec.getBoundingClientRect().bottom) + GAP - fy(hmw.getBoundingClientRect().top));
+      else dy = Math.round(FROM + sec.offsetHeight - TO);
+      room.move(dy);
+      window.caseSectionsUpdate?.();
+    };
+    window.fpRelayout = relayout;
+    const show = i => {
+      if (i === open) return;
+      open = i;
+      items.forEach((it, k) => { it.classList.toggle("is-open", k === i); it.querySelector(".fp-head").setAttribute("aria-expanded", k === i); });
+      panels.forEach((p, k) => p.classList.toggle("is-on", k === i));
+      align(i);
+      relayout();
+    };
+    items.forEach((it, i) => it.querySelector(".fp-head").addEventListener("click", () => show(i)));
+    // keep the page in step while the section changes height (fonts, pictures, the open/close transition)
+    new ResizeObserver(relayout).observe(sec);
+    const settle = () => { align(open); relayout(); };
+    settle();
+    sec.querySelectorAll("img").forEach(im => im.complete || im.addEventListener("load", settle, { once: true }));
+    document.fonts?.ready.then(settle);
+    addEventListener("load", () => { settle(); setTimeout(settle, 1200); });   // again after the rhythm pass
   })();
 </script>
 <style>
@@ -1337,25 +1517,33 @@
       .filter(e => shown(e) && fy(e.getBoundingClientRect().top) > 900)
       .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
     const title = pick("80:72411"), card = pick("80:72413"), hmw = pick("80:72436");
+    const fp = frame.querySelector(".fp");   // the findings and principles section, when it is there
     const bodies = ["80:72408", "80:72409", "80:72410"].map(pick).filter(Boolean);
-    if (!title || !card || !hmw || !bodies.length) return;
-    const low = bodies.sort((a, b) => b.getBoundingClientRect().bottom - a.getBoundingClientRect().bottom)[0];
-    const end = fy(low.getBoundingClientRect().bottom);           // the findings end here
-    const from = fy(title.getBoundingClientRect().top) - 1;
-    const to = fy(card.getBoundingClientRect().bottom) + 1;
-    const hmwTop = fy(hmw.getBoundingClientRect().top), gap = hmwTop - to;   // keep the space above the HMW
-
-    // the line, 32 px under the findings: a layer of the page itself, so later rooms move it too
+    if (!title || !card || !hmw || (!fp && !bodies.length)) return;
+    // the line under the findings. With the findings section on the page it closes that section (and
+    // moves with it as findings open and close); without it, it is a layer of the page 32 px under them
     const cta = document.createElement("p");
     cta.className = "sb-cta";
     cta.innerHTML = 'Want to meet the person we designed for? Take a look <button type="button" aria-haspopup="dialog" aria-controls="pr-modal">here</button>.';
-    title.offsetParent.appendChild(cta);
-    cta.style.top = "0px";
-    cta.style.top = end + 32 - fy(cta.getBoundingClientRect().top) + "px";
-    const ctaEnd = fy(cta.getBoundingClientRect().bottom);
+    if (fp) { cta.classList.add("fp-cta"); fp.appendChild(cta); window.fpRelayout?.(); }
+    // measured once the line is in, since adding it moves everything under the section
+    const from = fy(title.getBoundingClientRect().top) - 1;
+    const to = fy(card.getBoundingClientRect().bottom) + 1;
+    const hmwTop = fy(hmw.getBoundingClientRect().top), gap = hmwTop - to;   // keep the space above the HMW
+    let ctaEnd;
+    if (fp) ctaEnd = fy(fp.getBoundingClientRect().bottom);
+    else {
+      const low = bodies.sort((a, b) => b.getBoundingClientRect().bottom - a.getBoundingClientRect().bottom)[0];
+      const end = fy(low.getBoundingClientRect().bottom);           // the findings end here
+      title.offsetParent.appendChild(cta);
+      cta.style.top = "0px";
+      cta.style.top = end + 32 - fy(cta.getBoundingClientRect().top) + "px";
+      ctaEnd = fy(cta.getBoundingClientRect().bottom);
+    }
 
     const room = makeCaseRoom(from, to);            // the persona's layers go
     room.move(ctaEnd + gap - hmwTop);                // and the HMW comes up under the line
+    window.personaGone = true; window.fpRelayout?.();
     window.caseSectionsUpdate?.();
 
     const modal = document.createElement("div");
