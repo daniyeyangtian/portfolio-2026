@@ -1345,13 +1345,13 @@
     const to = fy(card.getBoundingClientRect().bottom) + 1;
     const hmwTop = fy(hmw.getBoundingClientRect().top), gap = hmwTop - to;   // keep the space above the HMW
 
-    // the line, 48 px under the findings: a layer of the page itself, so later rooms move it too
+    // the line, 32 px under the findings: a layer of the page itself, so later rooms move it too
     const cta = document.createElement("p");
     cta.className = "sb-cta";
     cta.innerHTML = 'Want to meet the person we designed for? Take a look <button type="button" aria-haspopup="dialog" aria-controls="pr-modal">here</button>.';
     title.offsetParent.appendChild(cta);
     cta.style.top = "0px";
-    cta.style.top = end + 48 - fy(cta.getBoundingClientRect().top) + "px";
+    cta.style.top = end + 32 - fy(cta.getBoundingClientRect().top) + "px";
     const ctaEnd = fy(cta.getBoundingClientRect().bottom);
 
     const room = makeCaseRoom(from, to);            // the persona's layers go
