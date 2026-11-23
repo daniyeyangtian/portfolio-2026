@@ -1309,6 +1309,106 @@
     });
   })();
 </script>
+<style>
+  /* Persona: off the page, like the storyboard. One line under the research findings opens Ning's
+     card in the same browser window popup (the .sb-* styles above) */
+  .pr-win { width: 980px; }
+  .pr-sheet { display: grid; grid-template-columns: 283px 1fr; gap: 40px; padding: 28px 32px 32px; }
+  .pr-sheet img { display: block; width: 283px; height: auto; }
+  .pr-head h2 { margin: 0; font: 600 34px/1.1 'Instrument Sans', sans-serif; letter-spacing: -.01em; color: #111; }
+  .pr-role { margin: 6px 0 0; font: 400 15px/1.4 'Instrument Sans', sans-serif; color: #6f6f6f; }
+  .pr-sheet h3 { margin: 28px 0 8px; font: 500 14px/1.3 'Instrument Sans', sans-serif; color: #137E44; }
+  .pr-sheet p.pr-about { margin: 0; max-width: 560px; font: 400 16px/1.5 'Instrument Sans', sans-serif; color: #4b4f55; }
+  .pr-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .pr-sheet ul { margin: 0; padding: 0; list-style: none; font: 400 15px/1.7 'Instrument Sans', sans-serif; color: #4b4f55; }
+</style>
+<script>
+  // Persona: the section leaves the page (a case room takes its layers out and closes the gap);
+  // one line stays under the research findings and "here" opens Ning's card in a window.
+  addEventListener("load", () => (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+    const frame = document.getElementById("frame");
+    const z = () => frame.getBoundingClientRect().width / 1220;
+    const fy = v => (v - frame.getBoundingClientRect().top) / z();
+    const shown = e => { const r = e.getBoundingClientRect(); if (!r.height) return false;
+      for (let a = e; a && a !== frame; a = a.parentElement) { const st = getComputedStyle(a); if (st.display === "none" || st.visibility === "hidden") return false; } return true; };
+    // the copy on show is the highest one below the hero
+    const pick = id => [...frame.querySelectorAll(`[data-node-id="${id}"], [data-copy-node-id="${id}"]`)]
+      .filter(e => shown(e) && fy(e.getBoundingClientRect().top) > 900)
+      .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
+    const title = pick("80:72411"), card = pick("80:72413"), hmw = pick("80:72436");
+    const bodies = ["80:72408", "80:72409", "80:72410"].map(pick).filter(Boolean);
+    if (!title || !card || !hmw || !bodies.length) return;
+    const low = bodies.sort((a, b) => b.getBoundingClientRect().bottom - a.getBoundingClientRect().bottom)[0];
+    const end = fy(low.getBoundingClientRect().bottom);           // the findings end here
+    const from = fy(title.getBoundingClientRect().top) - 1;
+    const to = fy(card.getBoundingClientRect().bottom) + 1;
+    const hmwTop = fy(hmw.getBoundingClientRect().top), gap = hmwTop - to;   // keep the space above the HMW
+
+    // the line, 48 px under the findings: a layer of the page itself, so later rooms move it too
+    const cta = document.createElement("p");
+    cta.className = "sb-cta";
+    cta.innerHTML = 'Want to meet the person we designed for? Take a look <button type="button" aria-haspopup="dialog" aria-controls="pr-modal">here</button>.';
+    title.offsetParent.appendChild(cta);
+    cta.style.top = "0px";
+    cta.style.top = end + 48 - fy(cta.getBoundingClientRect().top) + "px";
+    const ctaEnd = fy(cta.getBoundingClientRect().bottom);
+
+    const room = makeCaseRoom(from, to);            // the persona's layers go
+    room.move(ctaEnd + gap - hmwTop);                // and the HMW comes up under the line
+    window.caseSectionsUpdate?.();
+
+    const modal = document.createElement("div");
+    modal.className = "sb-modal"; modal.id = "pr-modal";
+    const X = '<svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1.5 1.5l5 5M6.5 1.5l-5 5" stroke="#6b1410" stroke-width="1.3" stroke-linecap="round"/></svg>';
+    const list = a => `<ul>${a.map(t => `<li>${t}</li>`).join("")}</ul>`;
+    modal.innerHTML = `<div class="sb-win pr-win" role="dialog" aria-modal="true" aria-labelledby="pr-title">
+      <div class="sb-bar">
+        <span class="sb-dots"><button type="button" class="sb-x" aria-label="Close the persona">${X}</button><i></i><i></i></span>
+        <span class="sb-tab"><span class="sb-fav"></span>Persona<button type="button" class="sb-x" aria-label="Close the persona" tabindex="-1">×</button></span>
+      </div>
+      <div class="sb-url">verdure&nbsp;/&nbsp;<b>persona</b></div>
+      <div class="pr-sheet">
+        <img src="../assets/verdure/noise/80-72435.png" alt="Ning, the persona">
+        <div>
+          <div class="pr-head"><h2 id="pr-title">Ning</h2><p class="pr-role">Office worker</p></div>
+          <h3>About</h3>
+          <p class="pr-about">A big city office worker who finds her job stressful and wants greenery around her at home. She cares about healthy, fresh food, but her small flat leaves no room to grow it, and its living, kitchen and dining areas run into one another.</p>
+          <div class="pr-cols">
+            <div><h3>Needs</h3>${list(["Easy home growing", "Closer connection to nature", "Edible plants as décor", "Less physical effort", "Room dividers"])}</div>
+            <div><h3>Personality</h3>${list(["Nature lover", "Enjoys life", "Often at home", "Open to new things"])}</div>
+            <div><h3>Pain points</h3>${list(["Work stress, wants greenery", "No space to grow fresh food", "No clear zones in a small home"])}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    const win = modal.querySelector(".sb-win"), btn = cta.querySelector("button"), shut = modal.querySelector(".sb-dots .sb-x");
+    const fit = () => { win.style.zoom = 1; win.style.zoom = Math.min(1, (innerWidth - 48) / win.offsetWidth, (innerHeight - 100) / win.offsetHeight); };
+    let last = null, overflow = "";
+    const open = () => {
+      last = document.activeElement;
+      overflow = document.documentElement.style.overflow;
+      document.documentElement.style.overflow = "hidden";
+      modal.classList.add("is-open"); fit();
+      requestAnimationFrame(() => shut.focus({ preventScroll: true }));
+    };
+    const close = () => {
+      if (!modal.classList.contains("is-open")) return;
+      modal.classList.remove("is-open");
+      document.documentElement.style.overflow = overflow;
+      (last || btn).focus({ preventScroll: true });
+    };
+    btn.addEventListener("click", open);
+    modal.querySelectorAll(".sb-x").forEach(b => b.addEventListener("click", close));
+    modal.addEventListener("click", e => { if (e.target === modal) close(); });
+    addEventListener("resize", () => { if (modal.classList.contains("is-open")) fit(); });
+    addEventListener("keydown", e => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") return close();
+      if (e.key === "Tab") { e.preventDefault(); shut.focus(); }
+    });
+  }));
+</script>
 <script>
   // Final Screens comes before Visual Style: the two blocks (title + content) trade places. Each
   // block keeps the room it had down to the next title, so the spacing is unchanged.
