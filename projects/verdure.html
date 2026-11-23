@@ -56,15 +56,8 @@
 :root { --light\/quiet: #686b6c; --light\/quiet-display: #6c6f70; --light\/tab-inactive: #727475; }
 .text-\[\#737373\] { color: #6f6f6f !important; }
 .text-\[\#6fd197\] { color: #137E44 !important; }
-/* Insights and How might we sit on white now (their photo bands are gone): body text in the
-   page's grey, the how-might-we statement in ink */
-:is([data-node-id="80:72408"], [data-copy-node-id="80:72408"], [data-node-id="80:72409"], [data-copy-node-id="80:72409"], [data-node-id="80:72410"], [data-copy-node-id="80:72410"]) { color: #6f6f6f !important; font-size: 16px !important; line-height: 24px !important;   /* body, as elsewhere on the page */ }
+/* How might we sits on white: the statement in ink */
 :is([data-node-id="80:72437"], [data-copy-node-id="80:72437"]), :is([data-node-id="80:72437"], [data-copy-node-id="80:72437"]) span { color: #141414 !important; }
-/* the three insight titles set like the Problem Statement's green lines: Geist 20 px, sentence case */
-:is([data-node-id="80:72404"], [data-copy-node-id="80:72404"], [data-node-id="80:72405"], [data-copy-node-id="80:72405"], [data-node-id="80:72407"], [data-copy-node-id="80:72407"]) { font-family: 'Instrument Sans', sans-serif !important; font-weight: 400 !important; line-height: 1.4 !important; text-transform: none !important; letter-spacing: 0 !important; text-align: left !important; }
-/* the research label, now a black section heading like the others (500 28px); placed by the page grid below */
-:is([data-node-id="80:72406"], [data-copy-node-id="80:72406"]) { transform: none !important;
-  font: 500 28px/normal 'Instrument Sans', sans-serif !important; color: #000 !important; text-transform: none !important; letter-spacing: normal !important; }
 
 /* ---- Frame 6 phones (inserted above Overview), animated by tools/verdure_anim.js ---- */
 /* 1 · Home: notification ping around the bell's yellow badge */
@@ -149,7 +142,8 @@
 <style>
   /* ---------- page grid: 114px margins, 12 columns of 60.67px with 24px gutters (content 992px) ----------
      Section titles start at the left margin, 48px above their content. */
-  /* What we found from research: three equal columns, 4 grid columns each (x 114 / 452.67 / 791.33, 314.67 wide) */
+  /* the old What we found from research layers: placed here only so the findings section that replaces
+     them (the .fp script) takes exactly their spot; the script then takes them off the page */
   :is([data-node-id="80:72406"], [data-copy-node-id="80:72406"]) { left: 114px !important; top: 5825px !important; transform: none !important; }
   :is([data-node-id="80:72404"], [data-copy-node-id="80:72404"], [data-node-id="80:72408"], [data-copy-node-id="80:72408"]) { left: 114px !important; width: 314.67px !important; transform: none !important; }
   :is([data-node-id="80:72405"], [data-copy-node-id="80:72405"], [data-node-id="80:72409"], [data-copy-node-id="80:72409"]) { left: 452.67px !important; width: 314.67px !important; transform: none !important; }
@@ -1058,7 +1052,7 @@
   .fp-lights li:last-child b { font-weight: 500; color: #137E44; }
   .fp-lights span { display: block; margin-top: 4px; font: 400 12px/1.4 'Instrument Sans', sans-serif; color: #6f6f6f; }
   .fp-take { margin: 16px 0 0; font: 400 14px/1.4 'Instrument Sans', sans-serif; color: #137E44; }
-  .fp .sb-cta.fp-cta { position: static; margin: 32px 0 0 114px; }
+  .fp .sb-cta.fp-cta { position: static; margin: 64px 0 0 114px; }
   @media (prefers-reduced-motion: reduce) { .fp-body, .fp-ev, .fp-panel, .fp-panel.is-on { transition: none; } }
 </style>
 <script>
@@ -1517,29 +1511,18 @@
       .filter(e => shown(e) && fy(e.getBoundingClientRect().top) > 900)
       .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
     const title = pick("80:72411"), card = pick("80:72413"), hmw = pick("80:72436");
-    const fp = frame.querySelector(".fp");   // the findings and principles section, when it is there
-    const bodies = ["80:72408", "80:72409", "80:72410"].map(pick).filter(Boolean);
-    if (!title || !card || !hmw || (!fp && !bodies.length)) return;
-    // the line under the findings. With the findings section on the page it closes that section (and
-    // moves with it as findings open and close); without it, it is a layer of the page 32 px under them
+    const fp = frame.querySelector(".fp");   // the findings and principles section
+    if (!title || !card || !hmw || !fp) return;
+    // the line closes the findings section, so it moves with it as findings open and close
     const cta = document.createElement("p");
-    cta.className = "sb-cta";
+    cta.className = "sb-cta fp-cta";
     cta.innerHTML = 'Want to meet the person we designed for? Take a look <button type="button" aria-haspopup="dialog" aria-controls="pr-modal">here</button>.';
-    if (fp) { cta.classList.add("fp-cta"); fp.appendChild(cta); window.fpRelayout?.(); }
+    fp.appendChild(cta); window.fpRelayout?.();
     // measured once the line is in, since adding it moves everything under the section
     const from = fy(title.getBoundingClientRect().top) - 1;
     const to = fy(card.getBoundingClientRect().bottom) + 1;
     const hmwTop = fy(hmw.getBoundingClientRect().top), gap = hmwTop - to;   // keep the space above the HMW
-    let ctaEnd;
-    if (fp) ctaEnd = fy(fp.getBoundingClientRect().bottom);
-    else {
-      const low = bodies.sort((a, b) => b.getBoundingClientRect().bottom - a.getBoundingClientRect().bottom)[0];
-      const end = fy(low.getBoundingClientRect().bottom);           // the findings end here
-      title.offsetParent.appendChild(cta);
-      cta.style.top = "0px";
-      cta.style.top = end + 32 - fy(cta.getBoundingClientRect().top) + "px";
-      ctaEnd = fy(cta.getBoundingClientRect().bottom);
-    }
+    const ctaEnd = fy(fp.getBoundingClientRect().bottom);
 
     const room = makeCaseRoom(from, to);            // the persona's layers go
     room.move(ctaEnd + gap - hmwTop);                // and the HMW comes up under the line
@@ -1690,10 +1673,9 @@
 </script>
 <script src="../js/headings.js?v=1"></script>
 <script>
-  // headings (js/headings.js): the project name, the section titles, and the findings' and persona's subheads
+  // headings (js/headings.js): the project name and the section titles
   addEventListener("load", () => markHeadings({
     h1: [...document.querySelectorAll("#frame p")].find(p => p.textContent.trim() === "Verdure" && parseFloat(getComputedStyle(p).fontSize) > 100 && p.getBoundingClientRect().width && getComputedStyle(p).visibility !== "hidden"),
-    h3: ':is([data-copy-node-id="80:72404"], [data-copy-node-id="80:72405"], [data-copy-node-id="80:72407"], [data-copy-node-id="80:72414"])',
   }));
 </script>
 </body>
