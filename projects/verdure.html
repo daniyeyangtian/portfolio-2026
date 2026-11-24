@@ -369,12 +369,15 @@
 // window (the one showing the page below the inserted phones). Keep the cuts in step
 // with the section anchors in projects.html.
 (() => {
+  // Final Product's render grid (FINAL below): its top and where it ends; the app screens (TILT) go under it
+  const FP = { L: -11.79, W: 1234.51, G: 9.2, T: 13969.5 };
+  FP.END = FP.T + (FP.W - FP.G) / 2 * 432.85 / 612.65 + FP.G + (FP.W - 3 * FP.G) / 4 * 238 / 336.4;
   const CUTS = [
     { from: 2290, to: 4434, cut: 1286 },   // survey chart and interviews: laid out again below
     { from: 4530, to: 5600, cut: 1086 },   // Data Analysis diagrams
     { from: 8340, to: 9293, cut: 913 },    // Product Opportunity: folded into the System Diagram
     { from: 10900, to: 11862, cut: 0 },    // System Diagram: replaced by the merged diagram (DIAGRAM)
-    { from: 13969, to: 13969, cut: -1009.2 }, // room for the tilted screens (TILT) above the Final Product renders
+    { from: FP.END, to: FP.END, cut: -1009.2 }, // room for the tilted screens (TILT) under the Final Product renders
     { from: 14640, to: 15160, cut: 524 },  // Final Product: the old lower grid (laid out again in FINAL)
     { from: 15560, to: 17600, cut: -130 }, // Workflows: the old flows and wireframes, replaced by FLOWS (130 px taller)
     { from: 17993, to: 17993, cut: -1131 }, // room for the Iteration carousel (ITER), opening the UI part
@@ -393,7 +396,7 @@
   // below, both rows spanning the same width (-11.79 to 1222.72) with 9.2 px gaps.
   // [left, top, width, height] in the frame, by node id
   const FINAL = (() => {
-    const L = -11.79, W = 1234.51, G = 9.2, T = 13969.5;
+    const { L, W, G, T } = FP;
     const tw = (W - G) / 2, th = tw * 432.85 / 612.65;            // top row
     const bw = (W - 3 * G) / 4, bh = bw * 238 / 336.4;            // bottom row
     const B = T + th + G;
@@ -713,12 +716,12 @@
   flows.style.cssText = `position:absolute;left:${FLOWS.left}px;top:${FLOWS.top - shiftAt(FLOWS.top) + moveAt(FLOWS.top)}px;` +
     `width:${FLOWS.width}px;height:${FLOWS.height}px`;
   root.appendChild(flows);
-  // Final Product, opening: all the app screens at once, tilted on a grey band like Clicket's
-  // (rendered from the flows/f*.png screens), as wide as the render grid below it, 9.2 px above it
-  const TILT = { top: 13969, left: -11.79, width: 1234.51, height: 1000 };
+  // Final Product, after the hardware renders: all the app screens at once, tilted on a grey band
+  // like Clicket's (rendered from the flows/f*.png screens), as wide as the render grid, 9.2 px under it
+  const TILT = { top: FP.END, left: -11.79, width: 1234.51, height: 1000 };
   const tilt = document.createElement("img");
   tilt.src = "../assets/verdure/final-screens.png?v=3"; tilt.alt = "Verdure app screens"; tilt.loading = "lazy";
-  tilt.style.cssText = `position:absolute;left:${TILT.left}px;top:${TILT.top - shiftAt(TILT.top - .5) + moveAt(TILT.top)}px;width:${TILT.width}px;height:${TILT.height}px`;
+  tilt.style.cssText = `position:absolute;left:${TILT.left}px;top:${TILT.top + FP.G - shiftAt(TILT.top - .5) + moveAt(TILT.top)}px;width:${TILT.width}px;height:${TILT.height}px`;
   root.appendChild(tilt);
   const diagram = document.createElement("img");
   diagram.src = DIAGRAM.src; diagram.alt = "Verdure system: plants and home growers above, the planting shelf and the mobile app as the final concepts, and the hardware and app functions below";
