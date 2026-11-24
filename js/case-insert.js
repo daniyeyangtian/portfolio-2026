@@ -78,15 +78,6 @@
     };
   };
 
-  // caseNudge(el, d) – move a layer by d for good: if rooms track it, its base moves too, so their
-  // later moves keep it (a plain style change would be undone the next time a room moves it)
-  window.caseNudge = (el, d) => {
-    const t = tracked.get(el);
-    if (t && t.kind === "translate") { t.base += d; apply(el, t); return; }
-    const [x, y] = getComputedStyle(el).translate.split(" ");
-    el.style.translate = `${x === "none" ? "0px" : x} ${(parseFloat(y) || 0) + d}px`;
-  };
-
   // own: the room made for this section, which must not push the section itself down
   window.addCaseSection = (sec, own) => {
     frame.appendChild(sec);
