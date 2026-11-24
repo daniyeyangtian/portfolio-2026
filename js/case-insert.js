@@ -54,7 +54,7 @@
     };
     [...frame.children].forEach(w => {
       if (w.classList.contains("case-insert")) {
-        if (yOf(w) >= to - 0.5) els.push(track(w, "top", parseFloat(w.style.top)));   // where it shows now
+        if (parseFloat(w.style.top) >= to) els.push(track(w, "top", parseFloat(w.style.top)));
         return;
       }
       const cs = getComputedStyle(w), wTop = parseFloat(cs.top) || 0, wH = parseFloat(cs.height) || 0;
@@ -76,6 +76,15 @@
         frameStyle.textContent = `#frame.case-frame { height: ${frameBase + total}px; }`;
       },
     };
+  };
+
+  // caseNudge(el, d) – move a layer by d for good: if rooms track it, its base moves too, so their
+  // later moves keep it (a plain style change would be undone the next time a room moves it)
+  window.caseNudge = (el, d) => {
+    const t = tracked.get(el);
+    if (t && t.kind === "translate") { t.base += d; apply(el, t); return; }
+    const [x, y] = getComputedStyle(el).translate.split(" ");
+    el.style.translate = `${x === "none" ? "0px" : x} ${(parseFloat(y) || 0) + d}px`;
   };
 
   // own: the room made for this section, which must not push the section itself down
@@ -185,11 +194,14 @@
       if (!ts[i + 1]) break;
       const nTop = yOf(ts[i + 1]);
       // (a picture that runs on past the next title belongs to that section, even if it starts a little above it)
-      inside = things().filter(e => e !== ts[i] && !holdsTitle(e) && yOf(e) >= yOf(ts[i]) - 80 && yOf(e) < nTop - 2 && bottomOf(e) <= nTop + 40);   // a picture may start a little above its title
+      // a picture may start a little above its title. One that does (like the System Diagram, 60 px above
+      // its title) is this section's even when it runs on past the next title, which then moves under it
+      const own = e => yOf(e) < yOf(ts[i]);
+      inside = things().filter(e => e !== ts[i] && !holdsTitle(e) && yOf(e) >= yOf(ts[i]) - 80 && yOf(e) < nTop - 2 && (bottomOf(e) <= nTop + 40 || own(e)));
       const last = Math.max(bottomOf(ts[i]), ...inside.map(bottomOf));
       const d2 = Math.round(last + sectionGap - nTop);
       // a picture that starts above the next title but runs on into its section moves with that title
-      const lead = things().filter(e => !holdsTitle(e) && yOf(e) >= yOf(ts[i]) - 80 && yOf(e) < nTop && bottomOf(e) > nTop + 40).map(yOf);
+      const lead = things().filter(e => !holdsTitle(e) && yOf(e) >= yOf(ts[i]) - 80 && !own(e) && yOf(e) < nTop && bottomOf(e) > nTop + 40).map(yOf);
       const cut = Math.min(nTop, ...lead);
       if (Math.abs(d2) >= 2) { makeCaseRoom(cut - 0.5).move(d2); moves.push([ts[i + 1].textContent.trim().slice(0, 24), "section", d2]); await settle(); }
       ts = titles();

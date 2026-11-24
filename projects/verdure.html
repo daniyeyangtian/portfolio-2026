@@ -856,7 +856,7 @@
     render(); syncDots();
   });
 </script>
-<script src="../js/case-insert.js?v=27"></script>
+<script src="../js/case-insert.js?v=29"></script>
 <script>
   // Problem Statement, between the overview and the research (keep projects.html's anchors in step:
   // "problem statement" at 1540, everything after it moved down by the returned shift)
@@ -1415,9 +1415,16 @@
     cta.style.top = box.style.top || getComputedStyle(box).top;
     cta.innerHTML = 'Want to see how Verdure fits into a day at home? Take a look <button type="button" aria-haspopup="dialog" aria-controls="sb-modal">here</button>.';
     box.parentNode.insertBefore(cta, box);
-    const follow = () => { cta.style.translate = getComputedStyle(box).translate; };
-    follow();
-    new MutationObserver(follow).observe(box, { attributes: true, attributeFilter: ["style"] });
+    // the line starts where the picture is, then moves by as much as the picture moves (rooms made
+    // before it, like the Research Path's, move the picture). Adding the moves, not copying the
+    // picture's place, keeps what later rooms (the rhythm pass) did to the line itself
+    const ty = el => parseFloat((getComputedStyle(el).translate.split(" ")[1]) || 0) || 0;
+    cta.style.translate = getComputedStyle(box).translate;
+    let boxY = ty(box);
+    new MutationObserver(() => {
+      const y = ty(box), d = y - boxY; boxY = y;
+      if (d) caseNudge(cta, d);
+    }).observe(box, { attributes: true, attributeFilter: ["style"] });
     box.classList.add("sb-gone");
     room.move(LINE - H);
     window.caseSectionsUpdate?.();
